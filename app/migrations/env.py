@@ -7,7 +7,8 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from sqlmodel import SQLModel
 
-from app.core.config import get_settings
+from core.config import get_settings
+from users.models import User
 
 
 config = context.config
@@ -17,6 +18,10 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 target_metadata = SQLModel.metadata
+
+
+def get_url() -> str:
+    return str(app_config.db_conn_string)
 
 
 def run_migrations_offline() -> None:
@@ -30,7 +35,7 @@ def run_migrations_offline() -> None:
     Calls to context.execute() here emit the given string to the
     script output.
     """
-    url = app_config.db_conn_string
+    url = get_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -54,13 +59,11 @@ async def run_async_migrations() -> None:
     and associate a connection with the context.
     """
     config_section = config.get_section(config.config_ini_section)
-    url = app_config.db_conn_string
-    config_section["sqlalchemy.url"] = url
+    config_section["sqlalchemy.url"] = get_url()
     connectable = async_engine_from_config(
         config_section,
         prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-        future=True
+        poolclass=pool.NullPool
     )
 
     async with connectable.connect() as connection:
