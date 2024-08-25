@@ -2,10 +2,16 @@ import uvicorn
 from fastapi import FastAPI, Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.database import get_db
+from core.database import get_db, init_db
+from users.models import User
 
 
 app = FastAPI()
+
+
+@app.on_event("startup")
+async def on_startup():
+    await init_db()
 
 
 @app.get("/")
