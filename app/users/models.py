@@ -13,7 +13,7 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=40, title="User password")
 
 
-class User(UserBase, table=True):
+class User(UserBase, table=True):  # type: ignore
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
     hashed_password: str = Field(min_length=59, max_length=60)
     telegram_id: int | None = Field(default=None)

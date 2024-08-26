@@ -7,7 +7,7 @@ from core.config import get_settings
 
 
 config = get_settings()
-engine = create_async_engine(str(config.db_conn_string), echo=True)
+engine = create_async_engine(config.db_conn_string, echo=True)
 SessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 

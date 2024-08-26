@@ -20,10 +20,6 @@ if config.config_file_name is not None:
 target_metadata = SQLModel.metadata
 
 
-def get_url() -> str:
-    return str(app_config.db_conn_string)
-
-
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
@@ -35,7 +31,7 @@ def run_migrations_offline() -> None:
     Calls to context.execute() here emit the given string to the
     script output.
     """
-    url = get_url()
+    url = app_config.db_conn_string
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -59,12 +55,8 @@ async def run_async_migrations() -> None:
     and associate a connection with the context.
     """
     config_section = config.get_section(config.config_ini_section)
-    config_section["sqlalchemy.url"] = get_url()
-    connectable = async_engine_from_config(
-        config_section,
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool
-    )
+    config_section["sqlalchemy.url"] = app_config.db_conn_string
+    connectable = async_engine_from_config(config_section, prefix="sqlalchemy.", poolclass=pool.NullPool)
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)

@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import computed_field, PostgresDsn
+from pydantic import computed_field
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -18,16 +18,18 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
 
-    @computed_field
+    @computed_field  # type: ignore
     @property
-    def db_conn_string(self) -> PostgresDsn:
-        return MultiHostUrl.build(
-            scheme="postgresql+asyncpg",
-            username=self.postgres_user,
-            password=self.postgres_password,
-            host=self.postgres_host,
-            port=self.postgres_port,
-            path=self.postgres_db,
+    def db_conn_string(self) -> str:
+        return str(
+            MultiHostUrl.build(
+                scheme="postgresql+asyncpg",
+                username=self.postgres_user,
+                password=self.postgres_password,
+                host=self.postgres_host,
+                port=self.postgres_port,
+                path=self.postgres_db,
+            )
         )
 
 
