@@ -1,7 +1,7 @@
 FROM python:3.12.5
 LABEL authors="ikaialai"
 
-WORKDIR /workplace/
+WORKDIR /workspace/
 
 COPY ./.env ./.env
 

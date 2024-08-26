@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     postgres_host: str
     postgres_port: int
 
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+
     @computed_field
     @property
     def db_conn_string(self) -> PostgresDsn:
