@@ -1,6 +1,6 @@
 import uuid
 
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel
 from sqlmodel import Field, SQLModel
 
 
@@ -15,10 +15,15 @@ class UserCreate(UserBase):
 
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
-    hashed_password: str = Field()  # length of hash + salt pass
+    hashed_password: str = Field(min_length=59, max_length=60)
     telegram_id: int | None = Field(default=None)
     is_superuser: bool = Field(default=False)
 
 
 class UserPublic(UserBase):
     id: uuid.UUID
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
