@@ -6,6 +6,20 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """Contains settings for project.
+
+    Attributes:
+        postgres_password: password for postgres connection
+        postgres_host: host for postgres connection
+        postgres_port: port for postgres connection
+        postgres_user: user for postgres connection
+        postgres_db: database for postgres connection
+        secret_key: secret key for application security
+        algorithm: algorithm for application security
+        access_token_expire_minutes: minutes for token expiration
+        db_conn_string: postgres connection string
+    """
+
     model_config = SettingsConfigDict(env_file=".env")
 
     postgres_password: str
@@ -35,4 +49,5 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
+    """Get settings object for project."""
     return Settings()

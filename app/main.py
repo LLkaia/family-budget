@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.database import get_db, init_db
@@ -12,11 +12,13 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def on_startup():
+    """Init database on startup."""
     await init_db()
 
 
 @app.get("/")
 async def root(session: AsyncSession = Depends(get_db)):
+    """Dummy endpoint."""
     return {"ping": "pong"}
 
 
