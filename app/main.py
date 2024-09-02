@@ -1,8 +1,7 @@
 import uvicorn
-from fastapi import Depends, FastAPI
-from sqlmodel.ext.asyncio.session import AsyncSession
+from fastapi import FastAPI
 
-from core.database import get_db, init_db
+from core.database import init_db
 from users.models import User
 from users.routes import router as users_router
 
@@ -16,13 +15,7 @@ async def on_startup():
     await init_db()
 
 
-@app.get("/")
-async def root(session: AsyncSession = Depends(get_db)):
-    """Dummy endpoint."""
-    return {"ping": "pong"}
-
-
-app.include_router(users_router, prefix="/users", tags=["users"])
+app.include_router(users_router, prefix="/account", tags=["account"])
 
 
 if __name__ == "__main__":

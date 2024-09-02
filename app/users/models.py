@@ -1,6 +1,7 @@
 import uuid
+from datetime import datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
 
@@ -32,8 +33,29 @@ class UserPublic(UserBase):
     id: uuid.UUID
 
 
-class Token(BaseModel):
+class UsersPublic(SQLModel):
+    """Many Users response model."""
+
+    data: list[UserPublic]
+    count: int
+
+
+class Token(SQLModel):
     """JWT Token model."""
 
     access_token: str
     token_type: str
+
+
+class TokenPayload(SQLModel):
+    """JWT Token payload."""
+
+    sub: EmailStr
+    exp: datetime
+    jti: uuid.UUID
+
+
+class Message(SQLModel):
+    """Standard response model."""
+
+    message: str
