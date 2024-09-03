@@ -17,7 +17,7 @@ async def get_db() -> AsyncSession:
         yield session
 
 
-async def init_db():
+async def init_db() -> None:
     """Initialize tables in database."""
     async with engine.begin() as conn:
         # await conn.run_sync(SQLModel.metadata.drop_all)
