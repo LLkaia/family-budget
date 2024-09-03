@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timedelta, timezone
-from typing import Annotated
+from typing import Annotated, cast
 
 import jwt
 from fastapi import Depends, HTTPException
@@ -47,7 +47,7 @@ def create_access_token(user: User) -> str:
     expire = datetime.now(timezone.utc) + timedelta(minutes=app_config.access_token_expire_minutes)
     to_encode = {"exp": expire, "sub": user.email, "jti": str(uuid.uuid1())}
     encoded_jwt = jwt.encode(to_encode, app_config.secret_key, algorithm=app_config.algorithm)
-    return encoded_jwt
+    return cast(str, encoded_jwt)
 
 
 def decode_access_token(token: Annotated[str, Depends(oauth2_scheme)]) -> TokenPayload:
@@ -97,7 +97,7 @@ def current_superuser(user: Annotated[User, Depends(current_user)]) -> User:
     return user
 
 
-async def destroy_token(token_payload: Annotated[TokenPayload, Depends(decode_access_token)]):
+async def destroy_token(token_payload: Annotated[TokenPayload, Depends(decode_access_token)]) -> None:
     """Add token to blocklist by unic identifier.
 
     :param token_payload: JWT access token payload
