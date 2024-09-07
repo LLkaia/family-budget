@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
+from budget.routes import router as budget_router
 from users.routes import router as users_router
 
 
@@ -14,6 +15,7 @@ app = FastAPI()
 
 
 app.include_router(users_router, prefix="/account", tags=["account"])
+app.include_router(budget_router, prefix="/budget", tags=["budget"])
 
 
 if __name__ == "__main__":
