@@ -2,7 +2,9 @@ import uuid
 from datetime import datetime
 
 from pydantic import EmailStr
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
+
+from budget.models import Budget, UserBudgetLink
 
 
 class UserBase(SQLModel):
@@ -18,13 +20,15 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=40, title="User password")
 
 
-class User(UserBase, table=True):  # type: ignore
+class User(UserBase, table=True):  # type: ignore[call-arg]
     """User database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
     hashed_password: str = Field(min_length=59, max_length=60)
     telegram_id: int | None = Field(default=None)
     is_superuser: bool = Field(default=False)
+
+    budgets: list[Budget] = Relationship(back_populates="users", link_model=UserBudgetLink, cascade_delete=True)
 
 
 class UserPublic(UserBase):

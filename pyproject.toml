@@ -1,6 +1,7 @@
 [tool.ruff]
 line-length = 120
 src = ["app"]
+exclude = ["app/migrations/versions/*"]
 
 [tool.ruff.lint]
 ignore = ["F401", "D104", "D100", "D107", "D203", "D213"]

@@ -4,11 +4,15 @@ services:
     container_name: app
     ports:
       - "8000:8000"
+    command: >
+      sh -c "python3 ./wait_db.py &&
+             alembic upgrade head &&
+             python3 ./main.py"
     depends_on:
       - db
   db:
     image: postgres:15.8
     ports:
       - "8001:5432"
-    env_file: ".env"
+    env_file: "app/.env"
     container_name: db

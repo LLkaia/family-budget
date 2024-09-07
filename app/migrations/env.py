@@ -7,6 +7,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from sqlmodel import SQLModel
 
+from budget.models import Budget, BudgetCategoryLink, Category, Transaction, UserBudgetLink
 from core.config import get_settings
 from users.models import User
 
