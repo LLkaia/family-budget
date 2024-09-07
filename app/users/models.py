@@ -28,7 +28,7 @@ class User(UserBase, table=True):  # type: ignore[call-arg]
     telegram_id: int | None = Field(default=None)
     is_superuser: bool = Field(default=False)
 
-    budgets: list[Budget] = Relationship(back_populates="users", link_model=UserBudgetLink, cascade_delete=True)
+    budgets: list[Budget] = Relationship(back_populates="users", link_model=UserBudgetLink)
 
 
 class UserPublic(UserBase):

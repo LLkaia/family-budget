@@ -8,7 +8,7 @@ from core.database import get_db
 from exceptions import CredentialsException
 from users.auth import authenticate_user, create_access_token, current_superuser, current_user, destroy_token
 from users.crud import create_user, get_user_by_email, get_users
-from users.models import Message, Token, User, UserCreate, UserPublic, UsersPublic
+from users.models import Message, Token, UserCreate, UsersPublic
 
 
 router = APIRouter()
@@ -52,7 +52,7 @@ async def register_new_user(session: Annotated[AsyncSession, Depends(get_db)], u
     return Message(message=f"User '{user.full_name}' successfully registered.")
 
 
-@router.post("/verify-token", response_model=UserPublic)
-def test_token(user: Annotated[User, Depends(current_user)]) -> UserPublic:
+@router.post("/verify-token", response_model=Message, dependencies=[Depends(current_user)])
+def test_token() -> Message:
     """Verify user token."""
-    return user
+    return Message(message="Token is valid.")
