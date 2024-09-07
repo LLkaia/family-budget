@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.config import get_settings
@@ -15,6 +15,16 @@ async def get_db() -> AsyncSession:
     """Get session object."""
     async with SessionLocal() as session:
         yield session
+
+
+async def is_db_alive() -> bool:
+    """Check if database is up and running."""
+    try:
+        async with SessionLocal() as session:
+            await session.exec(select(1))
+        return True
+    except OSError:
+        return False
 
 
 async def init_db() -> None:
