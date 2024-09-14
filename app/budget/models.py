@@ -24,7 +24,7 @@ class Budget(BudgetBase, table=True):  # type: ignore[call-arg]
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
 
     users: list["User"] = Relationship(  # type: ignore[name-defined] # noqa: F821
-        back_populates="budgets", link_model=UserBudgetLink
+        back_populates="budgets", link_model=UserBudgetLink, sa_relationship_kwargs={"lazy": "joined"}
     )
     categories: list["Category"] = Relationship(back_populates="budget", cascade_delete=True)
 
