@@ -33,19 +33,32 @@ class CategoryBase(SQLModel):
     """Base class for Category."""
 
     name: str = Field(max_length=255, title="Name of category")
-    category_restriction: float = Field(ge=0, title="Outlay restriction of category for budget")
-    description: str | None = Field(max_length=255, title="Description of category for budget")
-    is_income: bool = Field(title="Whether this category is income or outlay")
 
 
 class Category(CategoryBase, table=True):  # type: ignore[call-arg]
     """Category database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    category_restriction: float = Field(ge=0, title="Outlay restriction of category for budget")
+    description: str | None = Field(max_length=255, title="Description of category for budget")
+    is_income: bool = Field(title="Whether this category is income or outlay")
     budget_id: uuid.UUID = Field(foreign_key="budget.id", ondelete="CASCADE")
 
     budget: Budget = Relationship(back_populates="categories")
     transactions: list["Transaction"] = Relationship(back_populates="categories", cascade_delete=True)
+
+
+class PredefinedCategory(CategoryBase, table=True):  # type: ignore[call-arg]
+    """Predefined categories database model."""
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+
+
+class PredefinedCategories(SQLModel):
+    """Many Predefined Categories response model."""
+
+    data: list[PredefinedCategory]
+    count: int
 
 
 class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
