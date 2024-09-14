@@ -5,11 +5,20 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from budget.crud import (
     create_budget_with_user,
+    create_category_and_add_to_budget,
     create_predefined_category,
     get_budget_by_id_with_current_user,
     get_predefined_categories,
 )
-from budget.models import Budget, BudgetBase, CategoryBase, PredefinedCategories, PredefinedCategory
+from budget.models import (
+    Budget,
+    BudgetBase,
+    Category,
+    CategoryBase,
+    CategoryCreate,
+    PredefinedCategories,
+    PredefinedCategory,
+)
 from core.database import get_db
 from users.auth import current_superuser, current_user
 from users.models import User
@@ -24,12 +33,6 @@ async def create_budget(
 ) -> Budget:
     """Create new budget for current user."""
     budget = await create_budget_with_user(session, budget, user)
-    return budget
-
-
-@router.get("/{budget_id}", response_model=Budget)
-async def get_budget(budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)]) -> Budget:
-    """Get budget by id."""
     return budget
 
 
@@ -49,3 +52,20 @@ async def list_predefined_categories(
     """Retrieve predefined category."""
     categories = await get_predefined_categories(session, offset, limit)
     return categories
+
+
+@router.get("/{budget_id}", response_model=Budget)
+async def get_budget(budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)]) -> Budget:
+    """Get budget by id."""
+    return budget
+
+
+@router.post("/{budget_id}/categories", response_model=Category)
+async def add_new_category_to_budget(
+    budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
+    session: Annotated[AsyncSession, Depends(get_db)],
+    category: CategoryCreate,
+) -> Category:
+    """Create category and add it to budget."""
+    category = await create_category_and_add_to_budget(session, budget, category)
+    return category

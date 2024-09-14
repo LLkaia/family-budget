@@ -26,7 +26,9 @@ class Budget(BudgetBase, table=True):  # type: ignore[call-arg]
     users: list["User"] = Relationship(  # type: ignore[name-defined] # noqa: F821
         back_populates="budgets", link_model=UserBudgetLink, sa_relationship_kwargs={"lazy": "joined"}
     )
-    categories: list["Category"] = Relationship(back_populates="budget", cascade_delete=True)
+    categories: list["Category"] = Relationship(
+        back_populates="budget", cascade_delete=True, sa_relationship_kwargs={"lazy": "selectin"}
+    )
 
 
 class CategoryBase(SQLModel):
@@ -35,13 +37,18 @@ class CategoryBase(SQLModel):
     name: str = Field(max_length=255, title="Name of category")
 
 
-class Category(CategoryBase, table=True):  # type: ignore[call-arg]
-    """Category database model."""
+class CategoryCreate(CategoryBase):
+    """Category creation model."""
 
-    id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
     category_restriction: float = Field(ge=0, title="Outlay restriction of category for budget")
     description: str | None = Field(max_length=255, title="Description of category for budget")
     is_income: bool = Field(title="Whether this category is income or outlay")
+
+
+class Category(CategoryCreate, table=True):  # type: ignore[call-arg]
+    """Category database model."""
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
     budget_id: uuid.UUID = Field(foreign_key="budget.id", ondelete="CASCADE")
 
     budget: Budget = Relationship(back_populates="categories")
