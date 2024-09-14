@@ -6,7 +6,15 @@ from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
 
-from budget.models import Budget, BudgetBase, CategoryBase, PredefinedCategories, PredefinedCategory
+from budget.models import (
+    Budget,
+    BudgetBase,
+    Category,
+    CategoryBase,
+    CategoryCreate,
+    PredefinedCategories,
+    PredefinedCategory,
+)
 from core.database import get_db
 from users.auth import current_user
 from users.models import User
@@ -21,8 +29,29 @@ async def create_budget_with_user(session: AsyncSession, budget_data: BudgetBase
     return cast(Budget, budget)
 
 
+async def create_category_and_add_to_budget(
+    session: AsyncSession, budget: Budget, category: CategoryCreate
+) -> Category:
+    """Create a new category and add it to the budget."""
+    budget = await session.exec(select(Budget).where(Budget.id == budget.id))
+    budget = budget.unique().one()
+    is_category_exist = any(budget_category.name == category.name for budget_category in budget.categories)
+    if is_category_exist:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
+
+    category = Category.model_validate(category, update={"budget_id": budget.id})
+    session.add(category)
+    await session.commit()
+    await session.refresh(category)
+    return category
+
+
 async def create_predefined_category(session: AsyncSession, category: CategoryBase) -> PredefinedCategory:
     """Create a new predefined category."""
+    categories_from_db = await session.exec(select(PredefinedCategory).where(PredefinedCategory.name == category.name))
+    if categories_from_db.one_or_none():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
+
     predefined_category = PredefinedCategory.model_validate(category)
     session.add(predefined_category)
     await session.commit()
