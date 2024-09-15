@@ -1,6 +1,7 @@
+import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from budget.crud import (
@@ -9,6 +10,9 @@ from budget.crud import (
     create_predefined_category,
     get_budget_by_id_with_current_user,
     get_predefined_categories,
+    remove_budget,
+    remove_category_from_budget,
+    remove_predefined_category,
 )
 from budget.models import (
     Budget,
@@ -21,7 +25,7 @@ from budget.models import (
 )
 from core.database import get_db
 from users.auth import current_superuser, current_user
-from users.models import BudgetDetails, User
+from users.models import BudgetDetails, Message, User
 
 
 router = APIRouter()
@@ -54,10 +58,32 @@ async def list_predefined_categories(
     return categories
 
 
+@router.delete(
+    "/predefined-categories/{category_id}", response_model=Message, dependencies=[Depends(current_superuser)]
+)
+async def delete_predefined_categories(
+    category_id: Annotated[uuid.UUID, Path(title="Predefined category ID")],
+    session: Annotated[AsyncSession, Depends(get_db)],
+) -> Message:
+    """Create new predefined category."""
+    await remove_predefined_category(session, category_id)
+    return Message(message="Category successfully deleted.")
+
+
 @router.get("/{budget_id}", response_model=BudgetDetails)
 async def get_budget(budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)]) -> Budget:
     """Get budget by id."""
     return budget
+
+
+@router.delete("/{budget_id}", response_model=Message)
+async def delete_budget(
+    session: Annotated[AsyncSession, Depends(get_db)],
+    budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
+) -> Message:
+    """Delete budget."""
+    await remove_budget(session, budget)
+    return Message(message="Budget successfully deleted.")
 
 
 @router.post("/{budget_id}/categories", response_model=Category)
@@ -69,3 +95,14 @@ async def add_new_category_to_budget(
     """Create category and add it to budget."""
     category = await create_category_and_add_to_budget(session, budget, category)
     return category
+
+
+@router.delete("/{budget_id}/categories/{category_id}", response_model=Message)
+async def delete_category_from_budget(
+    budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
+    session: Annotated[AsyncSession, Depends(get_db)],
+    category_id: Annotated[uuid.UUID, Path(title="Category ID for specific budget")],
+) -> Message:
+    """Delete category from specific budget."""
+    await remove_category_from_budget(session, budget, category_id)
+    return Message(message="Category successfully deleted from budget.")
