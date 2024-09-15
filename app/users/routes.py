@@ -8,13 +8,19 @@ from core.database import get_db
 from exceptions import CredentialsException
 from users.auth import authenticate_user, create_access_token, current_superuser, current_user, destroy_token
 from users.crud import create_user, get_user_by_email, get_users
-from users.models import Message, Token, UserCreate, UsersPublic
+from users.models import Message, Token, User, UserCreate, UserDetails, UsersPublic
 
 
 router = APIRouter()
 
 
-@router.post("/users", response_model=UsersPublic, dependencies=[Depends(current_superuser)])
+@router.get("/", response_model=UserDetails)
+async def get_me_detailed(user: Annotated[User, Depends(current_user)]) -> User:
+    """Get current user info."""
+    return user
+
+
+@router.get("/users", response_model=UsersPublic, dependencies=[Depends(current_superuser)])
 async def get_list_of_users(
     session: Annotated[AsyncSession, Depends(get_db)], offset: int = 0, limit: int = 100
 ) -> UsersPublic:

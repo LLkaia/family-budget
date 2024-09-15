@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
-from budget.models import Budget, UserBudgetLink
+from budget.models import Budget, BudgetBase, Category, UserBudgetLink
 
 
 class UserBase(SQLModel):
@@ -37,11 +37,27 @@ class UserPublic(UserBase):
     id: uuid.UUID
 
 
+class UserDetails(UserPublic):
+    """Detailed User response model."""
+
+    telegram_id: int | None
+    is_superuser: bool
+    budgets: list[Budget] = []
+
+
 class UsersPublic(SQLModel):
     """Many Users response model."""
 
     data: list[UserPublic]
     count: int
+
+
+class BudgetDetails(BudgetBase):
+    """Detailed Budget response model."""
+
+    id: uuid.UUID
+    users: list[User] = []
+    categories: list[Category] = []
 
 
 class Token(SQLModel):

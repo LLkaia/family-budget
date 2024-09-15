@@ -1,7 +1,12 @@
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
+
+
+if TYPE_CHECKING:
+    from users.models import User
 
 
 class UserBudgetLink(SQLModel, table=True):  # type: ignore[call-arg]
@@ -23,7 +28,7 @@ class Budget(BudgetBase, table=True):  # type: ignore[call-arg]
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
 
-    users: list["User"] = Relationship(  # type: ignore[name-defined] # noqa: F821
+    users: list["User"] = Relationship(
         back_populates="budgets", link_model=UserBudgetLink, sa_relationship_kwargs={"lazy": "joined"}
     )
     categories: list["Category"] = Relationship(
