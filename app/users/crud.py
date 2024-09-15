@@ -1,5 +1,6 @@
 from typing import cast
 
+from sqlalchemy.orm import joinedload
 from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -9,8 +10,8 @@ from users.utils import get_password_hash
 
 async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
     """Retrieve user by email."""
-    user = await session.exec(select(User).where(User.email == email))
-    return cast(User | None, user.one_or_none())
+    user = await session.exec(select(User).where(User.email == email).options(joinedload(User.budgets)))
+    return cast(User | None, user.unique().one_or_none())
 
 
 async def get_users(session: AsyncSession, offset: int = 0, limit: int = 100) -> UsersPublic:

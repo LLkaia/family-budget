@@ -21,7 +21,7 @@ from budget.models import (
 )
 from core.database import get_db
 from users.auth import current_superuser, current_user
-from users.models import User
+from users.models import BudgetDetails, User
 
 
 router = APIRouter()
@@ -54,7 +54,7 @@ async def list_predefined_categories(
     return categories
 
 
-@router.get("/{budget_id}", response_model=Budget)
+@router.get("/{budget_id}", response_model=BudgetDetails)
 async def get_budget(budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)]) -> Budget:
     """Get budget by id."""
     return budget
