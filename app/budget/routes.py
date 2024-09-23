@@ -1,7 +1,8 @@
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, status
+from sqlalchemy.exc import IntegrityError
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from budget.crud import (
@@ -17,6 +18,7 @@ from budget.crud import (
 from budget.models import (
     Budget,
     BudgetBase,
+    BudgetsList,
     Category,
     CategoryBase,
     CategoryCreate,
@@ -24,6 +26,7 @@ from budget.models import (
     PredefinedCategory,
 )
 from core.database import get_db
+from exceptions import ItemNotExistsException
 from users.auth import current_superuser, current_user
 from users.models import BudgetDetails, Message, User
 
@@ -36,8 +39,13 @@ async def create_budget(
     budget: BudgetBase, session: Annotated[AsyncSession, Depends(get_db)], user: Annotated[User, Depends(current_user)]
 ) -> Budget:
     """Create new budget for current user."""
-    budget = await create_budget_with_user(session, budget, user)
-    return budget
+    return await create_budget_with_user(session, budget, user)
+
+
+@router.get("/", response_model=BudgetsList)
+async def get_my_budgets(user: Annotated[User, Depends(current_user)]) -> BudgetsList:
+    """Get current user budgets."""
+    return BudgetsList(data=user.budgets)
 
 
 @router.post("/predefined-categories", response_model=PredefinedCategory, dependencies=[Depends(current_superuser)])
@@ -45,8 +53,10 @@ async def create_predefined_categories(
     category: CategoryBase, session: Annotated[AsyncSession, Depends(get_db)]
 ) -> PredefinedCategory:
     """Create new predefined category."""
-    category = await create_predefined_category(session, category)
-    return category
+    try:
+        return await create_predefined_category(session, category)
+    except IntegrityError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
 
 
 @router.get("/predefined-categories", response_model=PredefinedCategories, dependencies=[Depends(current_user)])
@@ -54,8 +64,7 @@ async def list_predefined_categories(
     session: Annotated[AsyncSession, Depends(get_db)], offset: int = 0, limit: int = 100
 ) -> PredefinedCategories:
     """Retrieve predefined category."""
-    categories = await get_predefined_categories(session, offset, limit)
-    return categories
+    return await get_predefined_categories(session, offset, limit)
 
 
 @router.delete(
@@ -66,8 +75,11 @@ async def delete_predefined_categories(
     session: Annotated[AsyncSession, Depends(get_db)],
 ) -> Message:
     """Create new predefined category."""
-    await remove_predefined_category(session, category_id)
-    return Message(message="Category successfully deleted.")
+    try:
+        await remove_predefined_category(session, category_id)
+        return Message(message="Category successfully deleted.")
+    except ItemNotExistsException:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found.")
 
 
 @router.get("/{budget_id}", response_model=BudgetDetails)
@@ -93,8 +105,10 @@ async def add_new_category_to_budget(
     category: CategoryCreate,
 ) -> Category:
     """Create category and add it to budget."""
-    category = await create_category_and_add_to_budget(session, budget, category)
-    return category
+    try:
+        return await create_category_and_add_to_budget(session, budget, category)
+    except IntegrityError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
 
 
 @router.delete("/{budget_id}/categories/{category_id}", response_model=Message)
@@ -104,5 +118,8 @@ async def delete_category_from_budget(
     category_id: Annotated[uuid.UUID, Path(title="Category ID for specific budget")],
 ) -> Message:
     """Delete category from specific budget."""
-    await remove_category_from_budget(session, budget, category_id)
-    return Message(message="Category successfully deleted from budget.")
+    try:
+        await remove_category_from_budget(session, budget, category_id)
+        return Message(message="Category successfully deleted from budget.")
+    except ItemNotExistsException:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found.")
