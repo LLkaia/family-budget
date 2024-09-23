@@ -4,7 +4,8 @@ from sqlalchemy.orm import joinedload
 from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from users.models import User, UserCreate, UsersPublic
+from models import User
+from users.schemas import UserCreate, UserList
 from users.utils import get_password_hash
 
 
@@ -14,11 +15,11 @@ async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
     return cast(User | None, user.unique().one_or_none())
 
 
-async def get_users(session: AsyncSession, offset: int = 0, limit: int = 100) -> UsersPublic:
+async def get_users(session: AsyncSession, offset: int = 0, limit: int = 100) -> UserList:
     """Retrieve users."""
     count = await session.exec(select(func.count()).select_from(User))
     users = await session.exec(select(User).offset(offset).limit(limit))
-    return UsersPublic(count=count.one(), data=users.all())
+    return UserList(count=count.one(), data=users.all())
 
 
 async def create_user(session: AsyncSession, user_data: UserCreate) -> User:

@@ -6,22 +6,14 @@ from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
 
-from budget.models import (
-    Budget,
-    BudgetBase,
-    Category,
-    CategoryBase,
-    CategoryCreate,
-    PredefinedCategories,
-    PredefinedCategory,
-)
+from budget.schemas import BudgetCreate, CategoryCreate, PredefinedCategoryCreate, PredefinedCategoryList
 from core.database import get_db
 from exceptions import ItemNotExistsException
+from models import Budget, Category, PredefinedCategory, User
 from users.auth import current_user
-from users.models import User
 
 
-async def create_budget_with_user(session: AsyncSession, budget_data: BudgetBase, user: User) -> Budget:
+async def create_budget_with_user(session: AsyncSession, budget_data: BudgetCreate, user: User) -> Budget:
     """Create a new Budget with User."""
     budget = Budget.model_validate(budget_data, update={"users": [user]})
     session.add(budget)
@@ -41,7 +33,7 @@ async def create_category_and_add_to_budget(
     return category
 
 
-async def create_predefined_category(session: AsyncSession, category: CategoryBase) -> PredefinedCategory:
+async def create_predefined_category(session: AsyncSession, category: PredefinedCategoryCreate) -> PredefinedCategory:
     """Create a new predefined category."""
     predefined_category = PredefinedCategory.model_validate(category)
     session.add(predefined_category)
@@ -50,11 +42,11 @@ async def create_predefined_category(session: AsyncSession, category: CategoryBa
     return cast(PredefinedCategory, predefined_category)
 
 
-async def get_predefined_categories(session: AsyncSession, offset: int = 0, limit: int = 100) -> PredefinedCategories:
+async def get_predefined_categories(session: AsyncSession, offset: int = 0, limit: int = 100) -> PredefinedCategoryList:
     """Retrieve Predefined Categories."""
     count = await session.exec(select(func.count()).select_from(PredefinedCategory))
     categories = await session.exec(select(PredefinedCategory).offset(offset).limit(limit))
-    return PredefinedCategories(count=count.one(), data=categories.all())
+    return PredefinedCategoryList(count=count.one(), data=categories.all())
 
 
 async def remove_predefined_category(session: AsyncSession, category_id: uuid.UUID) -> None:
