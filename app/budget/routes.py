@@ -15,20 +15,19 @@ from budget.crud import (
     remove_category_from_budget,
     remove_predefined_category,
 )
-from budget.models import (
-    Budget,
-    BudgetBase,
-    BudgetsList,
-    Category,
-    CategoryBase,
+from budget.schemas import (
+    BudgetCreate,
+    BudgetDetails,
+    BudgetList,
     CategoryCreate,
-    PredefinedCategories,
-    PredefinedCategory,
+    PredefinedCategoryCreate,
+    PredefinedCategoryList,
 )
 from core.database import get_db
 from exceptions import ItemNotExistsException
+from models import Budget, Category, PredefinedCategory, User
 from users.auth import current_superuser, current_user
-from users.models import BudgetDetails, Message, User
+from users.schemas import Message
 
 
 router = APIRouter()
@@ -36,21 +35,23 @@ router = APIRouter()
 
 @router.post("/", response_model=Budget)
 async def create_budget(
-    budget: BudgetBase, session: Annotated[AsyncSession, Depends(get_db)], user: Annotated[User, Depends(current_user)]
+    budget: BudgetCreate,
+    session: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(current_user)],
 ) -> Budget:
     """Create new budget for current user."""
     return await create_budget_with_user(session, budget, user)
 
 
-@router.get("/", response_model=BudgetsList)
-async def get_my_budgets(user: Annotated[User, Depends(current_user)]) -> BudgetsList:
+@router.get("/", response_model=BudgetList)
+async def get_my_budgets(user: Annotated[User, Depends(current_user)]) -> BudgetList:
     """Get current user budgets."""
-    return BudgetsList(data=user.budgets)
+    return BudgetList(data=user.budgets)
 
 
 @router.post("/predefined-categories", response_model=PredefinedCategory, dependencies=[Depends(current_superuser)])
 async def create_predefined_categories(
-    category: CategoryBase, session: Annotated[AsyncSession, Depends(get_db)]
+    category: PredefinedCategoryCreate, session: Annotated[AsyncSession, Depends(get_db)]
 ) -> PredefinedCategory:
     """Create new predefined category."""
     try:
@@ -59,10 +60,10 @@ async def create_predefined_categories(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
 
 
-@router.get("/predefined-categories", response_model=PredefinedCategories, dependencies=[Depends(current_user)])
+@router.get("/predefined-categories", response_model=PredefinedCategoryList, dependencies=[Depends(current_user)])
 async def list_predefined_categories(
     session: Annotated[AsyncSession, Depends(get_db)], offset: int = 0, limit: int = 100
-) -> PredefinedCategories:
+) -> PredefinedCategoryList:
     """Retrieve predefined category."""
     return await get_predefined_categories(session, offset, limit)
 

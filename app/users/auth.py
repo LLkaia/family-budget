@@ -11,8 +11,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from core.config import get_settings
 from core.database import get_db
 from exceptions import CredentialsException
+from models import User
 from users.crud import get_user_by_email
-from users.models import TokenPayload, User
+from users.schemas import TokenPayload
 from users.utils import verify_password
 
 

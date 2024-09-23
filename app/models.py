@@ -1,13 +1,9 @@
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING
 
+from pydantic import EmailStr
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
-
-
-if TYPE_CHECKING:
-    from users.models import User
 
 
 class UserBudgetLink(SQLModel, table=True):  # type: ignore[call-arg]
@@ -17,17 +13,12 @@ class UserBudgetLink(SQLModel, table=True):  # type: ignore[call-arg]
     budget_id: uuid.UUID = Field(foreign_key="budget.id", primary_key=True, ondelete="CASCADE")
 
 
-class BudgetBase(SQLModel):
-    """Base class for Budget."""
-
-    name: str = Field(max_length=255, title="Name of budget")
-    balance: float = Field(ge=0, title="Current balance of budget")
-
-
-class Budget(BudgetBase, table=True):  # type: ignore[call-arg]
+class Budget(SQLModel, table=True):  # type: ignore[call-arg]
     """Budget database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    name: str = Field(max_length=255)
+    balance: float = Field(ge=0)
 
     users: list["User"] = Relationship(
         back_populates="budgets", link_model=UserBudgetLink, sa_relationship_kwargs={"lazy": "joined"}
@@ -37,30 +28,27 @@ class Budget(BudgetBase, table=True):  # type: ignore[call-arg]
     )
 
 
-class BudgetsList(SQLModel):
-    """Budgets List model for current user budgets."""
+class User(SQLModel, table=True):  # type: ignore[call-arg]
+    """User database model."""
 
-    data: list[Budget]
+    id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    full_name: str = Field(max_length=255)
+    email: EmailStr = Field(unique=True, max_length=255, index=True)
+    hashed_password: str = Field(min_length=59, max_length=60)
+    telegram_id: int | None = Field(default=None)
+    is_superuser: bool = Field(default=False)
 
-
-class CategoryBase(SQLModel):
-    """Base class for Category."""
-
-    name: str = Field(max_length=255, title="Name of category")
-
-
-class CategoryCreate(CategoryBase):
-    """Category creation model."""
-
-    category_restriction: float = Field(ge=0, title="Outlay restriction of category for budget")
-    description: str | None = Field(max_length=255, title="Description of category for budget")
-    is_income: bool = Field(title="Whether this category is income or outlay")
+    budgets: list[Budget] = Relationship(back_populates="users", link_model=UserBudgetLink)
 
 
-class Category(CategoryCreate, table=True):  # type: ignore[call-arg]
+class Category(SQLModel, table=True):  # type: ignore[call-arg]
     """Category database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    name: str = Field(max_length=255)
+    category_restriction: float = Field(ge=0)
+    description: str | None = Field(max_length=255)
+    is_income: bool
     budget_id: uuid.UUID = Field(foreign_key="budget.id", ondelete="CASCADE")
 
     budget: Budget = Relationship(back_populates="categories")
@@ -73,14 +61,7 @@ class PredefinedCategory(SQLModel, table=True):  # type: ignore[call-arg]
     """Predefined categories database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
-    name: str = Field(max_length=255, title="Name of category", unique=True)
-
-
-class PredefinedCategories(SQLModel):
-    """Many Predefined Categories response model."""
-
-    data: list[PredefinedCategory]
-    count: int
+    name: str = Field(max_length=255, unique=True)
 
 
 class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
@@ -88,7 +69,7 @@ class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
     date: datetime = Field(default_factory=datetime.now)
-    money: float = Field(ge=0, description="Amount of money income/outlay")
+    money: float = Field(ge=0)
     category_id: uuid.UUID = Field(foreign_key="category.id", ondelete="CASCADE")
 
     categories: Category = Relationship(back_populates="transactions")
