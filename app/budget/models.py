@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
+from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -36,6 +37,12 @@ class Budget(BudgetBase, table=True):  # type: ignore[call-arg]
     )
 
 
+class BudgetsList(SQLModel):
+    """Budgets List model for current user budgets."""
+
+    data: list[Budget]
+
+
 class CategoryBase(SQLModel):
     """Base class for Category."""
 
@@ -59,11 +66,14 @@ class Category(CategoryCreate, table=True):  # type: ignore[call-arg]
     budget: Budget = Relationship(back_populates="categories")
     transactions: list["Transaction"] = Relationship(back_populates="categories", cascade_delete=True)
 
+    __table_args__ = (UniqueConstraint("budget_id", "name", name="uq_budget_category"),)
 
-class PredefinedCategory(CategoryBase, table=True):  # type: ignore[call-arg]
+
+class PredefinedCategory(SQLModel, table=True):  # type: ignore[call-arg]
     """Predefined categories database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    name: str = Field(max_length=255, title="Name of category", unique=True)
 
 
 class PredefinedCategories(SQLModel):

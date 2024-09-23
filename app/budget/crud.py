@@ -16,6 +16,7 @@ from budget.models import (
     PredefinedCategory,
 )
 from core.database import get_db
+from exceptions import ItemNotExistsException
 from users.auth import current_user
 from users.models import User
 
@@ -33,10 +34,6 @@ async def create_category_and_add_to_budget(
     session: AsyncSession, budget: Budget, category: CategoryCreate
 ) -> Category:
     """Create a new category and add it to the budget."""
-    is_category_exist = any(budget_category.name == category.name for budget_category in budget.categories)
-    if is_category_exist:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
-
     category = Category.model_validate(category, update={"budget_id": budget.id})
     session.add(category)
     await session.commit()
@@ -46,10 +43,6 @@ async def create_category_and_add_to_budget(
 
 async def create_predefined_category(session: AsyncSession, category: CategoryBase) -> PredefinedCategory:
     """Create a new predefined category."""
-    categories_from_db = await session.exec(select(PredefinedCategory).where(PredefinedCategory.name == category.name))
-    if categories_from_db.one_or_none():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
-
     predefined_category = PredefinedCategory.model_validate(category)
     session.add(predefined_category)
     await session.commit()
@@ -69,7 +62,7 @@ async def remove_predefined_category(session: AsyncSession, category_id: uuid.UU
     category = await session.exec(select(PredefinedCategory).where(PredefinedCategory.id == category_id))
     category = category.one_or_none()
     if not category:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found.")
+        raise ItemNotExistsException
     await session.delete(category)
     await session.commit()
 
@@ -99,6 +92,6 @@ async def remove_category_from_budget(session: AsyncSession, budget: Budget, cat
     """Remove category from budget."""
     categories = [budget_category for budget_category in budget.categories if budget_category.id == category_id]
     if not categories:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found.")
+        raise ItemNotExistsException
     await session.delete(categories[0])
     await session.commit()
