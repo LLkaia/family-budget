@@ -10,19 +10,20 @@ from models import Budget
 class UserBase(SQLModel):
     """Base class for User schema."""
 
-    full_name: str = Field(max_length=255, title="Full user name")
     email: EmailStr = Field(unique=True, max_length=255, index=True, title="Email address")
 
 
 class UserCreate(UserBase):
     """User creation schema."""
 
+    full_name: str = Field(max_length=255, title="Full user name")
     password: str = Field(min_length=8, max_length=40, title="User password")
 
 
 class UserPublic(UserBase):
     """Public User schema."""
 
+    full_name: str = Field(max_length=255, title="Full user name")
     id: uuid.UUID
 
 

@@ -52,7 +52,7 @@ class Category(SQLModel, table=True):  # type: ignore[call-arg]
     budget_id: uuid.UUID = Field(foreign_key="budget.id", ondelete="CASCADE")
 
     budget: Budget = Relationship(back_populates="categories")
-    transactions: list["Transaction"] = Relationship(back_populates="categories", cascade_delete=True)
+    transactions: list["Transaction"] = Relationship(back_populates="category", cascade_delete=True)
 
     __table_args__ = (UniqueConstraint("budget_id", "name", name="uq_budget_category"),)
 
@@ -69,7 +69,7 @@ class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
     date: datetime = Field(default_factory=datetime.now)
-    money: float = Field(ge=0)
+    amount: float = Field(ge=0)
     category_id: uuid.UUID = Field(foreign_key="category.id", ondelete="CASCADE")
 
-    categories: Category = Relationship(back_populates="transactions")
+    category: Category = Relationship(back_populates="transactions")
