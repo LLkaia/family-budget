@@ -12,6 +12,13 @@ class BudgetCreate(SQLModel):
     balance: float = Field(ge=0, title="Current balance of budget")
 
 
+class BudgetUpdate(SQLModel):
+    """Update Budget schema."""
+
+    name: str | None = None
+    balance: float | None = None
+
+
 class BudgetList(SQLModel):
     """List Budget schema."""
 
@@ -33,6 +40,15 @@ class CategoryCreate(SQLModel):
     is_income: bool = Field(title="Whether this category is income or outlay")
 
 
+class CategoryUpdate(SQLModel):
+    """Update category schema."""
+
+    name: str | None = None
+    category_restriction: float | None = None
+    description: str | None = None
+    is_income: bool | None = None
+
+
 class PredefinedCategoryList(SQLModel):
     """List Predefined Categories schema."""
 
@@ -46,3 +62,9 @@ class BudgetDetails(BudgetCreate):
     id: uuid.UUID
     users: list[User] = []
     categories: list[Category] = []
+
+
+class TransactionCreate(SQLModel):
+    """Transaction input schema."""
+
+    amount: float = Field(ge=0)

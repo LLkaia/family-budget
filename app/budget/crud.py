@@ -6,10 +6,18 @@ from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette import status
 
-from budget.schemas import BudgetCreate, CategoryCreate, PredefinedCategoryCreate, PredefinedCategoryList
+from budget.schemas import (
+    BudgetCreate,
+    BudgetUpdate,
+    CategoryCreate,
+    CategoryUpdate,
+    PredefinedCategoryCreate,
+    PredefinedCategoryList,
+    TransactionCreate,
+)
 from core.database import get_db
 from exceptions import ItemNotExistsException
-from models import Budget, Category, PredefinedCategory, User
+from models import Budget, Category, PredefinedCategory, Transaction, User
 from users.auth import current_user
 
 
@@ -82,8 +90,66 @@ async def remove_budget(session: AsyncSession, budget: Budget) -> None:
 
 async def remove_category_from_budget(session: AsyncSession, budget: Budget, category_id: uuid.UUID) -> None:
     """Remove category from budget."""
-    categories = [budget_category for budget_category in budget.categories if budget_category.id == category_id]
-    if not categories:
-        raise ItemNotExistsException
-    await session.delete(categories[0])
+    category = get_category_by_id_from_existed_budget(budget, category_id)
+    await session.delete(category)
     await session.commit()
+
+
+async def update_category(
+    session: AsyncSession, budget: Budget, category_id: uuid.UUID, new_data: CategoryUpdate
+) -> Category:
+    """Update category with new data."""
+    category = get_category_by_id_from_existed_budget(budget, category_id)
+    category.sqlmodel_update(new_data.model_dump(exclude_unset=True))
+    session.add(category)
+    await session.commit()
+    await session.refresh(category)
+    return category
+
+
+async def add_user_to_budget(session: AsyncSession, budget: Budget, user: User) -> Budget:
+    """Add user to existed budget."""
+    budget.users.append(user)
+    session.add(budget)
+    await session.commit()
+    await session.refresh(budget)
+    return budget
+
+
+async def remove_user_from_budget(session: AsyncSession, budget: Budget, user: User) -> Budget:
+    """Remove user from existed budget."""
+    budget.users.remove(user)
+    session.add(budget)
+    await session.commit()
+    await session.refresh(budget)
+    return budget
+
+
+async def update_budget(session: AsyncSession, budget: Budget, new_data: BudgetUpdate) -> Budget:
+    """Update budget with new data."""
+    budget.sqlmodel_update(new_data.model_dump(exclude_unset=True))
+    session.add(budget)
+    await session.commit()
+    await session.refresh(budget)
+    return budget
+
+
+async def perform_transaction_per_budget(
+    session: AsyncSession, budget: Budget, category_id: uuid.UUID, transaction_data: TransactionCreate
+) -> Budget:
+    """Perform transaction per budget per category."""
+    category = get_category_by_id_from_existed_budget(budget, category_id)
+    transaction = Transaction.model_validate(transaction_data, update={"category_id": category.id})
+    budget.balance += transaction.amount if category.is_income else -transaction.amount
+    session.add_all([transaction, budget])
+    await session.commit()
+    await session.refresh(budget)
+    return budget
+
+
+def get_category_by_id_from_existed_budget(budget: Budget, category_id: uuid.UUID) -> Category:
+    """Get category from budget by ID."""
+    category = next((cat for cat in budget.categories if cat.id == category_id), None)
+    if not category:
+        raise ItemNotExistsException
+    return category
