@@ -1,9 +1,11 @@
 import uuid
 from datetime import datetime
 
-from pydantic import EmailStr
+from pydantic import EmailStr, field_validator
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
+
+from validators import normalize_name
 
 
 class UserBudgetLink(SQLModel, table=True):  # type: ignore[call-arg]
@@ -55,6 +57,7 @@ class Category(SQLModel, table=True):  # type: ignore[call-arg]
     transactions: list["Transaction"] = Relationship(back_populates="category", cascade_delete=True)
 
     __table_args__ = (UniqueConstraint("budget_id", "name", name="uq_budget_category"),)
+    _normalize_name = field_validator("name", mode="before")(normalize_name)
 
 
 class PredefinedCategory(SQLModel, table=True):  # type: ignore[call-arg]
@@ -62,6 +65,8 @@ class PredefinedCategory(SQLModel, table=True):  # type: ignore[call-arg]
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
     name: str = Field(max_length=255, unique=True)
+
+    _normalize_name = field_validator("name", mode="before")(normalize_name)
 
 
 class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
