@@ -33,16 +33,16 @@ from budget.schemas import (
 )
 from core.database import get_db
 from exceptions import ItemNotExistsException
-from models import Budget, Category, PredefinedCategory, Transaction, User
+from models import Budget, Category, PredefinedCategory, User
 from users.auth import current_superuser, current_user
 from users.crud import get_user_by_email
-from users.schemas import Message, UserBase
+from users.schemas import UserBase
 
 
 router = APIRouter()
 
 
-@router.post("/", response_model=Budget)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_budget(
     budget: BudgetCreate,
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -52,13 +52,13 @@ async def create_budget(
     return await create_budget_with_user(session, budget, user)
 
 
-@router.get("/", response_model=BudgetList)
+@router.get("/")
 async def get_my_budgets(user: Annotated[User, Depends(current_user)]) -> BudgetList:
     """Get current user budgets."""
     return BudgetList(data=user.budgets)
 
 
-@router.post("/predefined-categories", response_model=PredefinedCategory, dependencies=[Depends(current_superuser)])
+@router.post("/predefined-categories", status_code=status.HTTP_201_CREATED, dependencies=[Depends(current_superuser)])
 async def create_predefined_categories(
     category: PredefinedCategoryCreate, session: Annotated[AsyncSession, Depends(get_db)]
 ) -> PredefinedCategory:
@@ -69,7 +69,7 @@ async def create_predefined_categories(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
 
 
-@router.get("/predefined-categories", response_model=PredefinedCategoryList, dependencies=[Depends(current_user)])
+@router.get("/predefined-categories", dependencies=[Depends(current_user)])
 async def list_predefined_categories(
     session: Annotated[AsyncSession, Depends(get_db)], offset: int = 0, limit: int = 100
 ) -> PredefinedCategoryList:
@@ -78,37 +78,37 @@ async def list_predefined_categories(
 
 
 @router.delete(
-    "/predefined-categories/{category_id}", response_model=Message, dependencies=[Depends(current_superuser)]
+    "/predefined-categories/{category_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(current_superuser)],
 )
 async def delete_predefined_categories(
     category_id: Annotated[uuid.UUID, Path(title="Predefined category ID")],
     session: Annotated[AsyncSession, Depends(get_db)],
-) -> Message:
+) -> None:
     """Create new predefined category."""
     try:
         await remove_predefined_category(session, category_id)
-        return Message(message="Category successfully deleted.")
     except ItemNotExistsException:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found.")
 
 
-@router.get("/{budget_id}", response_model=BudgetDetails)
+@router.get("/{budget_id}", response_model=BudgetDetails, response_model_exclude_none=True)
 async def get_budget(budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)]) -> Budget:
     """Get budget by id."""
     return budget
 
 
-@router.delete("/{budget_id}", response_model=Message)
+@router.delete("/{budget_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_budget(
     session: Annotated[AsyncSession, Depends(get_db)],
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
-) -> Message:
+) -> None:
     """Delete budget."""
     await remove_budget(session, budget)
-    return Message(message="Budget successfully deleted.")
 
 
-@router.put("/{budget_id}", response_model=BudgetDetails)
+@router.put("/{budget_id}", response_model=BudgetDetails, response_model_exclude_none=True)
 async def modify_budget(
     session: Annotated[AsyncSession, Depends(get_db)],
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
@@ -118,7 +118,7 @@ async def modify_budget(
     return await update_budget(session, budget, new_data)
 
 
-@router.post("/{budget_id}/users", response_model=BudgetDetails)
+@router.post("/{budget_id}/users", response_model=BudgetDetails, response_model_exclude_none=True)
 async def add_new_user_to_budget(
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -131,7 +131,7 @@ async def add_new_user_to_budget(
     return await add_user_to_budget(session, budget, user)
 
 
-@router.delete("/{budget_id}/users", response_model=BudgetDetails)
+@router.delete("/{budget_id}/users", response_model=BudgetDetails, response_model_exclude_none=True)
 async def delete_user_from_budget(
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -144,7 +144,7 @@ async def delete_user_from_budget(
     return await remove_user_from_budget(session, budget, user)
 
 
-@router.post("/{budget_id}/categories", response_model=Category)
+@router.post("/{budget_id}/categories", response_model_exclude_none=True)
 async def add_new_category_to_budget(
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -157,21 +157,20 @@ async def add_new_category_to_budget(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
 
 
-@router.delete("/{budget_id}/categories/{category_id}", response_model=Message)
+@router.delete("/{budget_id}/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_category_from_budget(
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
     session: Annotated[AsyncSession, Depends(get_db)],
     category_id: Annotated[uuid.UUID, Path(title="Category ID for specific budget")],
-) -> Message:
+) -> None:
     """Delete category from specific budget."""
     try:
         await remove_category_from_budget(session, budget, category_id)
-        return Message(message="Category successfully deleted from budget.")
     except ItemNotExistsException:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found.")
 
 
-@router.put("/{budget_id}/categories/{category_id}", response_model=Category)
+@router.put("/{budget_id}/categories/{category_id}", response_model_exclude_none=True)
 async def modify_category_for_budget(
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -185,7 +184,7 @@ async def modify_category_for_budget(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found.")
 
 
-@router.post("/{budget_id}/categories/{category_id}/transactions", response_model=Budget)
+@router.post("/{budget_id}/categories/{category_id}/transactions")
 async def perform_transaction(
     session: Annotated[AsyncSession, Depends(get_db)],
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
