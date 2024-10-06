@@ -23,7 +23,6 @@ from budget.crud import (
 from budget.schemas import (
     BudgetCreate,
     BudgetDetails,
-    BudgetList,
     BudgetUpdate,
     CategoryCreate,
     CategoryUpdate,
@@ -53,9 +52,9 @@ async def create_budget(
 
 
 @router.get("/")
-async def get_my_budgets(user: Annotated[User, Depends(current_user)]) -> BudgetList:
+async def get_my_budgets(user: Annotated[User, Depends(current_user)]) -> list[Budget]:
     """Get current user budgets."""
-    return BudgetList(data=user.budgets)
+    return user.budgets
 
 
 @router.post("/predefined-categories", status_code=status.HTTP_201_CREATED, dependencies=[Depends(current_superuser)])
@@ -155,6 +154,15 @@ async def add_new_category_to_budget(
         return await create_category_and_add_to_budget(session, budget, category)
     except IntegrityError:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category already exists.")
+
+
+@router.get("/{budget_id}/categories", response_model_exclude_none=True)
+async def get_budget_categories(
+    budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
+    income: bool = False,
+) -> list[Category]:
+    """Get list of categories from budget."""
+    return [category for category in budget.categories if category.is_income == income]
 
 
 @router.delete("/{budget_id}/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
