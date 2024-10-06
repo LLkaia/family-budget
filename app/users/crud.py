@@ -6,7 +6,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from models import User
 from users.schemas import UserCreate, UserList
-from users.utils import get_password_hash
+from utils import get_password_hash
 
 
 async def get_user_by_email(session: AsyncSession, email: str) -> User | None:

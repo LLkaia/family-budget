@@ -5,6 +5,7 @@ from pydantic import EmailStr, field_validator
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
+from utils import get_datatime_now
 from validators import normalize_name
 
 
@@ -73,8 +74,8 @@ class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
     """Transaction database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
-    date: datetime = Field(default_factory=datetime.now)
-    amount: float = Field(ge=0)
+    date: datetime = Field(default_factory=get_datatime_now)
+    amount: float = Field(gt=0)
     category_id: uuid.UUID = Field(foreign_key="category.id", ondelete="CASCADE")
 
     category: Category = Relationship(back_populates="transactions")
