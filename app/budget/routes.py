@@ -1,7 +1,7 @@
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Path, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from sqlalchemy.exc import IntegrityError
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -10,6 +10,7 @@ from budget.crud import (
     create_budget_with_user,
     create_category_and_add_to_budget,
     create_predefined_category,
+    filter_categories,
     get_budget_by_id_with_current_user,
     get_predefined_categories,
     perform_transaction_per_budget,
@@ -26,16 +27,18 @@ from budget.schemas import (
     BudgetUpdate,
     CategoryCreate,
     CategoryUpdate,
+    CategoryWithAmount,
     PredefinedCategoryCreate,
     PredefinedCategoryList,
     TransactionCreate,
 )
 from core.database import get_db
-from exceptions import ItemNotExistsException
+from exceptions import ItemNotExistsException, ParameterMissingException
 from models import Budget, Category, PredefinedCategory, User
 from users.auth import current_superuser, current_user
 from users.crud import get_user_by_email
 from users.schemas import UserBase
+from utils import PeriodFrom
 
 
 router = APIRouter()
@@ -159,10 +162,16 @@ async def add_new_category_to_budget(
 @router.get("/{budget_id}/categories", response_model_exclude_none=True)
 async def get_budget_categories(
     budget: Annotated[Budget, Depends(get_budget_by_id_with_current_user)],
+    session: Annotated[AsyncSession, Depends(get_db)],
     income: bool = False,
-) -> list[Category]:
+    transactions: bool = False,
+    period: PeriodFrom = Query(default=None),
+) -> list[CategoryWithAmount]:
     """Get list of categories from budget."""
-    return [category for category in budget.categories if category.is_income == income]
+    try:
+        return await filter_categories(session, budget.categories, income, transactions, period)
+    except ParameterMissingException as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
 @router.delete("/{budget_id}/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)

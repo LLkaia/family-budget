@@ -12,3 +12,7 @@ class CredentialsException(HTTPException):
 
 class ItemNotExistsException(Exception):
     """Exception for not found item in DB."""
+
+
+class ParameterMissingException(Exception):
+    """Exception for missed parameters."""

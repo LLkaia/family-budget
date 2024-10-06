@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from typing import Annotated, cast
 
 from fastapi import Depends, HTTPException, Path
@@ -11,14 +12,16 @@ from budget.schemas import (
     BudgetUpdate,
     CategoryCreate,
     CategoryUpdate,
+    CategoryWithAmount,
     PredefinedCategoryCreate,
     PredefinedCategoryList,
     TransactionCreate,
 )
 from core.database import get_db
-from exceptions import ItemNotExistsException
+from exceptions import ItemNotExistsException, ParameterMissingException
 from models import Budget, Category, PredefinedCategory, Transaction, User
 from users.auth import current_user
+from utils import PeriodFrom, get_datatime_now
 
 
 async def create_budget_with_user(session: AsyncSession, budget_data: BudgetCreate, user: User) -> Budget:
@@ -153,3 +156,62 @@ def get_category_by_id_from_existed_budget(budget: Budget, category_id: uuid.UUI
     if not category:
         raise ItemNotExistsException
     return category
+
+
+async def filter_categories(
+    session: AsyncSession,
+    categories: list[Category],
+    is_income: bool,
+    get_transactions: bool,
+    period_from: PeriodFrom | None,
+) -> list[CategoryWithAmount]:
+    """Filter categories by income and period.
+
+    :param session: DB session
+    :param categories: Categories to filter
+    :param is_income: whether income or not
+    :param get_transactions: whether retrieve amount
+        of transaction per period.
+    :param period_from: period for amount of transactions,
+        is required if param get_transactions is True.
+    :return: list of filtered Categories
+    """
+    result = []
+    for category in categories:
+        if category.is_income == is_income:
+            filtered_category = CategoryWithAmount(**category.model_dump())
+
+            # aggregate related transactions per period
+            if get_transactions:
+                if period_from is None:
+                    raise ParameterMissingException("'period_from' is required to get aggregated transactions amount.")
+
+                date_start = get_datatime_now().replace(**period_from.get_datatime_start())  # type: ignore[arg-type]
+                filtered_category.amount = await retrieve_amount_per_category(session, category.id, date_start)
+
+            result.append(filtered_category)
+    return result
+
+
+async def retrieve_amount_per_category(
+    session: AsyncSession,
+    category_id: uuid.UUID,
+    start_date: datetime | None = None,
+    end_date: datetime | None = None,
+) -> float:
+    """Retrieve aggregated amount per category.
+
+    :param session: DB session
+    :param category_id: category ID
+    :param start_date: start date to filter
+    :param end_date: end date to filter
+    :return: list of filtered Categories
+    """
+    query = select(func.sum(Transaction.amount)).where(Transaction.category_id == category_id)
+    if start_date:
+        query = query.where(Transaction.date >= start_date)
+    if end_date:
+        query = query.where(Transaction.date <= end_date)
+
+    result = await session.exec(query)
+    return result.one_or_none() or 0.0

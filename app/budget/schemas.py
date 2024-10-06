@@ -2,7 +2,8 @@ import uuid
 
 from sqlmodel import Field, SQLModel
 
-from models import Category, PredefinedCategory, User
+from models import Category, PredefinedCategory
+from users.schemas import UserPublic
 
 
 class BudgetCreate(SQLModel):
@@ -30,8 +31,15 @@ class CategoryCreate(SQLModel):
 
     name: str = Field(max_length=255, title="Name of category")
     category_restriction: float = Field(ge=0, title="Outlay restriction of category for budget")
-    description: str | None = Field(max_length=255, title="Description of category for budget")
+    description: str | None = Field(max_length=255, title="Description of category for budget", default=None)
     is_income: bool = Field(title="Whether this category is income or outlay", default=False)
+
+
+class CategoryWithAmount(CategoryCreate):
+    """Category with calculated transactions amount."""
+
+    id: uuid.UUID
+    amount: float | None = None
 
 
 class CategoryUpdate(SQLModel):
@@ -54,7 +62,7 @@ class BudgetDetails(BudgetCreate):
     """Detailed Budget schema."""
 
     id: uuid.UUID
-    users: list[User] = []
+    users: list[UserPublic] = []
     categories: list[Category] = []
 
 

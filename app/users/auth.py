@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Annotated, cast
 
 import jwt
@@ -14,7 +14,7 @@ from exceptions import CredentialsException
 from models import User
 from users.crud import get_user_by_email
 from users.schemas import TokenPayload
-from users.utils import verify_password
+from utils import get_datatime_now, verify_password
 
 
 app_config = get_settings()
@@ -45,7 +45,7 @@ def create_access_token(user: User) -> str:
     :param user: User instance
     :return: access JWT token
     """
-    expire = datetime.now(timezone.utc) + timedelta(minutes=app_config.access_token_expire_minutes)
+    expire = get_datatime_now() + timedelta(minutes=app_config.access_token_expire_minutes)
     to_encode = {"exp": expire, "sub": user.email, "jti": str(uuid.uuid1())}
     encoded_jwt = jwt.encode(to_encode, app_config.secret_key, algorithm=app_config.algorithm)
     return cast(str, encoded_jwt)
@@ -76,7 +76,7 @@ async def current_user(
     """
     expires = token_payload.exp
     unic_id = token_payload.jti
-    if not expires or expires <= datetime.now(timezone.utc) or unic_id in token_blocklist:
+    if not expires or expires.replace(tzinfo=None) <= get_datatime_now() or unic_id in token_blocklist:
         raise CredentialsException("Token has expired")
     email = token_payload.sub
     if email is None:
