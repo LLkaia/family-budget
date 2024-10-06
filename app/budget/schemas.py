@@ -2,7 +2,7 @@ import uuid
 
 from sqlmodel import Field, SQLModel
 
-from models import Budget, Category, PredefinedCategory, User
+from models import Category, PredefinedCategory, User
 
 
 class BudgetCreate(SQLModel):
@@ -19,12 +19,6 @@ class BudgetUpdate(SQLModel):
     balance: float | None = None
 
 
-class BudgetList(SQLModel):
-    """List Budget schema."""
-
-    data: list[Budget]
-
-
 class PredefinedCategoryCreate(SQLModel):
     """Predefined category creation schema."""
 
@@ -37,7 +31,7 @@ class CategoryCreate(SQLModel):
     name: str = Field(max_length=255, title="Name of category")
     category_restriction: float = Field(ge=0, title="Outlay restriction of category for budget")
     description: str | None = Field(max_length=255, title="Description of category for budget")
-    is_income: bool = Field(title="Whether this category is income or outlay")
+    is_income: bool = Field(title="Whether this category is income or outlay", default=False)
 
 
 class CategoryUpdate(SQLModel):
