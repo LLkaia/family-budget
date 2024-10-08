@@ -5,7 +5,7 @@ from budget.routes import router as budget_router
 from users.routes import router as users_router
 
 
-app = FastAPI()
+app = FastAPI(docs_url="/")
 
 
 # @app.on_event("startup")
