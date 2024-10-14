@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
 from pydantic import EmailStr, field_validator
 from sqlalchemy import UniqueConstraint
@@ -23,12 +23,8 @@ class Budget(SQLModel, table=True):  # type: ignore[call-arg]
     name: str = Field(max_length=255)
     balance: float = Field(ge=0)
 
-    users: list["User"] = Relationship(
-        back_populates="budgets", link_model=UserBudgetLink, sa_relationship_kwargs={"lazy": "joined"}
-    )
-    categories: list["Category"] = Relationship(
-        back_populates="budget", cascade_delete=True, sa_relationship_kwargs={"lazy": "selectin"}
-    )
+    users: list["User"] = Relationship(back_populates="budgets", link_model=UserBudgetLink)
+    categories: list["Category"] = Relationship(back_populates="budget", cascade_delete=True)
 
 
 class User(SQLModel, table=True):  # type: ignore[call-arg]
@@ -74,8 +70,9 @@ class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
     """Transaction database model."""
 
     id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
-    date: datetime = Field(default_factory=get_datatime_now)
+    date_performed: date = Field(description="When transaction was performed.")
     amount: float = Field(gt=0)
     category_id: uuid.UUID = Field(foreign_key="category.id", ondelete="CASCADE")
+    datetime_added: datetime = Field(default_factory=get_datatime_now, description="When transaction was added.")
 
     category: Category = Relationship(back_populates="transactions")

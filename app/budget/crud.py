@@ -1,11 +1,10 @@
 import uuid
-from datetime import datetime
-from typing import Annotated, cast
+from datetime import date
+from typing import cast
 
-from fastapi import Depends, HTTPException, Path
+from sqlalchemy.orm import joinedload, selectinload
 from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from starlette import status
 
 from budget.schemas import (
     BudgetCreate,
@@ -17,11 +16,9 @@ from budget.schemas import (
     PredefinedCategoryList,
     TransactionCreate,
 )
-from core.database import get_db
 from exceptions import ItemNotExistsException, ParameterMissingException
-from models import Budget, Category, PredefinedCategory, Transaction, User
-from users.auth import current_user
-from utils import PeriodFrom, get_datatime_now
+from models import Budget, Category, PredefinedCategory, Transaction, User, UserBudgetLink
+from utils import PeriodFrom
 
 
 async def create_budget_with_user(session: AsyncSession, budget_data: BudgetCreate, user: User) -> Budget:
@@ -31,6 +28,12 @@ async def create_budget_with_user(session: AsyncSession, budget_data: BudgetCrea
     await session.commit()
     await session.refresh(budget)
     return cast(Budget, budget)
+
+
+async def retrieve_budgets_by_user(session: AsyncSession, user: User) -> list[Budget]:
+    """Retrieve Budgets with User."""
+    budgets = await session.exec(select(Budget).where(Budget.users.any(id=user.id)))  # type: ignore[attr-defined]
+    return list(budgets.all())
 
 
 async def create_category_and_add_to_budget(
@@ -71,18 +74,14 @@ async def remove_predefined_category(session: AsyncSession, category_id: uuid.UU
 
 
 async def get_budget_by_id_with_current_user(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
-    session: Annotated[AsyncSession, Depends(get_db)],
-    user: Annotated[User, Depends(current_user)],
-) -> Budget:
-    """Get Budget by ID for member or admin user."""
-    budget = await session.exec(select(Budget).where(Budget.id == budget_id))
-    budget = budget.unique().one_or_none()
-    if budget:
-        is_user_belongs_to_budget = any(user.id == budget_user.id for budget_user in budget.users)
-        if is_user_belongs_to_budget or user.is_superuser:  # TODO: remove access to budget for admin
-            return cast(Budget, budget)
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found.")
+    budget_id: uuid.UUID, session: AsyncSession, user: User, detailed: bool = False
+) -> Budget | None:
+    """Get Budget by ID for member."""
+    query = select(Budget).where(Budget.id == budget_id, Budget.users.any(id=user.id))  # type: ignore[attr-defined]
+    if detailed:
+        query = query.options(selectinload(Budget.users), joinedload(Budget.categories))
+    budget = await session.exec(query)
+    return cast(Budget | None, budget.unique().one_or_none())
 
 
 async def remove_budget(session: AsyncSession, budget: Budget) -> None:
@@ -91,18 +90,14 @@ async def remove_budget(session: AsyncSession, budget: Budget) -> None:
     await session.commit()
 
 
-async def remove_category_from_budget(session: AsyncSession, budget: Budget, category_id: uuid.UUID) -> None:
+async def remove_category(session: AsyncSession, category: Category) -> None:
     """Remove category from budget."""
-    category = get_category_by_id_from_existed_budget(budget, category_id)
     await session.delete(category)
     await session.commit()
 
 
-async def update_category(
-    session: AsyncSession, budget: Budget, category_id: uuid.UUID, new_data: CategoryUpdate
-) -> Category:
+async def update_category(session: AsyncSession, category: Category, new_data: CategoryUpdate) -> Category:
     """Update category with new data."""
-    category = get_category_by_id_from_existed_budget(budget, category_id)
     category.sqlmodel_update(new_data.model_dump(exclude_unset=True))
     session.add(category)
     await session.commit()
@@ -137,11 +132,10 @@ async def update_budget(session: AsyncSession, budget: Budget, new_data: BudgetU
     return budget
 
 
-async def perform_transaction_per_budget(
-    session: AsyncSession, budget: Budget, category_id: uuid.UUID, transaction_data: TransactionCreate
+async def perform_transaction_per_category(
+    session: AsyncSession, budget: Budget, category: Category, transaction_data: TransactionCreate
 ) -> Budget:
     """Perform transaction per budget per category."""
-    category = get_category_by_id_from_existed_budget(budget, category_id)
     transaction = Transaction.model_validate(transaction_data, update={"category_id": category.id})
     budget.balance += transaction.amount if category.is_income else -transaction.amount
     session.add_all([transaction, budget])
@@ -150,54 +144,78 @@ async def perform_transaction_per_budget(
     return budget
 
 
-def get_category_by_id_from_existed_budget(budget: Budget, category_id: uuid.UUID) -> Category:
+async def get_category_by_id_with_user(session: AsyncSession, user: User, category_id: uuid.UUID) -> Category | None:
     """Get category from budget by ID."""
-    category = next((cat for cat in budget.categories if cat.id == category_id), None)
-    if not category:
-        raise ItemNotExistsException
-    return category
+    category = await session.exec(
+        select(Category)
+        .join(Budget)
+        .join(UserBudgetLink)
+        .where(Category.id == category_id)
+        .where(UserBudgetLink.user_id == user.id)
+    )
+    return cast(Category | None, category.one_or_none())
 
 
-async def filter_categories(
+async def get_categories_by_budget_and_user(
+    budget_id: uuid.UUID,
+    user_id: uuid.UUID,
     session: AsyncSession,
-    categories: list[Category],
-    is_income: bool,
-    get_transactions: bool,
+    is_income: bool | None,
+    get_transactions: bool | None,
     period_from: PeriodFrom | None,
 ) -> list[CategoryWithAmount]:
-    """Filter categories by income and period.
+    """Get categories for budget.
 
-    :param session: DB session
-    :param categories: Categories to filter
-    :param is_income: whether income or not
-    :param get_transactions: whether retrieve amount
-        of transaction per period.
-    :param period_from: period for amount of transactions,
-        is required if param get_transactions is True.
-    :return: list of filtered Categories
+    Validate if user has access to budget, filter
+    by type, and get amount of transactions per
+    period per category.
+    :param budget_id: budget ID.
+    :param user_id: User ID
+    :param session: sql session
+    :param is_income: whether categories are income
+        or outlay.
+    :param get_transactions: whether to fetch amount
+        of transactions per category per period.
+    :param period_from: period for amount aggregation
+    :return:
     """
-    result = []
-    for category in categories:
-        if category.is_income == is_income:
-            filtered_category = CategoryWithAmount(**category.model_dump())
+    # get categories for budget, if user belongs to budget
+    query = (
+        select(Category)
+        .join(Budget)
+        .join(UserBudgetLink)
+        .where(Budget.id == budget_id)
+        .where(UserBudgetLink.user_id == user_id)
+    )
+    # filter by type
+    if is_income is not None:
+        query = query.where(Category.is_income == is_income)
 
-            # aggregate related transactions per period
-            if get_transactions:
-                if period_from is None:
-                    raise ParameterMissingException("'period_from' is required to get aggregated transactions amount.")
+    categories = await session.exec(query)
 
-                date_start = get_datatime_now().replace(**period_from.get_datatime_start())  # type: ignore[arg-type]
-                filtered_category.amount = await retrieve_amount_per_category(session, category.id, date_start)
+    # calculate amount of transaction per category
+    if get_transactions:
+        if period_from is None:
+            raise ParameterMissingException("'period_from' is required to get aggregated transactions amount.")
+        date_start = period_from.get_date_start()
+        categories_with_amount = []
+        for category in categories:
+            categories_with_amount.append(
+                CategoryWithAmount.model_validate(
+                    category.model_dump(),
+                    update={"total_amount": await retrieve_amount_per_category(session, category.id, date_start)},
+                )
+            )
+        return categories_with_amount
 
-            result.append(filtered_category)
-    return result
+    return cast(list[CategoryWithAmount], categories.all())
 
 
 async def retrieve_amount_per_category(
     session: AsyncSession,
     category_id: uuid.UUID,
-    start_date: datetime | None = None,
-    end_date: datetime | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None,
 ) -> float:
     """Retrieve aggregated amount per category.
 
@@ -209,9 +227,8 @@ async def retrieve_amount_per_category(
     """
     query = select(func.sum(Transaction.amount)).where(Transaction.category_id == category_id)
     if start_date:
-        query = query.where(Transaction.date >= start_date)
+        query = query.where(Transaction.date_performed >= start_date)
     if end_date:
-        query = query.where(Transaction.date <= end_date)
-
+        query = query.where(Transaction.date_performed <= end_date)
     result = await session.exec(query)
     return result.one_or_none() or 0.0

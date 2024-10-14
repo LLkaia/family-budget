@@ -1,4 +1,5 @@
 import uuid
+from datetime import date
 
 from sqlmodel import Field, SQLModel
 
@@ -39,7 +40,7 @@ class CategoryWithAmount(CategoryCreate):
     """Category with calculated transactions amount."""
 
     id: uuid.UUID
-    amount: float | None = None
+    total_amount: float | None = None
 
 
 class CategoryUpdate(SQLModel):
@@ -70,3 +71,4 @@ class TransactionCreate(SQLModel):
     """Transaction input schema."""
 
     amount: float = Field(ge=0)
+    date_performed: date
