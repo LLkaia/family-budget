@@ -1,6 +1,5 @@
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
-from typing import cast
 
 from passlib.context import CryptContext
 from zoneinfo import ZoneInfo
@@ -16,15 +15,15 @@ class PeriodFrom(str, Enum):
     MONTH = "month"
     YEAR = "year"
 
-    def get_datatime_start(self) -> dict[str, int]:
-        """Get dict to use for datatime.replace() function."""
+    def get_date_start(self) -> date:
+        """Get date for filter."""
+        now = date.today()
         if self == PeriodFrom.DAY:
-            return {"hour": 0, "minute": 0, "second": 0, "microsecond": 0}
+            return now
         elif self == PeriodFrom.MONTH:
-            return {"day": 1, "hour": 0, "minute": 0, "second": 0, "microsecond": 0}
+            return date(now.year, now.month, 1)
         elif self == PeriodFrom.YEAR:
-            return {"month": 1, "day": 1, "hour": 0, "minute": 0, "second": 0, "microsecond": 0}
-        return {}
+            return date(now.year, 1, 1)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -34,7 +33,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     :param hashed_password: hashed password
     :return: True if successful, False otherwise
     """
-    return cast(bool, pwd_context.verify(plain_password, hashed_password))
+    return bool(pwd_context.verify(plain_password, hashed_password))
 
 
 def get_password_hash(password: str) -> str:
@@ -43,7 +42,7 @@ def get_password_hash(password: str) -> str:
     :param password: plaintext password
     :return: hashed password
     """
-    return cast(str, pwd_context.hash(password))
+    return str(pwd_context.hash(password))
 
 
 def get_datatime_now(timezone: str = "UTC") -> datetime:
