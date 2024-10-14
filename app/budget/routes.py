@@ -120,9 +120,9 @@ async def delete_budget(
 ) -> None:
     """Delete budget."""
     budget = await get_budget_by_id_with_current_user(budget_id, session, user)
-    if budget:
-        await remove_budget(session, budget)
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found.")
+    if not budget:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found.")
+    await remove_budget(session, budget)
 
 
 @router.put("/{budget_id}", response_model_exclude_none=True)
@@ -154,6 +154,8 @@ async def add_new_user_to_budget(
     budget = await get_budget_by_id_with_current_user(budget_id, session, user, detailed=True)
     if not budget:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found.")
+    if user_to_add in budget.users:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists.")
 
     return await add_user_to_budget(session, budget, user_to_add)
 
@@ -172,9 +174,9 @@ async def delete_user_from_budget(
 
     user_to_delete = await get_user_by_email(session, user_data.email)
     if not user_to_delete or user_to_delete not in budget.users:
-        raise HTTPException(detail="User not found.", status_code=status.HTTP_404_NOT_FOUND)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
 
-    return await remove_user_from_budget(session, budget, user)
+    return await remove_user_from_budget(session, budget, user_to_delete)
 
 
 @router.post("/{budget_id}/categories", response_model_exclude_none=True)

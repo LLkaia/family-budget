@@ -1,9 +1,8 @@
 import uuid
-from datetime import date
 from typing import cast
 
 from sqlalchemy.orm import joinedload, selectinload
-from sqlmodel import func, select
+from sqlmodel import func, or_, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from budget.schemas import (
@@ -177,58 +176,40 @@ async def get_categories_by_budget_and_user(
     :param get_transactions: whether to fetch amount
         of transactions per category per period.
     :param period_from: period for amount aggregation
-    :return:
+    :return: list of categories
     """
-    # get categories for budget, if user belongs to budget
-    query = (
-        select(Category)
-        .join(Budget)
-        .join(UserBudgetLink)
-        .where(Budget.id == budget_id)
-        .where(UserBudgetLink.user_id == user_id)
-    )
-    # filter by type
-    if is_income is not None:
-        query = query.where(Category.is_income == is_income)
+    query = select(Category)
 
-    categories = await session.exec(query)
-
-    # calculate amount of transaction per category
+    # aggregate with amount of transactions per category and filter by start date
     if get_transactions:
         if period_from is None:
             raise ParameterMissingException("'period_from' is required to get aggregated transactions amount.")
         date_start = period_from.get_date_start()
-        categories_with_amount = []
-        for category in categories:
-            categories_with_amount.append(
-                CategoryWithAmount.model_validate(
-                    category.model_dump(),
-                    update={"total_amount": await retrieve_amount_per_category(session, category.id, date_start)},
-                )
+        query = (
+            select(
+                Category,
+                func.sum(Transaction.amount).label("total_amount"),
             )
-        return categories_with_amount
+            .outerjoin(Transaction)
+            .where(or_(Transaction.date_performed.is_(None), Transaction.date_performed >= date_start))  # type: ignore[attr-defined]
+            .group_by(Category.id)
+        )
 
-    return cast(list[CategoryWithAmount], categories.all())
+    # get related budget to check if user has access to category
+    query = (
+        query.join(Budget).join(UserBudgetLink).where(Budget.id == budget_id).where(UserBudgetLink.user_id == user_id)
+    )
 
+    # filter by type of category
+    if is_income is not None:
+        query = query.where(Category.is_income == is_income)
 
-async def retrieve_amount_per_category(
-    session: AsyncSession,
-    category_id: uuid.UUID,
-    start_date: date | None = None,
-    end_date: date | None = None,
-) -> float:
-    """Retrieve aggregated amount per category.
-
-    :param session: DB session
-    :param category_id: category ID
-    :param start_date: start date to filter
-    :param end_date: end date to filter
-    :return: list of filtered Categories
-    """
-    query = select(func.sum(Transaction.amount)).where(Transaction.category_id == category_id)
-    if start_date:
-        query = query.where(Transaction.date_performed >= start_date)
-    if end_date:
-        query = query.where(Transaction.date_performed <= end_date)
-    result = await session.exec(query)
-    return result.one_or_none() or 0.0
+    categories = await session.exec(query)
+    return (
+        [
+            CategoryWithAmount(**category.model_dump(), total_amount=total_amount or 0)
+            for category, total_amount in categories
+        ]
+        if get_transactions
+        else cast(list[CategoryWithAmount], categories.all())
+    )

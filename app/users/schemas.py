@@ -4,8 +4,6 @@ from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
-from models import Budget
-
 
 class UserBase(SQLModel):
     """Base class for User schema."""
@@ -32,7 +30,6 @@ class UserDetails(UserPublic):
 
     telegram_id: int | None
     is_superuser: bool
-    budgets: list[Budget] = []
 
 
 class UserList(SQLModel):
