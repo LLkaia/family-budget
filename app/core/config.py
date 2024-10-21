@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     postgres_db: str
     postgres_host: str
     postgres_port: int
+    postgres_test_db: str = "test_db"
 
     secret_key: str
     algorithm: str
@@ -42,6 +43,20 @@ class Settings(BaseSettings):
                 host=self.postgres_host,
                 port=self.postgres_port,
                 path=self.postgres_db,
+            )
+        )
+
+    @computed_field  # type: ignore
+    @property
+    def test_db_conn_string(self) -> str:
+        return str(
+            MultiHostUrl.build(
+                scheme="postgresql+asyncpg",
+                username=self.postgres_user,
+                password=self.postgres_password,
+                host=self.postgres_host,
+                port=self.postgres_port,
+                path=self.postgres_test_db,
             )
         )
 
