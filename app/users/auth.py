@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Annotated, cast
 
 import jwt
@@ -77,7 +77,7 @@ async def current_user(
     expires = token_payload.exp
     unic_id = token_payload.jti
     if not expires or expires.replace(tzinfo=None) <= get_datatime_now() or unic_id in token_blocklist:
-        raise CredentialsException("Token has expired")
+        raise CredentialsException
     email = token_payload.sub
     if email is None:
         raise CredentialsException

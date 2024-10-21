@@ -16,7 +16,7 @@ from users.schemas import Message, Token, UserCreate, UserDetails, UserList
 router = APIRouter()
 
 
-@router.get("/", response_model=UserDetails, response_model_exclude_none=True)
+@router.get("", response_model=UserDetails, response_model_exclude_none=True)
 async def get_me_detailed(user: Annotated[User, Depends(current_user)]) -> User:
     """Get current user info."""
     return user
@@ -38,9 +38,7 @@ async def login_for_access_token(
     """Authenticate user with provided credentials."""
     user = await authenticate_user(session, form_data.username, form_data.password)
     if not user:
-        raise CredentialsException(
-            detail="Incorrect email or password",
-        )
+        raise CredentialsException
     access_token = create_access_token(user)
     return Token(access_token=access_token, token_type="bearer")
 

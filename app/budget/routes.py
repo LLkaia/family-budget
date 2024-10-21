@@ -46,7 +46,7 @@ from utils import PeriodFrom
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("", status_code=status.HTTP_201_CREATED)
 async def create_budget(
     budget: BudgetCreate,
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -56,7 +56,7 @@ async def create_budget(
     return await create_budget_with_user(session, budget, user)
 
 
-@router.get("/")
+@router.get("")
 async def get_my_budgets(
     user: Annotated[User, Depends(current_user)], session: Annotated[AsyncSession, Depends(get_db)]
 ) -> list[Budget]:
