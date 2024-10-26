@@ -28,3 +28,9 @@ async def create_user(session: AsyncSession, user_data: UserCreate) -> User:
     await session.commit()
     await session.refresh(user)
     return cast(User, user)
+
+
+async def remove_user(session: AsyncSession, user: User) -> None:
+    """Remove existed user."""
+    await session.delete(user)
+    await session.commit()
