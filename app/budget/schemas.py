@@ -18,7 +18,7 @@ class BudgetUpdate(SQLModel):
     """Update Budget schema."""
 
     name: str | None = None
-    balance: float | None = None
+    balance: float | None = Field(default=None, ge=0, title="Current balance of budget")
 
 
 class PredefinedCategoryCreate(SQLModel):
