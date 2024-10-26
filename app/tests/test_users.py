@@ -1,6 +1,6 @@
 from httpx import AsyncClient
 
-from tests.conftest import UserFixture
+from users.schemas import UserFixture
 
 
 async def test_register_correct_data(client: AsyncClient) -> None:
@@ -57,7 +57,6 @@ async def test_login_successful(client: AsyncClient, test_user: UserFixture) -> 
     response_json = response.json()
     assert response.status_code == 200, response_json
     assert response_json["token_type"] == "bearer", response_json
-    test_user.token = response_json["access_token"]
 
 
 async def test_login_incorrect_credentials(client: AsyncClient) -> None:
@@ -113,4 +112,3 @@ async def test_logout(client: AsyncClient, test_user: UserFixture) -> None:
     assert response_json["message"] == "Successfully logged out.", response_json
     response = await client.post("/account/verify-token", headers=test_user.get_headers())
     assert response.status_code == 401, response_json
-    test_user.token = ""

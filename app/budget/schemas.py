@@ -72,3 +72,9 @@ class TransactionCreate(SQLModel):
 
     amount: float = Field(ge=0)
     date_performed: date
+
+
+class BudgetFixture(BudgetCreate):
+    """Budget fixture for tests."""
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid1)

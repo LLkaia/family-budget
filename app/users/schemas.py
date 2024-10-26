@@ -58,3 +58,13 @@ class Message(SQLModel):
     """Standard response schema."""
 
     message: str
+
+
+class UserFixture(UserCreate):
+    """User fixture for tests."""
+
+    token: str | None = None
+
+    def get_headers(self) -> dict[str, str]:
+        """Return the headers with the authorization token."""
+        return {"Authorization": f"Bearer {self.token}"}
