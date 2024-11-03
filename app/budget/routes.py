@@ -38,7 +38,7 @@ from core.database import get_db
 from exceptions import ItemNotExistsException, ParameterMissingException
 from models import Budget, Category, PredefinedCategory, User
 from users.auth import current_superuser, current_user
-from users.crud import get_user_by_email
+from users.crud import get_user_by_email, get_user_by_id
 from users.schemas import UserBase
 from utils import PeriodFrom
 
@@ -125,7 +125,7 @@ async def delete_budget(
     await remove_budget(session, budget)
 
 
-@router.put("/{budget_id}", response_model_exclude_none=True)
+@router.patch("/{budget_id}", response_model_exclude_none=True)
 async def modify_budget(
     budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -160,19 +160,19 @@ async def add_new_user_to_budget(
     return await add_user_to_budget(session, budget, user_to_add)
 
 
-@router.delete("/{budget_id}/users", response_model=BudgetDetails, response_model_exclude_none=True)
+@router.delete("/{budget_id}/users/{user_id}", response_model=BudgetDetails, response_model_exclude_none=True)
 async def delete_user_from_budget(
     budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    user_id: Annotated[uuid.UUID, Path(title="User id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
-    user_data: UserBase,
 ) -> Budget:
     """Delete user from budget."""
     budget = await get_budget_by_id_with_current_user(budget_id, session, user, detailed=True)
     if not budget:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found.")
 
-    user_to_delete = await get_user_by_email(session, user_data.email)
+    user_to_delete = await get_user_by_id(session, user_id)
     if not user_to_delete or user_to_delete not in budget.users:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
 
@@ -226,7 +226,7 @@ async def delete_category(
     await remove_category(session, category)
 
 
-@router.put("/categories/{category_id}", response_model_exclude_none=True)
+@router.patch("/categories/{category_id}", response_model_exclude_none=True)
 async def modify_category(
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
