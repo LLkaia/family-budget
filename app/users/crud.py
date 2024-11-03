@@ -37,6 +37,14 @@ async def create_user(session: AsyncSession, user_data: UserCreate) -> User:
     return cast(User, user)
 
 
+async def set_user_super(session: AsyncSession, user: User) -> User:
+    """Set user as superuser."""
+    user.is_superuser = True
+    await session.commit()
+    await session.refresh(user)
+    return user
+
+
 async def remove_user(session: AsyncSession, user: User) -> None:
     """Remove existed user."""
     await session.delete(user)

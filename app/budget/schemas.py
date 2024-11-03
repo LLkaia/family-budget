@@ -21,6 +21,12 @@ class BudgetUpdate(SQLModel):
     balance: float | None = Field(default=None, ge=0, title="Current balance of budget")
 
 
+class BudgetPublic(BudgetCreate):
+    """Public Budget schema."""
+
+    id: uuid.UUID
+
+
 class PredefinedCategoryCreate(SQLModel):
     """Predefined category creation schema."""
 
@@ -47,7 +53,7 @@ class CategoryUpdate(SQLModel):
     """Update category schema."""
 
     name: str | None = None
-    category_restriction: float | None = None
+    category_restriction: float | None = Field(ge=0, default=None)
     description: str | None = None
     is_income: bool | None = None
 
@@ -59,10 +65,9 @@ class PredefinedCategoryList(SQLModel):
     count: int
 
 
-class BudgetDetails(BudgetCreate):
+class BudgetDetails(BudgetPublic):
     """Detailed Budget schema."""
 
-    id: uuid.UUID
     users: list[UserPublic] = []
     categories: list[Category] = []
 
@@ -72,9 +77,3 @@ class TransactionCreate(SQLModel):
 
     amount: float = Field(ge=0)
     date_performed: date
-
-
-class BudgetFixture(BudgetCreate):
-    """Budget fixture for tests."""
-
-    id: uuid.UUID = Field(default_factory=uuid.uuid1)
