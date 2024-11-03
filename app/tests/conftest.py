@@ -1,7 +1,7 @@
 import asyncio
 import uuid
 from asyncio import AbstractEventLoop
-from typing import AsyncGenerator, Generator, cast
+from typing import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
@@ -13,13 +13,10 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from budget.crud import create_budget_with_user, remove_budget
-from budget.schemas import BudgetFixture
 from core.config import get_settings
 from core.database import get_db
 from main import app
-from models import User
-from users.crud import create_user, get_user_by_email, remove_user
+from users.crud import create_user, remove_user, set_user_super
 from users.schemas import UserFixture
 
 
@@ -81,6 +78,7 @@ async def test_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
     user_fixture = UserFixture(email="test@example.com", password="test12345", full_name="Test User", id=uuid.uuid1())
     async with TestSessionLocal() as session:
         created_user = await create_user(session, user_fixture)
+        await set_user_super(session, created_user)
     response = await client.post(
         "/account/login", data={"username": user_fixture.email, "password": user_fixture.password}
     )
@@ -88,15 +86,3 @@ async def test_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
     yield user_fixture
     async with TestSessionLocal() as session:
         await remove_user(session, created_user)
-
-
-@pytest.fixture
-async def test_budget(test_user: UserFixture, client: AsyncClient) -> AsyncGenerator[BudgetFixture, None]:
-    """Create test budget for user fixture."""
-    budget_fixture = BudgetFixture(name="Test Budget", balance=20000)
-    async with TestSessionLocal() as session:
-        user = await get_user_by_email(session, test_user.email)
-        created_budget = await create_budget_with_user(session, budget_fixture, cast(User, user))
-    yield budget_fixture
-    async with TestSessionLocal() as session:
-        await remove_budget(session, created_budget)

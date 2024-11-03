@@ -88,7 +88,7 @@ async def test_auth_user_profile(client: AsyncClient, test_user: UserFixture) ->
     assert response.status_code == 200, response_json
     assert response_json["email"] == test_user.email, response_json
     assert response_json["full_name"] == test_user.full_name, response_json
-    assert response_json["is_superuser"] is False, response_json
+    assert response_json["is_superuser"] is True, response_json
 
 
 async def test_not_auth_user_profile(client: AsyncClient) -> None:

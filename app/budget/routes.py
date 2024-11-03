@@ -179,7 +179,7 @@ async def delete_user_from_budget(
     return await remove_user_from_budget(session, budget, user_to_delete)
 
 
-@router.post("/{budget_id}/categories", response_model_exclude_none=True)
+@router.post("/{budget_id}/categories", response_model_exclude_none=True, status_code=status.HTTP_201_CREATED)
 async def add_new_category_to_budget(
     budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
@@ -254,4 +254,6 @@ async def perform_transaction(
     budget = await get_budget_by_id_with_current_user(category.budget_id, session, user)
     if not budget:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found.")
+    if budget.balance < transaction_data.amount:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not enough money.")
     return await perform_transaction_per_category(session, budget, category, transaction_data)
