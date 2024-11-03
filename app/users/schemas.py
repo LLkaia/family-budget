@@ -63,6 +63,7 @@ class Message(SQLModel):
 class UserFixture(UserCreate):
     """User fixture for tests."""
 
+    id: uuid.UUID
     token: str | None = None
 
     def get_headers(self) -> dict[str, str]:
