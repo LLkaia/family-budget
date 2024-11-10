@@ -1,4 +1,5 @@
 import uuid
+from datetime import date
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Path, status
@@ -13,15 +14,19 @@ from budget.crud import (
     get_budget_by_id_with_current_user,
     get_categories_by_budget_and_user,
     get_category_by_id_with_user,
+    get_list_transactions,
     get_predefined_categories,
+    get_transaction_by_id_with_user,
     perform_transaction_per_category,
     remove_budget,
     remove_category,
     remove_predefined_category,
+    remove_transaction,
     remove_user_from_budget,
     retrieve_budgets_by_user,
     update_budget,
     update_category,
+    update_transaction,
 )
 from budget.schemas import (
     BudgetCreate,
@@ -33,10 +38,12 @@ from budget.schemas import (
     PredefinedCategoryCreate,
     PredefinedCategoryList,
     TransactionCreate,
+    TransactionList,
+    TransactionUpdate,
 )
 from core.database import get_db
 from exceptions import ItemNotExistsException, ParameterMissingException
-from models import Budget, Category, PredefinedCategory, User
+from models import Budget, Category, PredefinedCategory, Transaction, User
 from users.auth import current_superuser, current_user
 from users.crud import get_user_by_email, get_user_by_id
 from users.schemas import UserBase
@@ -257,3 +264,50 @@ async def perform_transaction(
     if budget.balance < transaction_data.amount:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not enough money.")
     return await perform_transaction_per_category(session, budget, category, transaction_data)
+
+
+@router.get("/{budget_id}/transactions")
+async def get_budget_transactions(
+    session: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(current_user)],
+    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    date_start: date | None = None,
+    date_end: date | None = None,
+    category_name_filter: str | None = None,
+    offset: int = 0,
+    limit: int = 100,
+) -> TransactionList:
+    """Get list of transactions for budget."""
+    return await get_list_transactions(
+        session, budget_id, user.id, date_start, date_end, category_name_filter, offset, limit
+    )
+
+
+@router.delete("/transactions/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_transaction(
+    session: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(current_user)],
+    transaction_id: Annotated[uuid.UUID, Path(title="Transaction ID")],
+) -> None:
+    """Delete transaction by ID."""
+    transaction = await get_transaction_by_id_with_user(session, user, transaction_id)
+    if not transaction:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found.")
+    await remove_transaction(session, transaction)
+
+
+@router.patch("/transactions/{transaction_id}")
+async def modify_transaction(
+    session: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(current_user)],
+    transaction_id: Annotated[uuid.UUID, Path(title="Transaction ID")],
+    transaction_data: TransactionUpdate,
+) -> Transaction:
+    """Update transaction by ID."""
+    transaction = await get_transaction_by_id_with_user(session, user, transaction_id)
+    if not transaction:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found.")
+    try:
+        return await update_transaction(session, transaction, transaction_data)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
