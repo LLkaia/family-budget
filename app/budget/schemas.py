@@ -3,7 +3,7 @@ from datetime import date
 
 from sqlmodel import Field, SQLModel
 
-from models import Category, PredefinedCategory
+from models import Category, PredefinedCategory, Transaction
 from users.schemas import UserPublic
 
 
@@ -77,3 +77,17 @@ class TransactionCreate(SQLModel):
 
     amount: float = Field(ge=0)
     date_performed: date
+
+
+class TransactionList(SQLModel):
+    """List Transactions schema."""
+
+    data: list[Transaction]
+    count: int
+
+
+class TransactionUpdate(SQLModel):
+    """Transaction update schema."""
+
+    amount: float | None = Field(ge=0, default=None)
+    date_performed: date | None = None
