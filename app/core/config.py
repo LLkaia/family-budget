@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     postgres_port: int
     postgres_test_db: str = "test_db"
 
+    redis_host: str
+    redis_port: int
+
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int

@@ -10,8 +10,8 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 log.addHandler(logging.StreamHandler())
 
-RETRIES = 10
-SLEEP = 1
+RETRIES = 100
+SLEEP = 2
 
 
 if __name__ == "__main__":
