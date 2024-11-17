@@ -10,6 +10,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.config import get_settings
 from core.database import get_db
+from core.redis import redis_client
 from exceptions import CredentialsException
 from models import User
 from users.crud import get_user_by_email
@@ -20,9 +21,6 @@ from utils import get_datatime_now, verify_password
 app_config = get_settings()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/account/login")
-
-# move to Redis later
-token_blocklist = set()
 
 
 async def authenticate_user(session: AsyncSession, email: str, password: str) -> User | None:
@@ -76,7 +74,11 @@ async def current_user(
     """
     expires = token_payload.exp
     unic_id = token_payload.jti
-    if not expires or expires.replace(tzinfo=None) <= get_datatime_now() or unic_id in token_blocklist:
+    if (
+        not expires
+        or expires.replace(tzinfo=None) <= get_datatime_now()
+        or await redis_client.is_token_blacklisted(unic_id)
+    ):
         raise CredentialsException
     email = token_payload.sub
     if email is None:
@@ -103,4 +105,5 @@ async def destroy_token(token_payload: Annotated[TokenPayload, Depends(decode_ac
 
     :param token_payload: JWT access token payload
     """
-    token_blocklist.add(token_payload.jti)
+    ttl = token_payload.exp.replace(tzinfo=None) - get_datatime_now()
+    await redis_client.add_token_to_blacklist(token_payload.jti, ttl)

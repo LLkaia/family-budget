@@ -10,9 +10,14 @@ services:
              python3 ./main.py"
     depends_on:
       - db
+      - redis
   db:
-    image: postgres:15.8
+    image: postgres:15.8-alpine
     ports:
       - "8001:5432"
     env_file: "app/.env"
     container_name: db
+  redis:
+    image: redis:alpine
+    container_name: redis
+    command: redis-server

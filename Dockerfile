@@ -1,4 +1,4 @@
-FROM python:3.12.5
+FROM python:3.12.5-alpine
 LABEL authors="ikaialai"
 
 WORKDIR /workspace/
