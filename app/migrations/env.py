@@ -8,7 +8,17 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from sqlmodel import SQLModel
 
 from core.config import get_settings
-from models import Budget, Category, PredefinedCategory, Transaction, User, UserBudgetLink
+from models import (
+    Budget,
+    Category,
+    PredefinedCategory,
+    StockAccount,
+    StockPosition,
+    StockTransaction,
+    Transaction,
+    User,
+    UserBudgetLink,
+)
 
 
 config = context.config

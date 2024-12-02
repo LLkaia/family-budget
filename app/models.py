@@ -5,6 +5,7 @@ from pydantic import EmailStr, field_validator
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
+from stocks.schemas import StockTransactionType
 from utils import get_datatime_now
 from validators import normalize_name
 
@@ -38,6 +39,7 @@ class User(SQLModel, table=True):  # type: ignore[call-arg]
     is_superuser: bool = Field(default=False)
 
     budgets: list[Budget] = Relationship(back_populates="users", link_model=UserBudgetLink)
+    stock_accounts: list["StockAccount"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 class Category(SQLModel, table=True):  # type: ignore[call-arg]
@@ -76,3 +78,45 @@ class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
     datetime_added: datetime = Field(default_factory=get_datatime_now, description="When transaction was added.")
 
     category: Category = Relationship(back_populates="transactions")
+
+
+class StockAccount(SQLModel, table=True):  # type: ignore[call-arg]
+    """Stock account database model."""
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    balance: float = Field(ge=0)
+    account_name: str = Field(max_length=255)
+    owner_id: uuid.UUID = Field(foreign_key="user.id", ondelete="CASCADE")
+
+    owner: User = Relationship(back_populates="stock_accounts")
+    stock_transactions: list["StockTransaction"] = Relationship(back_populates="stock_account", cascade_delete=True)
+
+
+class StockPosition(SQLModel, table=True):  # type: ignore[call-arg]
+    """Stock position database model."""
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    ticket_name: str = Field(max_length=10)
+    count_active: int = Field(ge=0)
+    date_opened: date = Field(description="When position was opened.")
+    dividends_payed: float = Field(
+        ge=0, default=0, description="Dividends paid per position."
+    )  # consider to be auto generated
+
+    stock_transactions: list["StockTransaction"] = Relationship(back_populates="stock_account", cascade_delete=True)
+
+
+class StockTransaction(SQLModel, table=True):  # type: ignore[call-arg]
+    """Stock transaction database model."""
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid1, primary_key=True)
+    date: date = Field(description="When transaction was performed.")
+    account_id: uuid.UUID = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
+    amount: float = Field(gt=0)
+    type: StockTransactionType
+    paid_fee: float = Field(ge=0, default=0)
+    taxes_to_pay: float = Field(ge=0, default=0)  # consider to be auto generated
+    stock_position_id: uuid.UUID = Field(foreign_key="stockposition.id", ondelete="CASCADE")
+
+    stock_account: StockAccount = Relationship(back_populates="stock_transactions")
+    stock_position: StockPosition = Relationship(back_populates="stock_transactions")
