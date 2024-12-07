@@ -9,6 +9,7 @@ from sqlmodel import SQLModel
 
 from core.config import get_settings
 from models import (
+    AccountTransaction,
     Budget,
     Category,
     PredefinedCategory,
