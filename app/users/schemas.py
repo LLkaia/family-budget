@@ -22,7 +22,7 @@ class UserPublic(UserBase):
     """Public User schema."""
 
     full_name: str = Field(max_length=255, title="Full user name")
-    id: uuid.UUID
+    id: int
 
 
 class UserDetails(UserPublic):
@@ -63,7 +63,7 @@ class Message(SQLModel):
 class UserFixture(UserCreate):
     """User fixture for tests."""
 
-    id: uuid.UUID
+    id: int
     token: str | None = None
 
     def get_headers(self) -> dict[str, str]:

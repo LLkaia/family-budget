@@ -1,4 +1,3 @@
-import uuid
 from datetime import date
 from typing import Annotated
 
@@ -96,7 +95,7 @@ async def list_predefined_categories(
     dependencies=[Depends(current_superuser)],
 )
 async def delete_predefined_categories(
-    id_: Annotated[uuid.UUID, Path(title="Predefined category ID")],
+    id_: Annotated[int, Path(title="Predefined category ID")],
     session: Annotated[AsyncSession, Depends(get_db)],
 ) -> None:
     """Create new predefined category."""
@@ -108,7 +107,7 @@ async def delete_predefined_categories(
 
 @router.get("/{budget_id}", response_model=BudgetDetails, response_model_exclude_none=True)
 async def get_budget(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
 ) -> Budget:
@@ -121,7 +120,7 @@ async def get_budget(
 
 @router.delete("/{budget_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_budget(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
 ) -> None:
@@ -134,7 +133,7 @@ async def delete_budget(
 
 @router.patch("/{budget_id}", response_model_exclude_none=True)
 async def modify_budget(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
     new_data: BudgetUpdate,
@@ -148,7 +147,7 @@ async def modify_budget(
 
 @router.post("/{budget_id}/users", response_model=BudgetDetails, response_model_exclude_none=True)
 async def add_new_user_to_budget(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
     user_data: UserBase,
@@ -169,8 +168,8 @@ async def add_new_user_to_budget(
 
 @router.delete("/{budget_id}/users/{user_id}", response_model=BudgetDetails, response_model_exclude_none=True)
 async def delete_user_from_budget(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
-    user_id: Annotated[uuid.UUID, Path(title="User id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
+    user_id: Annotated[int, Path(title="User id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
 ) -> Budget:
@@ -188,7 +187,7 @@ async def delete_user_from_budget(
 
 @router.post("/{budget_id}/categories", response_model_exclude_none=True, status_code=status.HTTP_201_CREATED)
 async def add_new_category_to_budget(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
     category: CategoryCreate,
@@ -206,7 +205,7 @@ async def add_new_category_to_budget(
 
 @router.get("/{budget_id}/categories", response_model_exclude_none=True)
 async def get_budget_categories(
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
     income: bool | None = None,
@@ -224,7 +223,7 @@ async def get_budget_categories(
 async def delete_category(
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
-    category_id: Annotated[uuid.UUID, Path(title="Category ID for specific budget")],
+    category_id: Annotated[int, Path(title="Category ID for specific budget")],
 ) -> None:
     """Delete category from specific budget."""
     category = await get_category_by_id_with_user(session, user, category_id)
@@ -237,7 +236,7 @@ async def delete_category(
 async def modify_category(
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
-    category_id: Annotated[uuid.UUID, Path(title="Category ID for specific budget")],
+    category_id: Annotated[int, Path(title="Category ID for specific budget")],
     category_data: CategoryUpdate,
 ) -> Category:
     """Modify category with new data."""
@@ -251,7 +250,7 @@ async def modify_category(
 async def perform_transaction(
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
-    category_id: Annotated[uuid.UUID, Path(title="Category ID for specific budget")],
+    category_id: Annotated[int, Path(title="Category ID for specific budget")],
     transaction_data: TransactionCreate,
 ) -> Budget:
     """Perform transaction per budget per category."""
@@ -270,7 +269,7 @@ async def perform_transaction(
 async def get_budget_transactions(
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
-    budget_id: Annotated[uuid.UUID, Path(title="Budget id")],
+    budget_id: Annotated[int, Path(title="Budget id")],
     date_start: date | None = None,
     date_end: date | None = None,
     category_name_filter: str | None = None,
@@ -287,7 +286,7 @@ async def get_budget_transactions(
 async def delete_transaction(
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
-    transaction_id: Annotated[uuid.UUID, Path(title="Transaction ID")],
+    transaction_id: Annotated[int, Path(title="Transaction ID")],
 ) -> None:
     """Delete transaction by ID."""
     transaction = await get_transaction_by_id_with_user(session, user, transaction_id)
@@ -300,7 +299,7 @@ async def delete_transaction(
 async def modify_transaction(
     session: Annotated[AsyncSession, Depends(get_db)],
     user: Annotated[User, Depends(current_user)],
-    transaction_id: Annotated[uuid.UUID, Path(title="Transaction ID")],
+    transaction_id: Annotated[int, Path(title="Transaction ID")],
     transaction_data: TransactionUpdate,
 ) -> Transaction:
     """Update transaction by ID."""

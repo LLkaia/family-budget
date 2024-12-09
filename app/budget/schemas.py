@@ -1,4 +1,3 @@
-import uuid
 from datetime import date
 
 from sqlmodel import Field, SQLModel
@@ -24,7 +23,7 @@ class BudgetUpdate(SQLModel):
 class BudgetPublic(BudgetCreate):
     """Public Budget schema."""
 
-    id: uuid.UUID
+    id: int
 
 
 class PredefinedCategoryCreate(SQLModel):
@@ -45,7 +44,7 @@ class CategoryCreate(SQLModel):
 class CategoryWithAmount(CategoryCreate):
     """Category with calculated transactions amount."""
 
-    id: uuid.UUID
+    id: int
     total_amount: float | None = None
 
 

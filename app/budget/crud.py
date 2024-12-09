@@ -1,4 +1,3 @@
-import uuid
 from datetime import date
 from typing import cast
 
@@ -65,7 +64,7 @@ async def get_predefined_categories(session: AsyncSession, offset: int = 0, limi
     return PredefinedCategoryList(count=count.one(), data=categories.all())
 
 
-async def remove_predefined_category(session: AsyncSession, category_id: uuid.UUID) -> None:
+async def remove_predefined_category(session: AsyncSession, category_id: int) -> None:
     """Remove Predefined Category."""
     category = await session.exec(select(PredefinedCategory).where(PredefinedCategory.id == category_id))
     category = category.one_or_none()
@@ -76,7 +75,7 @@ async def remove_predefined_category(session: AsyncSession, category_id: uuid.UU
 
 
 async def get_budget_by_id_with_current_user(
-    budget_id: uuid.UUID, session: AsyncSession, user: User, detailed: bool = False
+    budget_id: int, session: AsyncSession, user: User, detailed: bool = False
 ) -> Budget | None:
     """Get Budget by ID for member."""
     query = select(Budget).where(Budget.id == budget_id, Budget.users.any(id=user.id))  # type: ignore[attr-defined]
@@ -146,7 +145,7 @@ async def perform_transaction_per_category(
     return budget
 
 
-async def get_category_by_id_with_user(session: AsyncSession, user: User, category_id: uuid.UUID) -> Category | None:
+async def get_category_by_id_with_user(session: AsyncSession, user: User, category_id: int) -> Category | None:
     """Get category from budget by ID."""
     category = await session.exec(
         select(Category)
@@ -159,8 +158,8 @@ async def get_category_by_id_with_user(session: AsyncSession, user: User, catego
 
 
 async def get_categories_by_budget_and_user(
-    budget_id: uuid.UUID,
-    user_id: uuid.UUID,
+    budget_id: int,
+    user_id: int,
     session: AsyncSession,
     is_income: bool | None,
     get_transactions: bool | None,
@@ -218,9 +217,7 @@ async def get_categories_by_budget_and_user(
     )
 
 
-async def get_transaction_by_id_with_user(
-    session: AsyncSession, user: User, transaction_id: uuid.UUID
-) -> Transaction | None:
+async def get_transaction_by_id_with_user(session: AsyncSession, user: User, transaction_id: int) -> Transaction | None:
     """Get transaction by ID."""
     transaction = await session.exec(
         select(Transaction)
@@ -247,8 +244,8 @@ async def remove_transaction(session: AsyncSession, transaction: Transaction) ->
 
 async def get_list_transactions(
     session: AsyncSession,
-    budget_id: uuid.UUID,
-    user_id: uuid.UUID,
+    budget_id: int,
+    user_id: int,
     date_start: date | None,
     date_end: date | None,
     category_name_filter: str | None,

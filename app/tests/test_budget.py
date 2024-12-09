@@ -1,4 +1,3 @@
-import uuid
 from datetime import date
 from typing import AsyncGenerator, cast
 
@@ -28,7 +27,7 @@ async def test_budget(test_user: UserFixture, client: AsyncClient) -> AsyncGener
     async with TestSessionLocal() as session:
         user = await get_user_by_email(session, test_user.email)
         created_budget = await create_budget_with_user(
-            session, BudgetPublic(name="Test Budget", balance=20000, id=uuid.uuid1()), cast(User, user)
+            session, BudgetPublic(name="Test Budget", balance=20000, id=1000), cast(User, user)
         )
     yield created_budget
     async with TestSessionLocal() as session:
@@ -66,9 +65,7 @@ async def test_transactions(test_budget: Budget, test_category: Category) -> Non
 
 @pytest.fixture
 async def budget_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
-    user_fixture = UserFixture(
-        email="test_budget@example.com", password="test12345", full_name="Budget User", id=uuid.uuid1()
-    )
+    user_fixture = UserFixture(email="test_budget@example.com", password="test12345", full_name="Budget User", id=2000)
     async with TestSessionLocal() as session:
         created_user = await create_user(session, user_fixture)
     yield user_fixture
@@ -118,7 +115,7 @@ async def test_get_my_budgets(client: AsyncClient, test_user: UserFixture, test_
     assert response.status_code == 200, response_json
     assert isinstance(response_json, list), response_json
     assert len(response_json) == 1, response_json
-    assert response_json[0]["id"] == str(test_budget.id), response_json
+    assert response_json[0]["id"] == test_budget.id, response_json
 
 
 async def test_get_my_budgets_not_auth(client: AsyncClient) -> None:
@@ -131,14 +128,14 @@ async def test_get_budget(client: AsyncClient, test_user: UserFixture, test_budg
     response = await client.get(f"/budget/{test_budget.id}", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 200, response_json
-    assert response_json["id"] == str(test_budget.id), response_json
+    assert response_json["id"] == test_budget.id, response_json
     assert response_json["name"] == test_budget.name, response_json
     assert response_json["balance"] == test_budget.balance, response_json
     assert response_json["users"][0]["email"] == test_user.email, response_json
 
 
 async def test_get_budget_not_found(client: AsyncClient, test_user: UserFixture) -> None:
-    response = await client.get(f"/budget/{uuid.uuid1()}", headers=test_user.get_headers())
+    response = await client.get("/budget/10", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 404, response_json
     assert response_json["detail"] == "Budget not found.", response_json
@@ -160,7 +157,7 @@ async def test_delete_budget(client: AsyncClient, test_user: UserFixture, test_b
 
 
 async def test_delete_budget_not_found(client: AsyncClient, test_user: UserFixture) -> None:
-    response = await client.delete(f"/budget/{uuid.uuid1()}", headers=test_user.get_headers())
+    response = await client.delete("/budget/10", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 404, response_json
     assert response_json["detail"] == "Budget not found.", response_json
@@ -178,7 +175,7 @@ async def test_modify_budget(client: AsyncClient, test_user: UserFixture, test_b
     response = await client.patch(f"/budget/{test_budget.id}", json=update_data, headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 200, response_json
-    assert response_json["id"] == str(test_budget.id), response_json
+    assert response_json["id"] == test_budget.id, response_json
     assert response_json["name"] == update_data["name"], response_json
     assert response_json["balance"] == update_data["balance"], response_json
 
@@ -188,7 +185,7 @@ async def test_modify_budget_balance(client: AsyncClient, test_user: UserFixture
     response = await client.patch(f"/budget/{test_budget.id}", json=update_data, headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 200, response_json
-    assert response_json["id"] == str(test_budget.id), response_json
+    assert response_json["id"] == test_budget.id, response_json
     assert response_json["name"] == test_budget.name, response_json
     assert response_json["balance"] == update_data["balance"], response_json
 
@@ -202,7 +199,7 @@ async def test_modify_budget_neg_balance(client: AsyncClient, test_user: UserFix
 
 async def test_modify_budget_not_found(client: AsyncClient, test_user: UserFixture) -> None:
     response = await client.patch(
-        f"/budget/{uuid.uuid1()}",
+        "/budget/10",
         json={"name": "Nonexistent Budget", "balance": 1000.0},
         headers=test_user.get_headers(),
     )
@@ -226,7 +223,7 @@ async def test_add_new_user_to_budget(
     )
     response_json = response.json()
     assert response.status_code == 200, response_json
-    assert response_json["id"] == str(test_budget.id), response_json
+    assert response_json["id"] == test_budget.id, response_json
     assert any(u["email"] == budget_user.email for u in response_json["users"]), response_json
 
 
@@ -244,9 +241,7 @@ async def test_add_new_user_to_budget_user_not_found(
 async def test_add_new_user_to_budget_budget_not_found(
     client: AsyncClient, test_user: UserFixture, budget_user: UserFixture
 ) -> None:
-    response = await client.post(
-        f"/budget/{uuid.uuid1()}/users", json={"email": budget_user.email}, headers=test_user.get_headers()
-    )
+    response = await client.post("/budget/10/users", json={"email": budget_user.email}, headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 404, response_json
     assert response_json["detail"] == "Budget not found.", response_json
@@ -273,14 +268,14 @@ async def test_delete_user_from_budget(client: AsyncClient, test_user: UserFixtu
     response = await client.delete(f"/budget/{test_budget.id}/users/{test_user.id}", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 200, response_json
-    assert response_json["id"] == str(test_budget.id), response_json
+    assert response_json["id"] == test_budget.id, response_json
     assert not any(u["email"] == test_user.email for u in response_json["users"]), response_json
 
 
 async def test_delete_user_from_budget_user_not_found(
     client: AsyncClient, test_user: UserFixture, test_budget: Budget, budget_user: UserFixture
 ) -> None:
-    response = await client.delete(f"/budget/{test_budget.id}/users/{uuid.uuid1()}", headers=test_user.get_headers())
+    response = await client.delete(f"/budget/{test_budget.id}/users/100", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 404, response_json
     assert response_json["detail"] == "User not found.", response_json
@@ -296,7 +291,7 @@ async def test_delete_user_from_budget_user_not_in_budget(
 
 
 async def test_delete_user_from_budget_budget_not_found(client: AsyncClient, test_user: UserFixture) -> None:
-    response = await client.delete(f"/budget/{uuid.uuid1()}/users/{test_user.id}", headers=test_user.get_headers())
+    response = await client.delete(f"/budget/10/users/{test_user.id}", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 404, response_json
     assert response_json["detail"] == "Budget not found.", response_json
@@ -322,12 +317,12 @@ async def test_add_category_to_budget_success(client: AsyncClient, test_user: Us
     assert response_json["category_restriction"] == test_category_data["category_restriction"], response_json
     assert response_json["description"] == test_category_data["description"], response_json
     assert response_json["is_income"] == test_category_data["is_income"], response_json
-    assert response_json["budget_id"] == str(test_budget.id), response_json
+    assert response_json["budget_id"] == test_budget.id, response_json
 
 
 async def test_add_category_to_budget_budget_not_found(client: AsyncClient, test_user: UserFixture) -> None:
     response = await client.post(
-        f"/budget/{uuid.uuid1()}/categories",
+        "/budget/10/categories",
         json={"name": "category", "description": "Test", "category_restriction": 100, "is_income": False},
         headers=test_user.get_headers(),
     )
@@ -394,7 +389,7 @@ async def test_delete_category_success(client: AsyncClient, test_user: UserFixtu
 
 
 async def test_delete_category_not_found(client: AsyncClient, test_user: UserFixture) -> None:
-    response = await client.delete(f"/budget/categories/{uuid.uuid1()}", headers=test_user.get_headers())
+    response = await client.delete("/budget/categories/20", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 404, response_json
     assert response_json["detail"] == "Category not found.", response_json
@@ -428,7 +423,7 @@ async def test_modify_category_success(client: AsyncClient, test_user: UserFixtu
 
 async def test_modify_category_not_found(client: AsyncClient, test_user: UserFixture) -> None:
     response = await client.patch(
-        f"/budget/categories/{uuid.uuid1()}",
+        "/budget/categories/20",
         json={
             "name": "NonExistentCategory",
             "category_restriction": 100.0,
@@ -479,7 +474,7 @@ async def test_perform_transaction_success(
     )
     response_json = response.json()
     assert response.status_code == 200, response_json
-    assert response_json["id"] == str(test_category.budget_id), response_json
+    assert response_json["id"] == test_category.budget_id, response_json
     assert response_json["balance"] == expected_balance, response_json
 
 
@@ -600,7 +595,7 @@ async def test_get_budget_categories_expense_only(
 
 
 async def test_get_budget_categories_budget_not_exist(client: AsyncClient, test_user: UserFixture) -> None:
-    response = await client.get(f"/budget/{uuid.uuid1()}/categories", headers=test_user.get_headers())
+    response = await client.get("/budget/10/categories", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 200, response_json
     assert response_json == [], response_json
@@ -675,7 +670,7 @@ async def test_delete_predefined_category_success(
 
 async def test_delete_predefined_category_not_found(client: AsyncClient, test_user: UserFixture) -> None:
     response = await client.delete(
-        f"/budget/predefined-categories/{uuid.uuid1()}",
+        "/budget/predefined-categories/30",
         headers=test_user.get_headers(),
     )
     response_json = response.json()
