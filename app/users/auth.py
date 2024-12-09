@@ -44,7 +44,7 @@ def create_access_token(user: User) -> str:
     :return: access JWT token
     """
     expire = get_datatime_now() + timedelta(minutes=app_config.access_token_expire_minutes)
-    to_encode = {"exp": expire, "sub": user.email, "jti": str(uuid.uuid1())}
+    to_encode = {"exp": expire, "sub": user.email, "jti": str(uuid.uuid4())}
     encoded_jwt = jwt.encode(to_encode, app_config.secret_key, algorithm=app_config.algorithm)
     return cast(str, encoded_jwt)
 

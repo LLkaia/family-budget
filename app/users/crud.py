@@ -1,4 +1,3 @@
-import uuid
 from typing import cast
 
 from sqlmodel import func, select
@@ -15,7 +14,7 @@ async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
     return cast(User | None, user.unique().one_or_none())
 
 
-async def get_user_by_id(session: AsyncSession, id_: uuid.UUID) -> User | None:
+async def get_user_by_id(session: AsyncSession, id_: int) -> User | None:
     """Retrieve user by ID."""
     user = await session.exec(select(User).where(User.id == id_))
     return cast(User | None, user.unique().one_or_none())
