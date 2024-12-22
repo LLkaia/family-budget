@@ -15,7 +15,6 @@ from models import (
     PredefinedCategory,
     StockAccount,
     StockPosition,
-    StockTransaction,
     Transaction,
     User,
     UserBudgetLink,

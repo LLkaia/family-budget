@@ -4,7 +4,7 @@ from pydantic import EmailStr, field_validator
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
-from stocks.schemas import AccountTransactionType, StockTransactionType
+from stocks.schemas import AccountTransactionType
 from utils import get_datatime_now
 from validators import normalize_name
 
@@ -88,7 +88,6 @@ class StockAccount(SQLModel, table=True):  # type: ignore[call-arg]
     owner_id: int = Field(foreign_key="user.id", ondelete="CASCADE")
 
     owner: User = Relationship(back_populates="stock_accounts")
-    stock_transactions: list["StockTransaction"] = Relationship(back_populates="stock_account", cascade_delete=True)
     stock_positions: list["StockPosition"] = Relationship(back_populates="stock_account", cascade_delete=True)
     account_transactions: list["AccountTransaction"] = Relationship(back_populates="stock_account", cascade_delete=True)
 
@@ -100,29 +99,11 @@ class StockPosition(SQLModel, table=True):  # type: ignore[call-arg]
     ticket_name: str = Field(max_length=10)
     count_active: int = Field(ge=0)
     date_opened: date = Field(description="When position was opened.")
-    dividends_payed: float = Field(
-        ge=0, default=0, description="Dividends paid per position."
-    )  # consider to be triggered by paid dividends type in AccountTransaction
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
+    price_per_stock_in: float = Field(ge=0, description="Price per stock in.")
 
-    stock_transactions: list["StockTransaction"] = Relationship(back_populates="stock_position", cascade_delete=True)
+    transactions: list["AccountTransaction"] = Relationship(back_populates="stock_position", cascade_delete=True)
     stock_account: StockAccount = Relationship(back_populates="stock_positions")
-
-
-class StockTransaction(SQLModel, table=True):  # type: ignore[call-arg]
-    """Stock transaction database model."""
-
-    id: int = Field(default=None, primary_key=True)
-    date_performed: date = Field(description="When transaction was performed.")
-    account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
-    amount: float = Field(gt=0)
-    transaction_type: StockTransactionType
-    paid_fee: float = Field(ge=0, default=0)
-    taxes_to_pay: float = Field(ge=0, default=0)  # consider to be auto generated
-    stock_position_id: int = Field(foreign_key="stockposition.id", ondelete="CASCADE")
-
-    stock_account: StockAccount = Relationship(back_populates="stock_transactions")
-    stock_position: StockPosition = Relationship(back_populates="stock_transactions")
 
 
 class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
@@ -131,9 +112,14 @@ class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
     id: int = Field(default=None, primary_key=True)
     date_performed: date = Field(description="When transaction was performed.")
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
-    amount: float = Field(gt=0)
+    total_amount: float = Field(gt=0)
     transaction_type: AccountTransactionType
     paid_fee: float = Field(ge=0, default=0)
-    taxes_to_pay: float = Field(ge=0, default=0)  # consider to be auto generated
+    taxes_to_pay: float = Field(ge=0, default=0)
+    ticket_name: str = Field(max_length=10, default=None)
+    price_per_item: float = Field(ge=0)
+    count_items: int = Field(ge=0)
+    stock_position_id: int = Field(foreign_key="stockposition.id", default=None, ondelete="CASCADE")
 
     stock_account: StockAccount = Relationship(back_populates="account_transactions")
+    stock_position: StockPosition = Relationship(back_populates="transactions")
