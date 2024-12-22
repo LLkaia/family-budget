@@ -3,19 +3,14 @@ from enum import Enum
 from sqlmodel import Field, SQLModel
 
 
-class StockTransactionType(str, Enum):
-    """Stock Transaction Types Enum."""
-
-    BUY = "buy"
-    SELL = "sell"
-
-
 class AccountTransactionType(str, Enum):
     """Account Transaction Types Enum."""
 
     DIVIDENDS = "dividends"
     DEPOSIT = "deposit"
     WITHDRAWAL = "withdrawal"
+    STOCK_IN = "stock_in"
+    STOCK_OUT = "stock_out"
 
 
 class StockAccountCreate(SQLModel):
