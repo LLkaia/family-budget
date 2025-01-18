@@ -115,3 +115,17 @@ async def perform_account_transaction(
     )
     session.add_all([transaction, account])
     await session.commit()
+
+
+async def get_active_stock_positions_per_account(
+    session: AsyncSession, account_id: int, user: User, current_price: bool
+) -> list[StockPosition]:
+    """Get active stock positions per account."""
+    stock_positions = await session.exec(
+        select(StockPosition)
+        .join(StockAccount)
+        .where(StockAccount.owner_id == user.id)
+        .where(StockPosition.account_id == account_id)
+        .where(StockPosition.count_active > 0)
+    )
+    return list(stock_positions.all())

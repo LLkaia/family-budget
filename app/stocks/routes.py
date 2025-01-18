@@ -1,12 +1,13 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Path, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.database import get_db
 from models import StockAccount, StockPosition, User
 from stocks.crud import (
     create_stock_account_with_user,
+    get_active_stock_positions_per_account,
     get_stock_account_by_id_with_user,
     open_stock_position_with_transaction,
     retrieve_stock_accounts_by_user,
@@ -61,3 +62,14 @@ async def open_stock_position(
     if stock_account:
         return await open_stock_position_with_transaction(session, stock_account, stock_position)
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stock Account not found.")
+
+
+@router.get("/account/{account_id}/stocks")
+async def get_stock_positions(
+    user: Annotated[User, Depends(current_user)],
+    session: Annotated[AsyncSession, Depends(get_db)],
+    account_id: Annotated[int, Path(title="Stock Account ID")],
+    current_price: Annotated[bool, Query(title="Request stock near real-time price", alias="current-price")] = False,
+) -> list[StockPosition]:
+    """Get all stock positions for account."""
+    return await get_active_stock_positions_per_account(session, account_id, user, current_price)
