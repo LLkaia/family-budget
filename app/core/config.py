@@ -14,10 +14,15 @@ class Settings(BaseSettings):
     :arg postgres_port: port for postgres connection
     :arg postgres_user: user for postgres connection
     :arg postgres_db: database for postgres connection
+    :arg postgres_test_db: test database for postgres connection
     :arg secret_key: secret key for application security
     :arg algorithm: algorithm for application security
     :arg access_token_expire_minutes: minutes for token expiration
-    :arg db_conn_string: postgres connection string
+    :arg db_conn_string: db connection string
+    :arg test_db_conn_string: test db connection string
+    :arg finnhub_api_key: api key for finnhub connection
+    :arg api_version_file_path: path to file with api version
+    :arg api_version: api version
     """
 
     model_config = SettingsConfigDict(env_file=".env")
@@ -37,6 +42,8 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int
 
     api_version_file_path: str = "./.version"
+
+    finnhub_api_key: str
 
     @computed_field  # type: ignore
     @property

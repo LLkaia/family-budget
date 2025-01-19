@@ -19,6 +19,7 @@ class RedisKeys(str, Enum):
 
     blacklist = "blacklist"
     predefined_category = "predefined_category"
+    stock_price = "stock_price"
 
 
 class RedisClient:
@@ -26,19 +27,19 @@ class RedisClient:
 
     def __init__(self, host: str = "localhost", port: int = 6379):
         """Initialize Redis connection."""
-        self._redis = redis.Redis(host=host, port=port)
+        self._redis = redis.Redis(host=host, port=port, decode_responses=True)
 
     async def add_token_to_blacklist(self, jwt_id: uuid.UUID, ttl: timedelta) -> None:
         """Add token to blacklist."""
-        await self._redis.setex(f"{RedisKeys.blacklist.value}:{jwt_id}", ttl, "blacklisted")
+        await self.add_row_to_cache(RedisKeys.blacklist.value, str(jwt_id), "blacklisted", ttl)
 
     async def is_token_blacklisted(self, jwt_id: uuid.UUID) -> bool:
         """Check if token is blacklisted."""
         return bool(await self._redis.exists(f"{RedisKeys.blacklist.value}:{jwt_id}") > 0)
 
-    async def add_row_to_cache(self, redis_key: str, key: str, value: str) -> None:
+    async def add_row_to_cache(self, redis_key: str, key: str, value: str, ttl: timedelta | None = None) -> None:
         """Add row to cache."""
-        await self._redis.set(f"{redis_key}:{key}", value)
+        await self._redis.set(f"{redis_key}:{key}", value, ex=ttl)
 
     async def read_row_from_cache(self, redis_key: str, key: str) -> Any:
         """Read row from cache."""

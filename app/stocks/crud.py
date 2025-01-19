@@ -6,7 +6,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from exceptions import ParameterMissingException
 from models import AccountTransaction, StockAccount, StockPosition, User
-from stocks.schemas import AccountTransactionType, StockAccountCreate, StockPositionOpen
+from stocks.schemas import AccountTransactionType, StockAccountCreate, StockPositionOpen, StockPositionWithCurrentPrice
+from utils import get_stock_price_now
 
 
 async def create_stock_account_with_user(
@@ -119,7 +120,7 @@ async def perform_account_transaction(
 
 async def get_active_stock_positions_per_account(
     session: AsyncSession, account_id: int, user: User, current_price: bool
-) -> list[StockPosition]:
+) -> list[StockPosition | StockPositionWithCurrentPrice]:
     """Get active stock positions per account."""
     stock_positions = await session.exec(
         select(StockPosition)
@@ -128,4 +129,13 @@ async def get_active_stock_positions_per_account(
         .where(StockPosition.account_id == account_id)
         .where(StockPosition.count_active > 0)
     )
-    return list(stock_positions.all())
+    return (
+        [
+            StockPositionWithCurrentPrice.model_validate(
+                stock_position, update={"current_price": await get_stock_price_now(stock_position.ticket_name)}
+            )
+            for stock_position in stock_positions
+        ]
+        if current_price
+        else list(stock_positions.all())
+    )
