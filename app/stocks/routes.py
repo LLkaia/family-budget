@@ -12,7 +12,7 @@ from stocks.crud import (
     open_stock_position_with_transaction,
     retrieve_stock_accounts_by_user,
 )
-from stocks.schemas import StockAccountCreate, StockPositionOpen
+from stocks.schemas import StockAccountCreate, StockPositionOpen, StockPositionWithCurrentPrice
 from users.auth import current_user
 
 
@@ -70,6 +70,6 @@ async def get_stock_positions(
     session: Annotated[AsyncSession, Depends(get_db)],
     account_id: Annotated[int, Path(title="Stock Account ID")],
     current_price: Annotated[bool, Query(title="Request stock near real-time price", alias="current-price")] = False,
-) -> list[StockPosition]:
+) -> list[StockPosition | StockPositionWithCurrentPrice]:
     """Get all stock positions for account."""
     return await get_active_stock_positions_per_account(session, account_id, user, current_price)
