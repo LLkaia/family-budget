@@ -6,8 +6,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from exceptions import ParameterMissingException
 from models import AccountTransaction, StockAccount, StockPosition, User
+from stocks.finnhub import get_stock_price_now
 from stocks.schemas import AccountTransactionType, StockAccountCreate, StockPositionOpen, StockPositionWithCurrentPrice
-from utils import get_stock_price_now
 
 
 async def create_stock_account_with_user(
