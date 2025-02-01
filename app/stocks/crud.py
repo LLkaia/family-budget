@@ -1,4 +1,3 @@
-from datetime import date
 from typing import cast
 
 from sqlmodel import select
@@ -7,7 +6,13 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from exceptions import ParameterMissingException
 from models import AccountTransaction, StockAccount, StockPosition, User
 from stocks.finnhub import get_stock_price_now
-from stocks.schemas import AccountTransactionType, StockAccountCreate, StockPositionOpen, StockPositionWithCurrentPrice
+from stocks.schemas import (
+    AccountTransactionData,
+    AccountTransactionType,
+    StockAccountCreate,
+    StockPositionOpen,
+    StockPositionWithCurrentPrice,
+)
 
 
 async def create_stock_account_with_user(
@@ -51,66 +56,43 @@ async def open_stock_position_with_transaction(
     await session.commit()
     await session.refresh(stock_position)
 
-    await perform_account_transaction(
-        session=session,
-        transaction_type=AccountTransactionType.STOCK_IN,
-        account=stock_account,
+    transaction = AccountTransactionData(
         date_performed=stock_position.date_opened,
+        account_id=stock_account.id,
+        total_amount=stock_position.price_per_stock_in * stock_position.count_active,
+        transaction_type=AccountTransactionType.STOCK_IN,
         price_per_item=stock_position.price_per_stock_in,
         count_items=stock_position.count_active,
         paid_fee=stock_position_data.paid_fee,
-        stock_position_id=stock_position.id,
         ticket_name=stock_position.ticket_name,
+        stock_position_id=stock_position.id,
     )
+    await perform_account_transaction(session=session, account=stock_account, transaction=transaction)
 
     return stock_position
 
 
 async def perform_account_transaction(
-    session: AsyncSession,
-    transaction_type: AccountTransactionType,
-    account: StockAccount,
-    date_performed: date,
-    price_per_item: float,
-    count_items: int = 1,
-    paid_fee: float = 0,
-    taxes_to_pay: float = 0,
-    stock_position_id: int | None = None,
-    ticket_name: str | None = None,
+    session: AsyncSession, account: StockAccount, transaction: AccountTransactionData
 ) -> None:
     """Perform account transaction."""
-    total_amount = price_per_item * count_items
+    match transaction.transaction_type:
+        case AccountTransactionType.STOCK_IN | AccountTransactionType.WITHDRAWAL:
+            account.balance -= transaction.total_amount + transaction.paid_fee
+        case AccountTransactionType.STOCK_OUT | AccountTransactionType.DIVIDENDS | AccountTransactionType.DEPOSIT:
+            account.balance += transaction.total_amount - transaction.paid_fee
 
-    if transaction_type == AccountTransactionType.WITHDRAWAL or (
-        transaction_type == AccountTransactionType.STOCK_IN and stock_position_id and ticket_name
-    ):
-        # spend account money
-        account.balance -= total_amount + paid_fee
-    elif (
-        (transaction_type == AccountTransactionType.STOCK_OUT and stock_position_id and ticket_name)
-        or (transaction_type == AccountTransactionType.DIVIDENDS and ticket_name)
-        or transaction_type == AccountTransactionType.DEPOSIT
-    ):
-        # deposit money into the account
-        account.balance += total_amount - paid_fee
-    else:
-        raise ParameterMissingException("Not all parameters were provided to perform account transaction.")
+    if transaction.transaction_type in {AccountTransactionType.STOCK_IN, AccountTransactionType.STOCK_OUT}:
+        if not (transaction.stock_position_id and transaction.ticket_name):
+            raise ParameterMissingException("Missing stock position ID or ticket name.")
+
+    if transaction.transaction_type == AccountTransactionType.DIVIDENDS and not transaction.ticket_name:
+        raise ParameterMissingException("Missing ticket name.")
 
     if account.balance < 0:
         raise ValueError("Not enough money.")
 
-    transaction = AccountTransaction(
-        transaction_type=transaction_type,
-        date_performed=date_performed,
-        account_id=account.id,
-        price_per_item=price_per_item,
-        count_items=count_items,
-        paid_fee=paid_fee,
-        taxes_to_pay=taxes_to_pay,
-        ticket_name=ticket_name,
-        stock_position_id=stock_position_id,
-        total_amount=total_amount,
-    )
+    transaction = AccountTransaction.model_validate(transaction)
     session.add_all([transaction, account])
     await session.commit()
 
