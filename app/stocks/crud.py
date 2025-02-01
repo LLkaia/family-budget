@@ -81,23 +81,20 @@ async def perform_account_transaction(
     """Perform account transaction."""
     total_amount = price_per_item * count_items
 
-    match transaction_type:
+    if transaction_type == AccountTransactionType.WITHDRAWAL or (
+        transaction_type == AccountTransactionType.STOCK_IN and stock_position_id and ticket_name
+    ):
         # spend account money
-        case AccountTransactionType.STOCK_IN if stock_position_id and ticket_name:
-            account.balance -= total_amount + paid_fee
-        case AccountTransactionType.WITHDRAWAL:
-            account.balance -= total_amount + paid_fee
-
+        account.balance -= total_amount + paid_fee
+    elif (
+        (transaction_type == AccountTransactionType.STOCK_OUT and stock_position_id and ticket_name)
+        or (transaction_type == AccountTransactionType.DIVIDENDS and ticket_name)
+        or transaction_type == AccountTransactionType.DEPOSIT
+    ):
         # deposit money into the account
-        case AccountTransactionType.STOCK_OUT if stock_position_id and ticket_name:
-            account.balance += total_amount - paid_fee
-        case AccountTransactionType.DIVIDENDS if ticket_name:
-            account.balance += total_amount - paid_fee
-        case AccountTransactionType.DEPOSIT:
-            account.balance += total_amount - paid_fee
-
-        case _:
-            raise ParameterMissingException("Not all parameters were provided to perform account transaction.")
+        account.balance += total_amount - paid_fee
+    else:
+        raise ParameterMissingException("Not all parameters were provided to perform account transaction.")
 
     if account.balance < 0:
         raise ValueError("Not enough money.")
