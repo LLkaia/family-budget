@@ -53,7 +53,7 @@ async def open_stock_position_with_transaction(
         account_id=stock_account.id,
     )
     session.add(stock_position)
-    await session.commit()
+    await session.flush()
     await session.refresh(stock_position)
 
     transaction = AccountTransactionData(
@@ -67,12 +67,12 @@ async def open_stock_position_with_transaction(
         ticket_name=stock_position.ticket_name,
         stock_position_id=stock_position.id,
     )
-    await perform_account_transaction(session=session, account=stock_account, transaction=transaction)
-
+    perform_account_transaction(session=session, account=stock_account, transaction=transaction)
+    await session.commit()
     return stock_position
 
 
-async def perform_account_transaction(
+def perform_account_transaction(
     session: AsyncSession, account: StockAccount, transaction: AccountTransactionData
 ) -> None:
     """Perform account transaction."""
@@ -94,7 +94,6 @@ async def perform_account_transaction(
 
     transaction = AccountTransaction.model_validate(transaction)
     session.add_all([transaction, account])
-    await session.commit()
 
 
 async def get_active_stock_positions_per_account(
