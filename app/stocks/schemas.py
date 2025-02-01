@@ -44,3 +44,18 @@ class StockPositionWithCurrentPrice(StockPositionBase):
     count_active: int = Field(gt=0, description="Count of stocks active.")
     price_per_stock_in: float = Field(gt=0, description="Price per stock in.")
     current_price: float = Field(ge=0, description="Near real-time stock price.")
+
+
+class AccountTransactionData(SQLModel):
+    """Account Transaction Data schema."""
+
+    date_performed: date
+    account_id: int
+    total_amount: float = Field(gt=0)
+    transaction_type: AccountTransactionType
+    price_per_item: float = Field(gt=0)
+    count_items: int = Field(ge=0)
+    paid_fee: float = Field(ge=0, default=0)
+    taxes_to_pay: float = Field(ge=0, default=0)
+    ticket_name: str = Field(max_length=10, default=None)
+    stock_position_id: int = Field(default=None)
