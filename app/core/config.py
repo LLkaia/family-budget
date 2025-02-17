@@ -1,3 +1,4 @@
+import os
 from functools import lru_cache
 
 from pydantic import computed_field
@@ -35,6 +36,8 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
 
+    api_version_file_path: str = "./.version"
+
     @computed_field  # type: ignore
     @property
     def db_conn_string(self) -> str:
@@ -62,6 +65,14 @@ class Settings(BaseSettings):
                 path=self.postgres_test_db,
             )
         )
+
+    @computed_field  # type: ignore
+    @property
+    def api_version(self) -> str:
+        if os.path.exists(self.api_version_file_path):
+            with open(self.api_version_file_path) as f:
+                return f.read().strip()
+        return "0.0.0"
 
 
 @lru_cache

@@ -2,11 +2,14 @@ import uvicorn
 from fastapi import FastAPI
 
 from budget.routes import router as budget_router
+from core.config import get_settings
 from stocks.routes import router as stocks_router
 from users.routes import router as users_router
 
 
-app = FastAPI(docs_url="/")
+config = get_settings()
+
+app = FastAPI(docs_url="/", title="Family Budget API", version=config.api_version)
 
 
 # @app.on_event("startup")

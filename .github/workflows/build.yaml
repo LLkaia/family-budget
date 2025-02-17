@@ -31,13 +31,13 @@ jobs:
 
       - name: Bump version
         run: |
-          echo "${{ steps.new_version.outputs.patch }}" > .version
+          echo "${{ steps.new_version.outputs.patch }}" > app/.version
 
       - name: Commit and push version bump
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add .version
+          git add app/.version
           git commit -m "ci: bump version to ${{ steps.new_version.outputs.patch }}"
           git tag ${{ steps.new_version.outputs.patch }}
           git push origin main
