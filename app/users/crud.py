@@ -31,7 +31,7 @@ async def create_user(session: AsyncSession, user_data: UserCreate) -> User:
     """Create a new user."""
     user = User.model_validate(user_data, update={"hashed_password": get_password_hash(user_data.password)})
     session.add(user)
-    await session.commit()
+    await session.flush()
     await session.refresh(user)
     return cast(User, user)
 
@@ -39,7 +39,7 @@ async def create_user(session: AsyncSession, user_data: UserCreate) -> User:
 async def set_user_super(session: AsyncSession, user: User) -> User:
     """Set user as superuser."""
     user.is_superuser = True
-    await session.commit()
+    await session.flush()
     await session.refresh(user)
     return user
 
@@ -47,4 +47,3 @@ async def set_user_super(session: AsyncSession, user: User) -> User:
 async def remove_user(session: AsyncSession, user: User) -> None:
     """Remove existed user."""
     await session.delete(user)
-    await session.commit()

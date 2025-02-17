@@ -21,7 +21,7 @@ async def create_stock_account_with_user(
     """Create a new stock account with given user."""
     stock_account = StockAccount.model_validate(stock_account_data, update={"owner_id": user.id})
     session.add(stock_account)
-    await session.commit()
+    await session.flush()
     await session.refresh(stock_account)
     return cast(StockAccount, stock_account)
 
@@ -68,7 +68,6 @@ async def open_stock_position_with_transaction(
         stock_position_id=stock_position.id,
     )
     perform_account_transaction(session=session, account=stock_account, transaction=transaction)
-    await session.commit()
     return stock_position
 
 

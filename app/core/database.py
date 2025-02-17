@@ -15,6 +15,7 @@ async def get_db() -> AsyncSession:
     """Get session object."""
     async with SessionLocal() as session:
         yield session
+        await session.commit()
 
 
 async def is_db_alive() -> bool:

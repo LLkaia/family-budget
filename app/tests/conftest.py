@@ -1,5 +1,6 @@
 import asyncio
 from asyncio import AbstractEventLoop
+from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Generator
 
 import pytest
@@ -51,19 +52,21 @@ async def setup_test_database() -> AsyncGenerator[None, None]:
         await conn.run_sync(SQLModel.metadata.drop_all)
 
 
-@pytest.fixture
-async def db() -> AsyncSession:
+@asynccontextmanager
+async def test_db() -> AsyncSession:
     """Get test session object."""
     async with TestSessionLocal() as session:
         yield session
+        await session.commit()
 
 
 @pytest.fixture
-async def client(db: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
+async def client() -> AsyncGenerator[AsyncClient, None]:
     """Provide TestClient and override db connection."""
 
     async def override_get_db() -> AsyncGenerator[AsyncSession, None]:
-        yield db
+        async with test_db() as session:
+            yield session
 
     app.dependency_overrides[get_db] = override_get_db
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
@@ -75,7 +78,7 @@ async def client(db: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
 async def test_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
     """Create test user."""
     user_fixture = UserFixture(email="test@example.com", password="test12345", full_name="Test User", id=1000)
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         created_user = await create_user(session, user_fixture)
         await set_user_super(session, created_user)
     response = await client.post(
@@ -83,5 +86,5 @@ async def test_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
     )
     user_fixture.token = response.json()["access_token"]
     yield user_fixture
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         await remove_user(session, created_user)

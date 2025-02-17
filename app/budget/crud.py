@@ -26,7 +26,7 @@ async def create_budget_with_user(session: AsyncSession, budget_data: BudgetCrea
     """Create a new Budget with User."""
     budget = Budget.model_validate(budget_data, update={"users": [user]})
     session.add(budget)
-    await session.commit()
+    await session.flush()
     await session.refresh(budget)
     return cast(Budget, budget)
 
@@ -43,7 +43,7 @@ async def create_category_and_add_to_budget(
     """Create a new category and add it to the budget."""
     category = Category.model_validate(category, update={"budget_id": budget.id})
     session.add(category)
-    await session.commit()
+    await session.flush()
     await session.refresh(category)
     return category
 
@@ -52,7 +52,7 @@ async def create_predefined_category(session: AsyncSession, category: Predefined
     """Create a new predefined category."""
     predefined_category = PredefinedCategory.model_validate(category)
     session.add(predefined_category)
-    await session.commit()
+    await session.flush()
     await session.refresh(predefined_category)
     return cast(PredefinedCategory, predefined_category)
 
@@ -71,7 +71,6 @@ async def remove_predefined_category(session: AsyncSession, category_id: int) ->
     if not category:
         raise ItemNotExistsException
     await session.delete(category)
-    await session.commit()
 
 
 async def get_budget_by_id_with_current_user(
@@ -88,20 +87,18 @@ async def get_budget_by_id_with_current_user(
 async def remove_budget(session: AsyncSession, budget: Budget) -> None:
     """Remove existed budget."""
     await session.delete(budget)
-    await session.commit()
 
 
 async def remove_category(session: AsyncSession, category: Category) -> None:
     """Remove category from budget."""
     await session.delete(category)
-    await session.commit()
 
 
 async def update_category(session: AsyncSession, category: Category, new_data: CategoryUpdate) -> Category:
     """Update category with new data."""
     category.sqlmodel_update(new_data.model_dump(exclude_unset=True))
     session.add(category)
-    await session.commit()
+    await session.flush()
     await session.refresh(category)
     return category
 
@@ -110,7 +107,7 @@ async def add_user_to_budget(session: AsyncSession, budget: Budget, user: User) 
     """Add user to existed budget."""
     budget.users.append(user)
     session.add(budget)
-    await session.commit()
+    await session.flush()
     await session.refresh(budget)
     return budget
 
@@ -119,7 +116,7 @@ async def remove_user_from_budget(session: AsyncSession, budget: Budget, user: U
     """Remove user from existed budget."""
     budget.users.remove(user)
     session.add(budget)
-    await session.commit()
+    await session.flush()
     await session.refresh(budget)
     return budget
 
@@ -128,7 +125,7 @@ async def update_budget(session: AsyncSession, budget: Budget, new_data: BudgetU
     """Update budget with new data."""
     budget.sqlmodel_update(new_data.model_dump(exclude_unset=True))
     session.add(budget)
-    await session.commit()
+    await session.flush()
     await session.refresh(budget)
     return budget
 
@@ -140,7 +137,7 @@ async def perform_transaction_per_category(
     transaction = Transaction.model_validate(transaction_data, update={"category_id": category.id})
     budget.balance += transaction.amount if category.is_income else -transaction.amount
     session.add_all([transaction, budget])
-    await session.commit()
+    await session.flush()
     await session.refresh(budget)
     return budget
 
@@ -239,7 +236,6 @@ async def remove_transaction(session: AsyncSession, transaction: Transaction) ->
     budget.balance += transaction.amount if not category.is_income else -transaction.amount
     session.add(budget)
     await session.delete(transaction)
-    await session.commit()
 
 
 async def get_list_transactions(
@@ -303,6 +299,6 @@ async def update_transaction(
     transaction.sqlmodel_update(new_data.model_dump(exclude_unset=True))
     session.add(transaction)
 
-    await session.commit()
+    await session.flush()
     await session.refresh(transaction)
     return transaction
