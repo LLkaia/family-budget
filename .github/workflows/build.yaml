@@ -1,0 +1,44 @@
+name: Build release version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release-on-push:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get previous tag
+        id: previous_tag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+
+      - name: Get next minor version
+        id: new_version
+        uses: WyriHaximus/github-action-next-semvers@v1
+        with:
+          version: ${{ steps.previous_tag.outputs.tag }}
+
+      - name: Bump version
+        run: |
+          echo "${{ steps.new_version.outputs.patch }}" > .version
+
+      - name: Commit and push version bump
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .version
+          git commit -m "ci: bump version to ${{ steps.new_version.outputs.patch }}"
+          git tag ${{ steps.new_version.outputs.patch }}
+          git push origin main
+          git push origin ${{ steps.new_version.outputs.patch }}
