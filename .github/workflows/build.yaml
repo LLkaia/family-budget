@@ -31,7 +31,7 @@ jobs:
 
       - name: Bump version
         run: |
-          echo "${{ steps.new_version.outputs.patch }}" > .version
+          echo "${{ steps.new_version.outputs.patch }}" > app/.version
 
       - name: Commit and push version bump
         run: |
