@@ -16,7 +16,7 @@ from budget.crud import (
 from budget.schemas import BudgetPublic, CategoryCreate, PredefinedCategoryCreate, TransactionCreate
 from exceptions import ItemNotExistsException
 from models import Budget, Category, PredefinedCategory, User
-from tests.conftest import TestSessionLocal
+from tests.conftest import test_db
 from users.crud import create_user, get_user_by_email, remove_user
 from users.schemas import UserFixture
 
@@ -24,20 +24,20 @@ from users.schemas import UserFixture
 @pytest.fixture
 async def test_budget(test_user: UserFixture, client: AsyncClient) -> AsyncGenerator[Budget, None]:
     """Create test budget for user fixture."""
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         user = await get_user_by_email(session, test_user.email)
         created_budget = await create_budget_with_user(
             session, BudgetPublic(name="Test Budget", balance=20000, id=1000), cast(User, user)
         )
     yield created_budget
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         await remove_budget(session, created_budget)
 
 
 @pytest.fixture
 async def test_category(test_budget: Budget) -> AsyncGenerator[Category, None]:
     """Create test category for Test Budget."""
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         category = await create_category_and_add_to_budget(
             session, test_budget, CategoryCreate(name="food", category_restriction=5000, is_income=False)
         )
@@ -45,7 +45,7 @@ async def test_category(test_budget: Budget) -> AsyncGenerator[Category, None]:
             session, test_budget, CategoryCreate(name="salary", category_restriction=20000, is_income=True)
         )
     yield category
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         await remove_category(session, category)
 
 
@@ -53,7 +53,7 @@ async def test_category(test_budget: Budget) -> AsyncGenerator[Category, None]:
 async def test_transactions(test_budget: Budget, test_category: Category) -> None:
     """Perform test transactions for category."""
     today = date.today()
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         transactions = [
             (TransactionCreate(amount=100, date_performed=today), test_category),
             (TransactionCreate(amount=300, date_performed=date(today.year, today.month, 1)), test_category),
@@ -66,19 +66,19 @@ async def test_transactions(test_budget: Budget, test_category: Category) -> Non
 @pytest.fixture
 async def budget_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
     user_fixture = UserFixture(email="test_budget@example.com", password="test12345", full_name="Budget User", id=2000)
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         created_user = await create_user(session, user_fixture)
     yield user_fixture
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         await remove_user(session, created_user)
 
 
 @pytest.fixture
 async def test_predefined_category(client: AsyncClient) -> AsyncGenerator[PredefinedCategory, None]:
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         predefined_category = await create_predefined_category(session, PredefinedCategoryCreate(name="Test"))
     yield predefined_category
-    async with TestSessionLocal() as session:
+    async with test_db() as session:
         try:
             await remove_predefined_category(session, predefined_category.id)
         except ItemNotExistsException:
