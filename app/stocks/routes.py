@@ -8,7 +8,7 @@ from models import StockAccount, StockPosition, User
 from stocks.crud import (
     create_stock_account_with_user,
     get_active_stock_positions_per_account,
-    get_stock_account_by_id_with_user,
+    get_stock_account_with_user_by_account_id,
     open_stock_position_with_transaction,
     retrieve_stock_accounts_by_user,
 )
@@ -44,7 +44,7 @@ async def get_stock_account(
     user: Annotated[User, Depends(current_user)],
 ) -> StockAccount:
     """Get stock account by id."""
-    stock_account = await get_stock_account_by_id_with_user(account_id, session, user)
+    stock_account = await get_stock_account_with_user_by_account_id(account_id, session, user)
     if stock_account:
         return stock_account
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stock Account not found.")
@@ -58,7 +58,7 @@ async def open_stock_position(
     stock_position: StockPositionOpen,
 ) -> StockPosition:
     """Open stock position for account."""
-    stock_account = await get_stock_account_by_id_with_user(account_id, session, user)
+    stock_account = await get_stock_account_with_user_by_account_id(account_id, session, user)
     if stock_account:
         return await open_stock_position_with_transaction(session, stock_account, stock_position)
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stock Account not found.")
@@ -69,7 +69,9 @@ async def get_stock_positions(
     user: Annotated[User, Depends(current_user)],
     session: Annotated[AsyncSession, Depends(get_db)],
     account_id: Annotated[int, Path(title="Stock Account ID")],
-    current_price: Annotated[bool, Query(title="Request stock near real-time price", alias="current-price")] = False,
+    get_current_price: Annotated[
+        bool, Query(title="Request stock near real-time price", alias="get-current-price")
+    ] = False,
 ) -> list[StockPosition | StockPositionWithCurrentPrice]:
     """Get all stock positions for account."""
-    return await get_active_stock_positions_per_account(session, account_id, user, current_price)
+    return await get_active_stock_positions_per_account(session, account_id, user, get_current_price)
