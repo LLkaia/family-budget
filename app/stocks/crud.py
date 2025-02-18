@@ -5,7 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from exceptions import ParameterMissingException
 from models import AccountTransaction, StockAccount, StockPosition, User
-from stocks.finnhub import get_stock_price_now
+from stocks.finnhub import get_latest_stock_price
 from stocks.schemas import (
     AccountTransactionData,
     AccountTransactionType,
@@ -32,7 +32,7 @@ async def retrieve_stock_accounts_by_user(session: AsyncSession, user: User) -> 
     return list(stocks_accounts.all())
 
 
-async def get_stock_account_by_id_with_user(
+async def get_stock_account_with_user_by_account_id(
     stock_account_id: int, session: AsyncSession, user: User
 ) -> StockAccount | None:
     """Get Stock Account by ID for owner."""
@@ -96,7 +96,7 @@ def perform_account_transaction(
 
 
 async def get_active_stock_positions_per_account(
-    session: AsyncSession, account_id: int, user: User, current_price: bool
+    session: AsyncSession, account_id: int, user: User, get_current_price: bool
 ) -> list[StockPosition | StockPositionWithCurrentPrice]:
     """Get active stock positions per account."""
     stock_positions = await session.exec(
@@ -109,10 +109,10 @@ async def get_active_stock_positions_per_account(
     return (
         [
             StockPositionWithCurrentPrice.model_validate(
-                stock_position, update={"current_price": await get_stock_price_now(stock_position.ticket_name)}
+                stock_position, update={"current_price": await get_latest_stock_price(stock_position.ticket_name)}
             )
             for stock_position in stock_positions
         ]
-        if current_price
+        if get_current_price
         else list(stock_positions.all())
     )

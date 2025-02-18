@@ -14,8 +14,8 @@ def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=get_settings().finnhub_api_key)
 
 
-async def get_stock_price_now(ticket: str, cache_ttl: int = 86400, update_after: int = 3600) -> float:
-    """Get stock price by ticket.
+async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_after: int = 3600) -> float:
+    """Get latest stock price by ticket.
 
     Get stock price by <ticket> from cache if it is there and
     <update_after> seconds not reached since last cache update,
