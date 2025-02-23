@@ -6,14 +6,16 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from core.database import get_db
 from models import StockAccount, StockPosition, User
 from stocks.crud import (
+    close_stock_positions_with_transactions,
     create_stock_account_with_user,
     get_active_stock_positions_per_account,
     get_stock_account_with_user_by_account_id,
     open_stock_position_with_transaction,
     retrieve_stock_accounts_by_user,
 )
-from stocks.schemas import StockAccountCreate, StockPositionOpen, StockPositionWithCurrentPrice
+from stocks.schemas import StockAccountCreate, StockPositionClose, StockPositionOpen, StockPositionWithCurrentPrice
 from users.auth import current_user
+from users.schemas import Message
 
 
 router = APIRouter()
@@ -75,3 +77,18 @@ async def get_stock_positions(
 ) -> list[StockPosition | StockPositionWithCurrentPrice]:
     """Get all stock positions for account."""
     return await get_active_stock_positions_per_account(session, account_id, user, get_current_price)
+
+
+@router.post("/account/{account_id}/stocks/close-positions")
+async def close_stock_positions_by_ticket_name(
+    user: Annotated[User, Depends(current_user)],
+    session: Annotated[AsyncSession, Depends(get_db)],
+    account_id: Annotated[int, Path(title="Stock Account ID")],
+    stock_position: StockPositionClose,
+) -> Message:
+    """Close stock positions."""
+    stock_account = await get_stock_account_with_user_by_account_id(account_id, session, user)
+    if stock_account:
+        await close_stock_positions_with_transactions(session, stock_account, stock_position)
+        return Message(message="Stock positions successfully closed.")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stock Account not found.")

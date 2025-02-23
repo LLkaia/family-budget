@@ -10,6 +10,7 @@ from stocks.schemas import (
     AccountTransactionData,
     AccountTransactionType,
     StockAccountCreate,
+    StockPositionClose,
     StockPositionOpen,
     StockPositionWithCurrentPrice,
 )
@@ -48,7 +49,7 @@ async def open_stock_position_with_transaction(
     stock_position = StockPosition(
         ticket_name=stock_position_data.ticket_name,
         count_active=stock_position_data.count,
-        date_opened=stock_position_data.date_opened,
+        datetime_opened=stock_position_data.datetime_opened,
         price_per_stock_in=stock_position_data.price_per_stock,
         account_id=stock_account.id,
     )
@@ -57,7 +58,7 @@ async def open_stock_position_with_transaction(
     await session.refresh(stock_position)
 
     transaction = AccountTransactionData(
-        date_performed=stock_position.date_opened,
+        datetime_performed=stock_position.datetime_opened,
         account_id=stock_account.id,
         total_amount=stock_position.price_per_stock_in * stock_position.count_active,
         transaction_type=AccountTransactionType.STOCK_IN,
@@ -69,6 +70,47 @@ async def open_stock_position_with_transaction(
     )
     perform_account_transaction(session=session, account=stock_account, transaction=transaction)
     return stock_position
+
+
+async def close_stock_positions_with_transactions(
+    session: AsyncSession, stock_account: StockAccount, stock_position_to_close: StockPositionClose
+) -> None:
+    """Close stock positions with transactions."""
+    stock_positions = await session.exec(
+        select(StockPosition)
+        .where(StockPosition.account_id == stock_account.id)
+        .where(StockPosition.count_active > 0)
+        .where(StockPosition.ticket_name == stock_position_to_close.ticket_name)
+        .order_by(StockPosition.datetime_opened)
+    )
+
+    total_count_to_subtract = stock_position_to_close.count
+    for stock_position in stock_positions:
+        subtracted_count = min(total_count_to_subtract, stock_position.count_active)
+        stock_position.count_active -= subtracted_count
+        total_count_to_subtract -= subtracted_count
+        session.add(stock_position)
+
+        transaction = AccountTransactionData(
+            datetime_performed=stock_position_to_close.datetime_closed,
+            account_id=stock_account.id,
+            total_amount=stock_position_to_close.price_per_stock * subtracted_count,
+            transaction_type=AccountTransactionType.STOCK_OUT,
+            price_per_item=stock_position_to_close.price_per_stock,
+            count_items=subtracted_count,
+            paid_fee=stock_position_to_close.paid_fee,
+            ticket_name=stock_position_to_close.ticket_name,
+            stock_position_id=stock_position.id,
+        )
+        perform_account_transaction(session=session, account=stock_account, transaction=transaction)
+
+        if total_count_to_subtract == 0:
+            break
+
+    if total_count_to_subtract > 0:
+        raise ValueError(
+            f"Cannot close stock positions: too many stocks to close. Remaining: {total_count_to_subtract}."
+        )
 
 
 def perform_account_transaction(

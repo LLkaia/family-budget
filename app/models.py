@@ -98,7 +98,7 @@ class StockPosition(SQLModel, table=True):  # type: ignore[call-arg]
     id: int = Field(default=None, primary_key=True)
     ticket_name: str = Field(max_length=10)
     count_active: int = Field(ge=0)
-    date_opened: date = Field(description="When position was opened.")
+    datetime_opened: datetime = Field(description="When position was opened.")
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
     price_per_stock_in: float = Field(ge=0, description="Price per stock in.")
 
@@ -110,7 +110,7 @@ class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
     """Account Transaction database model."""
 
     id: int = Field(default=None, primary_key=True)
-    date_performed: date = Field(description="When transaction was performed.")
+    datetime_performed: datetime = Field(description="When transaction was performed.")
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
     total_amount: float = Field(gt=0)
     transaction_type: AccountTransactionType

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from enum import Enum
 
 from sqlmodel import Field, SQLModel
@@ -24,13 +24,22 @@ class StockAccountCreate(SQLModel):
 class StockPositionBase(SQLModel):
     """Stock Position Base schema."""
 
-    date_opened: date = Field(description="When position was opened.")
     ticket_name: str = Field(max_length=10)
 
 
 class StockPositionOpen(StockPositionBase):
     """Stock Position Open schema."""
 
+    datetime_opened: datetime = Field(description="When position was opened. Format: 'YYYY-MM-DD HH:MM:SS'")
+    count: int = Field(gt=0, description="Count of stocks bought.")
+    price_per_stock: float = Field(gt=0, description="Price per one stock.")
+    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
+
+
+class StockPositionClose(StockPositionBase):
+    """Stock Position Close schema."""
+
+    datetime_closed: datetime = Field(description="When position was closed. Format: 'YYYY-MM-DD HH:MM:SS'")
     count: int = Field(gt=0, description="Count of stocks bought.")
     price_per_stock: float = Field(gt=0, description="Price per one stock.")
     paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
@@ -41,6 +50,7 @@ class StockPositionWithCurrentPrice(StockPositionBase):
 
     id: int
     account_id: int
+    datetime_opened: datetime = Field(description="When position was opened.")
     count_active: int = Field(gt=0, description="Count of stocks active.")
     price_per_stock_in: float = Field(gt=0, description="Price per stock in.")
     current_price: float = Field(ge=0, description="Near real-time stock price.")
@@ -49,7 +59,7 @@ class StockPositionWithCurrentPrice(StockPositionBase):
 class AccountTransactionData(SQLModel):
     """Account Transaction Data schema."""
 
-    date_performed: date
+    datetime_performed: datetime
     account_id: int
     total_amount: float = Field(gt=0)
     transaction_type: AccountTransactionType
