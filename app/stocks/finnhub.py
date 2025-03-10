@@ -58,3 +58,10 @@ async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_aft
         )
 
     return float(current_price)
+
+
+# async def update_stock_symbols_table(exchange_code: str = "US"):
+#     """Update stock symbols table."""
+#     retrieved_data = get_finnhub_client().stock_symbols(exchange_code)
+#     async with get_db() as session:
+#         await insert_bulk_stock_symbols(session, retrieved_data)

@@ -158,3 +158,8 @@ async def get_active_stock_positions_per_account(
         if get_current_price
         else list(stock_positions.all())
     )
+
+
+# async def insert_bulk_stock_symbols(session: AsyncSession, data: list) -> None:
+#     """Insert bulk stock symbols."""
+#     session.bulk_insert_mappings(StockSymbols, data)

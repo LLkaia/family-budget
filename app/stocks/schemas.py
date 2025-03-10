@@ -3,6 +3,8 @@ from enum import Enum
 
 from sqlmodel import Field, SQLModel
 
+from custom_types import StockSymbol
+
 
 class AccountTransactionType(str, Enum):
     """Account Transaction Types Enum."""
@@ -24,32 +26,30 @@ class StockAccountCreate(SQLModel):
 class StockPositionBase(SQLModel):
     """Stock Position Base schema."""
 
-    ticket_name: str = Field(max_length=10)
+    ticket_name: StockSymbol
+    count: int = Field(gt=0, description="Count of stocks.")
+    price_per_stock: float = Field(gt=0, description="Price per one stock.")
+    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
 
 
 class StockPositionOpen(StockPositionBase):
     """Stock Position Open schema."""
 
     datetime_opened: datetime = Field(description="When position was opened. Format: 'YYYY-MM-DD HH:MM:SS'")
-    count: int = Field(gt=0, description="Count of stocks bought.")
-    price_per_stock: float = Field(gt=0, description="Price per one stock.")
-    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
 
 
 class StockPositionClose(StockPositionBase):
     """Stock Position Close schema."""
 
     datetime_closed: datetime = Field(description="When position was closed. Format: 'YYYY-MM-DD HH:MM:SS'")
-    count: int = Field(gt=0, description="Count of stocks bought.")
-    price_per_stock: float = Field(gt=0, description="Price per one stock.")
-    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
 
 
-class StockPositionWithCurrentPrice(StockPositionBase):
+class StockPositionWithCurrentPrice(SQLModel):
     """Stock Position With Current Price schema."""
 
     id: int
     account_id: int
+    ticket_name: StockSymbol
     datetime_opened: datetime = Field(description="When position was opened.")
     count_active: int = Field(gt=0, description="Count of stocks active.")
     price_per_stock_in: float = Field(gt=0, description="Price per stock in.")
@@ -67,5 +67,5 @@ class AccountTransactionData(SQLModel):
     count_items: int = Field(ge=0)
     paid_fee: float = Field(ge=0, default=0)
     taxes_to_pay: float = Field(ge=0, default=0)
-    ticket_name: str = Field(max_length=10, default=None)
+    ticket_name: StockSymbol = Field(default=None)
     stock_position_id: int = Field(default=None)
