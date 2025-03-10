@@ -4,6 +4,7 @@ from pydantic import EmailStr, field_validator
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
+from custom_types import StockSymbol
 from stocks.schemas import AccountTransactionType
 from utils import get_datatime_now
 from validators import normalize_name
@@ -96,7 +97,7 @@ class StockPosition(SQLModel, table=True):  # type: ignore[call-arg]
     """Stock position database model."""
 
     id: int = Field(default=None, primary_key=True)
-    ticket_name: str = Field(max_length=10)
+    ticket_name: StockSymbol
     count_active: int = Field(ge=0)
     datetime_opened: datetime = Field(description="When position was opened.")
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
@@ -116,10 +117,19 @@ class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
     transaction_type: AccountTransactionType
     paid_fee: float = Field(ge=0, default=0)
     taxes_to_pay: float = Field(ge=0, default=0)
-    ticket_name: str = Field(max_length=10, default=None)
+    ticket_name: StockSymbol = Field(default=None)
     price_per_item: float = Field(ge=0)
     count_items: int = Field(ge=0)
     stock_position_id: int = Field(foreign_key="stockposition.id", default=None, ondelete="CASCADE")
 
     stock_account: StockAccount = Relationship(back_populates="account_transactions")
     stock_position: StockPosition = Relationship(back_populates="transactions")
+
+
+class StockSymbols(SQLModel, table=True):  # type: ignore[call-arg]
+    """Stock Symbols database model."""
+
+    figi: str = Field(min_length=12, max_length=12, primary_key=True, description="Global unique identifier.")
+    symbol: str = Field(min_length=1, max_length=6, index=True)
+    exchange_code: str = Field(min_length=1, max_length=3, description="Stock exchange identifier.")
+    currency: str = Field(min_length=3, max_length=3)
