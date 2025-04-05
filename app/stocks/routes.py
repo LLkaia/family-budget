@@ -10,11 +10,19 @@ from stocks.crud import (
     create_stock_account_with_user,
     get_active_stock_positions_per_account,
     get_stock_account_with_user_by_account_id,
+    get_stock_symbols,
     open_stock_position_with_transaction,
     retrieve_stock_accounts_by_user,
+    update_stock_symbols,
 )
-from stocks.schemas import StockAccountCreate, StockPositionClose, StockPositionOpen, StockPositionWithCurrentPrice
-from users.auth import current_user
+from stocks.schemas import (
+    StockAccountCreate,
+    StockPositionClose,
+    StockPositionOpen,
+    StockPositionWithCurrentPrice,
+    StockSymbolList,
+)
+from users.auth import current_superuser, current_user
 from users.schemas import Message
 
 
@@ -92,3 +100,20 @@ async def close_stock_positions_by_ticket_name(
         await close_stock_positions_with_transactions(session, stock_account, stock_position)
         return Message(message="Stock positions successfully closed.")
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stock Account not found.")
+
+
+@router.post("/symbols/update", dependencies=[Depends(current_superuser)])
+async def update_stock_symbols_task(
+    session: Annotated[AsyncSession, Depends(get_db)], exchange_code: str = "US"
+) -> Message:
+    """Update stock symbols in table."""
+    await update_stock_symbols(session, exchange_code)
+    return Message(message="Stock symbols are updated.")
+
+
+@router.get("/symbols", dependencies=[Depends(current_user)])
+async def get_list_of_stock_symbols(
+    session: Annotated[AsyncSession, Depends(get_db)], offset: int = 0, limit: int = 100
+) -> StockSymbolList:
+    """Get list of existed users."""
+    return await get_stock_symbols(session, offset, limit)

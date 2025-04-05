@@ -5,6 +5,7 @@ import finnhub
 
 from core.config import get_settings
 from core.redis import RedisKeys, redis_client
+from models import StockSymbol
 from utils import get_datatime_now
 
 
@@ -58,3 +59,33 @@ async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_aft
         )
 
     return float(current_price)
+
+
+async def get_stock_symbols_data(
+    exchange_code: str = "US", type_of_symbols: list[str] | None = None
+) -> list[dict[str, str]]:
+    """Get stock symbols per stock exchange.
+
+    :param exchange_code: exchange code of needed stock exchange.
+    :param type_of_symbols: type of symbols to return.
+    :return: list of dicts with stock symbols data.
+    """
+    exchange_code = exchange_code.upper()
+    if type_of_symbols is None:
+        type_of_symbols = ["Common Stock"]
+
+    try:
+        requested_data = get_finnhub_client().stock_symbols(exchange_code)
+    except finnhub.FinnhubAPIException:  # 429 throttle error
+        return []
+
+    # take 'StockSymbol' fields from items in 'requested_data' and extend it with 'extra_data'
+    allowed_keys = StockSymbol.__table__.columns
+    extra_data = {"exchange_code": exchange_code}
+
+    # additionally, filter only needed types of symbols
+    return [
+        {**{key: item[key] for key in item if key in allowed_keys}, **extra_data}
+        for item in requested_data
+        if item["type"] in type_of_symbols
+    ]

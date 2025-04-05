@@ -1,11 +1,15 @@
+import math
 from typing import cast
 
+from sqlalchemy import func
+from sqlalchemy.dialects.postgresql import insert
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from core.database import PSQL_QUERY_ALLOWED_MAX_ARGS
 from exceptions import ParameterMissingException
-from models import AccountTransaction, StockAccount, StockPosition, User
-from stocks.finnhub import get_latest_stock_price
+from models import AccountTransaction, StockAccount, StockPosition, StockSymbol, User
+from stocks.finnhub import get_latest_stock_price, get_stock_symbols_data
 from stocks.schemas import (
     AccountTransactionData,
     AccountTransactionType,
@@ -13,6 +17,7 @@ from stocks.schemas import (
     StockPositionClose,
     StockPositionOpen,
     StockPositionWithCurrentPrice,
+    StockSymbolList,
 )
 
 
@@ -158,3 +163,35 @@ async def get_active_stock_positions_per_account(
         if get_current_price
         else list(stock_positions.all())
     )
+
+
+async def update_stock_symbols(session: AsyncSession, exchange_code: str = "US") -> None:
+    """Update stock symbols table with fresh data."""
+    stock_symbols_data = await get_stock_symbols_data(exchange_code)
+
+    # allowed items depends on parameters of each item
+    allowed_items_per_query = int(math.floor(PSQL_QUERY_ALLOWED_MAX_ARGS / len(stock_symbols_data[0])))
+
+    # make generator which returns allowed amount of items per iteration
+    query_args_sets = (
+        stock_symbols_data[offset : offset + allowed_items_per_query]
+        for offset in range(0, len(stock_symbols_data), allowed_items_per_query)
+    )
+
+    for data in query_args_sets:
+        query = insert(StockSymbol).values(data)
+
+        # if item with same figi exists -> update symbol and description
+        query = query.on_conflict_do_update(
+            constraint="stocksymbol_figi_key",
+            set_={StockSymbol.symbol: query.excluded.symbol, StockSymbol.description: query.excluded.description},
+        )
+
+        await session.exec(query)
+
+
+async def get_stock_symbols(session: AsyncSession, offset: int = 0, limit: int = 100) -> StockSymbolList:
+    """Retrieve stock symbols."""
+    count = await session.exec(select(func.count()).select_from(StockSymbol))
+    stock_symbols = await session.exec(select(StockSymbol).order_by(StockSymbol.symbol).offset(offset).limit(limit))
+    return StockSymbolList(count=count.one(), data=stock_symbols.all())
