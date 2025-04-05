@@ -25,31 +25,29 @@ class StockPositionBase(SQLModel):
     """Stock Position Base schema."""
 
     ticket_name: str = Field(max_length=10)
+    count: int = Field(gt=0, description="Count of stocks.")
+    price_per_stock: float = Field(gt=0, description="Price per one stock.")
+    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
 
 
 class StockPositionOpen(StockPositionBase):
     """Stock Position Open schema."""
 
     datetime_opened: datetime = Field(description="When position was opened. Format: 'YYYY-MM-DD HH:MM:SS'")
-    count: int = Field(gt=0, description="Count of stocks bought.")
-    price_per_stock: float = Field(gt=0, description="Price per one stock.")
-    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
 
 
 class StockPositionClose(StockPositionBase):
     """Stock Position Close schema."""
 
     datetime_closed: datetime = Field(description="When position was closed. Format: 'YYYY-MM-DD HH:MM:SS'")
-    count: int = Field(gt=0, description="Count of stocks bought.")
-    price_per_stock: float = Field(gt=0, description="Price per one stock.")
-    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
 
 
-class StockPositionWithCurrentPrice(StockPositionBase):
+class StockPositionWithCurrentPrice(SQLModel):
     """Stock Position With Current Price schema."""
 
     id: int
     account_id: int
+    ticket_name: str = Field(max_length=10)
     datetime_opened: datetime = Field(description="When position was opened.")
     count_active: int = Field(gt=0, description="Count of stocks active.")
     price_per_stock_in: float = Field(gt=0, description="Price per stock in.")
@@ -69,3 +67,20 @@ class AccountTransactionData(SQLModel):
     taxes_to_pay: float = Field(ge=0, default=0)
     ticket_name: str = Field(max_length=10, default=None)
     stock_position_id: int = Field(default=None)
+
+
+class StockSymbolPublic(SQLModel):
+    """Stock Symbols public schema."""
+
+    id: int
+    figi: str = Field(min_length=12, max_length=12, description="Global unique identifier.")
+    symbol: str = Field(min_length=1, max_length=6)
+    exchange_code: str = Field(min_length=1, max_length=3, description="Stock exchange identifier.")
+    description: str = Field(max_length=255)
+
+
+class StockSymbolList(SQLModel):
+    """List Stock Symbol schema."""
+
+    data: list[StockSymbolPublic]
+    count: int

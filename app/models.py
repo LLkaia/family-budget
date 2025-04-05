@@ -123,3 +123,16 @@ class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
 
     stock_account: StockAccount = Relationship(back_populates="account_transactions")
     stock_position: StockPosition = Relationship(back_populates="transactions")
+
+
+class StockSymbol(SQLModel, table=True):  # type: ignore[call-arg]
+    """Stock Symbols database model."""
+
+    id: int = Field(default=None, primary_key=True)
+    figi: str = Field(min_length=12, max_length=12, unique=True, description="Global unique identifier.")
+    symbol: str = Field(min_length=1, max_length=6)
+    exchange_code: str = Field(min_length=1, max_length=3, description="Stock exchange identifier.")
+    currency: str = Field(min_length=3, max_length=3)
+    description: str = Field(max_length=255)
+
+    __table_args__ = (UniqueConstraint("symbol", "exchange_code", name="uq_symbol_exchange_code"),)
