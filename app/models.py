@@ -1,8 +1,8 @@
 from datetime import date, datetime
+from typing import Any
 
 from pydantic import EmailStr, field_validator
-from sqlalchemy import UniqueConstraint
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import JSON, Column, Field, Relationship, SQLModel, UniqueConstraint, func
 
 from stocks.schemas import AccountTransactionType
 from utils import get_datatime_now
@@ -136,3 +136,15 @@ class StockSymbol(SQLModel, table=True):  # type: ignore[call-arg]
     description: str = Field(max_length=255)
 
     __table_args__ = (UniqueConstraint("symbol", "exchange_code", name="uq_symbol_exchange_code"),)
+
+
+class AuditLog(SQLModel, table=True):  # type: ignore[call-arg]
+    """Audit Log database model."""
+
+    id: int = Field(default=None, primary_key=True)
+    table_name: str = Field(max_length=20)
+    operation: str = Field(min_length=6, max_length=6)
+    changed_at: datetime = Field(sa_column_kwargs={"server_default": func.now()})
+    record_id: int | None = None
+    old_data: dict[str, Any] | None = Field(sa_column=Column(JSON), default=None)
+    new_data: dict[str, Any] | None = Field(sa_column=Column(JSON), default=None)
