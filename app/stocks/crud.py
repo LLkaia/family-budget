@@ -1,4 +1,5 @@
 import math
+from itertools import batched
 from typing import cast
 
 from sqlalchemy import func
@@ -173,12 +174,7 @@ async def update_stock_symbols(session: AsyncSession, exchange_code: str = "US")
     allowed_items_per_query = int(math.floor(PSQL_QUERY_ALLOWED_MAX_ARGS / len(stock_symbols_data[0])))
 
     # make generator which returns allowed amount of items per iteration
-    query_args_sets = (
-        stock_symbols_data[offset : offset + allowed_items_per_query]
-        for offset in range(0, len(stock_symbols_data), allowed_items_per_query)
-    )
-
-    for data in query_args_sets:
+    for data in batched(stock_symbols_data, allowed_items_per_query):
         query = insert(StockSymbol).values(data)
 
         # if item with same figi exists -> update symbol and description
