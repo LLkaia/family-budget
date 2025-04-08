@@ -3,6 +3,9 @@
 
 ## Quick Start
 
+### Install Git LFS locally
+Follow this [documentation](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
+
 ### Clone the Repository
 Clone the repository to your local machine:
 ```shell
