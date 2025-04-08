@@ -8,7 +8,13 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from core.database import get_db
 from exceptions import CredentialsException
 from models import User
-from users.auth import authenticate_user, create_access_token, current_superuser, current_user, destroy_token
+from users.auth import (
+    authenticate_user,
+    create_access_token,
+    current_superuser,
+    current_user,
+    destroy_token,
+)
 from users.crud import create_user, get_users
 from users.schemas import Message, Token, UserCreate, UserDetails, UserList
 
@@ -54,9 +60,10 @@ async def register_new_user(session: Annotated[AsyncSession, Depends(get_db)], u
     """Register new user."""
     try:
         user = await create_user(session, user)
-        return Message(message=f"User '{user.full_name}' successfully registered.")
     except IntegrityError:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered.")
+    else:
+        return Message(message=f"User '{user.full_name}' successfully registered.")
 
 
 @router.post("/verify-token", dependencies=[Depends(current_user)])

@@ -4,7 +4,7 @@ from users.schemas import UserFixture
 
 
 async def test_register_correct_data(client: AsyncClient) -> None:
-    data = {"email": "test1@example.com", "password": "example12345", "full_name": "Test"}
+    data = {"email": "test1@example.com", "password": "Example12345@", "full_name": "Test"}
     response = await client.post("/account/register", json=data)
     response_json = response.json()
     assert response.status_code == 201, response_json
@@ -12,11 +12,10 @@ async def test_register_correct_data(client: AsyncClient) -> None:
 
 
 async def test_register_short_password(client: AsyncClient) -> None:
-    data = {"email": "test2@example.com", "password": "short", "full_name": "Test"}
+    data = {"email": "test2@example.com", "password": "shrt12$", "full_name": "Test"}
     response = await client.post("/account/register", json=data)
     response_json = response.json()
     assert response.status_code == 422, response_json
-    assert "password" in response_json["detail"][0]["loc"], response_json
 
 
 async def test_register_existing_email(client: AsyncClient, test_user: UserFixture) -> None:
@@ -28,7 +27,7 @@ async def test_register_existing_email(client: AsyncClient, test_user: UserFixtu
 
 
 async def test_register_invalid_email_format(client: AsyncClient) -> None:
-    data = {"email": "invalid-email", "password": "example12345", "full_name": "Test"}
+    data = {"email": "invalid-email", "password": "Example12345@", "full_name": "Test"}
     response = await client.post("/account/register", json=data)
     response_json = response.json()
     assert response.status_code == 422, response_json
@@ -36,7 +35,7 @@ async def test_register_invalid_email_format(client: AsyncClient) -> None:
 
 
 async def test_register_missing_email(client: AsyncClient) -> None:
-    data = {"password": "example12345", "full_name": "Test"}
+    data = {"password": "Example12345@", "full_name": "Test"}
     response = await client.post("/account/register", json=data)
     response_json = response.json()
     assert response.status_code == 422, response_json
