@@ -77,7 +77,7 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 @pytest.fixture
 async def test_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
     """Create test user."""
-    user_fixture = UserFixture(email="test@example.com", password="test12345", full_name="Test User", id=1000)
+    user_fixture = UserFixture(email="test@example.com", password="Test12345@", full_name="Test User", id=1000)
     async with test_db() as session:
         created_user = await create_user(session, user_fixture)
         await set_user_super(session, created_user)
