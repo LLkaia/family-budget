@@ -6,7 +6,7 @@ import finnhub
 from core.config import get_settings
 from core.redis import RedisKeys, redis_client
 from models import StockSymbol
-from utils import get_datatime_now
+from utils import get_datetime_now
 
 
 @lru_cache
@@ -31,7 +31,7 @@ async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_aft
         update cache (1 hour by default)
     :return: stock price or None
     """
-    current_timestamp = int(get_datatime_now().timestamp())
+    current_timestamp = int(get_datetime_now().timestamp())
 
     data_from_cache = await redis_client.read_row_from_cache(RedisKeys.stock_price.value, ticket)
     price_from_cache = "0"

@@ -5,7 +5,7 @@ from pydantic import EmailStr, field_validator
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel, UniqueConstraint, func
 
 from stocks.schemas import AccountTransactionType
-from utils import get_datatime_now
+from utils import get_datetime_now
 from validators import normalize_name
 
 
@@ -74,7 +74,7 @@ class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
     date_performed: date = Field(description="When transaction was performed.")
     amount: float = Field(gt=0)
     category_id: int = Field(foreign_key="category.id", ondelete="CASCADE")
-    datetime_added: datetime = Field(default_factory=get_datatime_now, description="When transaction was added.")
+    datetime_added: datetime = Field(default_factory=get_datetime_now, description="When transaction was added.")
 
     category: Category = Relationship(back_populates="transactions")
 
