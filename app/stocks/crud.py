@@ -4,6 +4,7 @@ from typing import cast
 
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.orm import joinedload
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -17,6 +18,7 @@ from stocks.schemas import (
     StockAccountCreate,
     StockPositionClose,
     StockPositionOpen,
+    StockPositionPublic,
     StockPositionWithCurrentPrice,
     StockSymbolList,
 )
@@ -53,7 +55,7 @@ async def open_stock_position_with_transaction(
 ) -> StockPosition:
     """Open stock position with transaction."""
     stock_position = StockPosition(
-        ticket_name=stock_position_data.ticket_name,
+        stock_symbol_id=stock_position_data.stock_symbol_id,
         count_active=stock_position_data.count,
         datetime_opened=stock_position_data.datetime_opened,
         price_per_stock_in=stock_position_data.price_per_stock,
@@ -71,7 +73,7 @@ async def open_stock_position_with_transaction(
         price_per_item=stock_position.price_per_stock_in,
         count_items=stock_position.count_active,
         paid_fee=stock_position_data.paid_fee,
-        ticket_name=stock_position.ticket_name,
+        stock_symbol_id=stock_position.stock_symbol_id,
         stock_position_id=stock_position.id,
     )
     perform_account_transaction(session=session, account=stock_account, transaction=transaction)
@@ -86,7 +88,7 @@ async def close_stock_positions_with_transactions(
         select(StockPosition)
         .where(StockPosition.account_id == stock_account.id)
         .where(StockPosition.count_active > 0)
-        .where(StockPosition.ticket_name == stock_position_to_close.ticket_name)
+        .where(StockPosition.stock_symbol_id == stock_position_to_close.stock_symbol_id)
         .order_by(StockPosition.datetime_opened)
     )
 
@@ -105,7 +107,7 @@ async def close_stock_positions_with_transactions(
             price_per_item=stock_position_to_close.price_per_stock,
             count_items=subtracted_count,
             paid_fee=stock_position_to_close.paid_fee,
-            ticket_name=stock_position_to_close.ticket_name,
+            stock_symbol_id=stock_position_to_close.stock_symbol_id,
             stock_position_id=stock_position.id,
         )
         perform_account_transaction(session=session, account=stock_account, transaction=transaction)
@@ -130,11 +132,11 @@ def perform_account_transaction(
             account.balance += transaction.total_amount - transaction.paid_fee
 
     if transaction.transaction_type in {AccountTransactionType.STOCK_IN, AccountTransactionType.STOCK_OUT}:
-        if not (transaction.stock_position_id and transaction.ticket_name):
-            raise ParameterMissingException("Missing stock position ID or ticket name.")
+        if not (transaction.stock_position_id and transaction.stock_symbol_id):
+            raise ParameterMissingException("Missing stock position ID or stock symbol ID.")
 
-    if transaction.transaction_type == AccountTransactionType.DIVIDENDS and not transaction.ticket_name:
-        raise ParameterMissingException("Missing ticket name.")
+    if transaction.transaction_type == AccountTransactionType.DIVIDENDS and not transaction.stock_symbol_id:
+        raise ParameterMissingException("Missing stock symbol ID.")
 
     if account.balance < 0:
         raise ValueError("Not enough money.")
@@ -145,7 +147,7 @@ def perform_account_transaction(
 
 async def get_active_stock_positions_per_account(
     session: AsyncSession, account_id: int, user: User, get_current_price: bool
-) -> list[StockPosition | StockPositionWithCurrentPrice]:
+) -> list[StockPositionPublic | StockPositionWithCurrentPrice]:
     """Get active stock positions per account."""
     stock_positions = await session.exec(
         select(StockPosition)
@@ -153,11 +155,13 @@ async def get_active_stock_positions_per_account(
         .where(StockAccount.owner_id == user.id)
         .where(StockPosition.account_id == account_id)
         .where(StockPosition.count_active > 0)
+        .options(joinedload(StockPosition.stock_symbol))
     )
     return (
         [
             StockPositionWithCurrentPrice.model_validate(
-                stock_position, update={"current_price": await get_latest_stock_price(stock_position.ticket_name)}
+                stock_position,
+                update={"current_price": await get_latest_stock_price(stock_position.stock_symbol.symbol)},
             )
             for stock_position in stock_positions
         ]

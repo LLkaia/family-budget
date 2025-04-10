@@ -14,6 +14,39 @@ class AccountTransactionType(str, Enum):
     STOCK_OUT = "stock_out"
 
 
+class StockSymbolType(str, Enum):
+    """Stock Symbol Types Enum."""
+
+    COMMON_STOCK = "Common Stock"
+    PREFERENCE = "Preference"
+    FOREIGN_SHARE = "Foreign Sh."
+    SAVINGS_SHARE = "Savings Share"
+    SDR = "SDR"
+    ETP = "ETP"
+    PRIVATE = "PRIVATE"
+    PUBLIC = "PUBLIC"
+    NY_REG_SHRS = "NY Reg Shrs"
+    ADR = "ADR"
+    GDR = "GDR"
+    RECEIPT = "Receipt"
+    LTD_PART = "Ltd Part"
+    MISC = "Misc."
+    OPEN_END_FUND = "Open-End Fund"
+    CLOSED_END_FUND = "Closed-End Fund"
+    UNIT = "Unit"
+    REIT = "REIT"
+    TRACKING_STOCK = "Tracking Stk"
+    DUTCH_CERT = "Dutch Cert"
+    ROYALTY_TRUST = "Royalty Trst"
+    MLP = "MLP"
+    STAPLED_SECURITY = "Stapled Security"
+    NVDR = "NVDR"
+    CDI = "CDI"
+    RIGHT = "Right"
+    EQUITY_WRT = "Equity WRT"
+    UNKNOWN = ""
+
+
 class StockAccountCreate(SQLModel):
     """Stock Account Create schema."""
 
@@ -24,7 +57,7 @@ class StockAccountCreate(SQLModel):
 class StockPositionBase(SQLModel):
     """Stock Position Base schema."""
 
-    ticket_name: str = Field(max_length=10)
+    stock_symbol_id: int
     count: int = Field(gt=0, description="Count of stocks.")
     price_per_stock: float = Field(gt=0, description="Price per one stock.")
     paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
@@ -42,15 +75,20 @@ class StockPositionClose(StockPositionBase):
     datetime_closed: datetime = Field(description="When position was closed. Format: 'YYYY-MM-DD HH:MM:SS'")
 
 
-class StockPositionWithCurrentPrice(SQLModel):
-    """Stock Position With Current Price schema."""
+class StockPositionPublic(SQLModel):
+    """Stock Position Public schema."""
 
     id: int
     account_id: int
-    ticket_name: str = Field(max_length=10)
+    stock_symbol: "StockSymbolPublic"
     datetime_opened: datetime = Field(description="When position was opened.")
     count_active: int = Field(gt=0, description="Count of stocks active.")
     price_per_stock_in: float = Field(gt=0, description="Price per stock in.")
+
+
+class StockPositionWithCurrentPrice(StockPositionPublic):
+    """Stock Position With Current Price schema."""
+
     current_price: float = Field(ge=0, description="Near real-time stock price.")
 
 
@@ -65,7 +103,7 @@ class AccountTransactionData(SQLModel):
     count_items: int = Field(ge=0)
     paid_fee: float = Field(ge=0, default=0)
     taxes_to_pay: float = Field(ge=0, default=0)
-    ticket_name: str = Field(max_length=10, default=None)
+    stock_symbol_id: int
     stock_position_id: int = Field(default=None)
 
 
