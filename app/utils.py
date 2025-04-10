@@ -45,14 +45,14 @@ def get_password_hash(password: str) -> str:
     return str(pwd_context.hash(password))
 
 
-def get_datatime_now(timezone: str = "UTC") -> datetime:
-    """Get current datatime object.
+def get_datetime_now(timezone: str = "UTC") -> datetime:
+    """Get current datetime object.
 
     If function called with <timezone> parameter,
-    return current datatime object for given timezone,
-    else return datatime object for UTC.
+    return current datetime object for given timezone,
+    else return datetime object for UTC.
 
     :param timezone: timezone string
-    :return: datatime object
+    :return: datetime object
     """
     return datetime.now(ZoneInfo(timezone)).replace(tzinfo=None)

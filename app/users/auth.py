@@ -15,7 +15,7 @@ from exceptions import CredentialsException
 from models import User
 from users.crud import get_user_by_email
 from users.schemas import TokenPayload
-from utils import get_datatime_now, verify_password
+from utils import get_datetime_now, verify_password
 
 
 app_config = get_settings()
@@ -43,7 +43,7 @@ def create_access_token(user: User) -> str:
     :param user: User instance
     :return: access JWT token
     """
-    expire = get_datatime_now() + timedelta(minutes=app_config.access_token_expire_minutes)
+    expire = get_datetime_now() + timedelta(minutes=app_config.access_token_expire_minutes)
     to_encode = {"exp": expire, "sub": user.email, "jti": str(uuid.uuid4())}
     encoded_jwt = jwt.encode(to_encode, app_config.secret_key, algorithm=app_config.algorithm)
     return cast(str, encoded_jwt)
@@ -76,7 +76,7 @@ async def current_user(
     unic_id = token_payload.jti
     if (
         not expires
-        or expires.replace(tzinfo=None) <= get_datatime_now()
+        or expires.replace(tzinfo=None) <= get_datetime_now()
         or await redis_client.is_token_blacklisted(unic_id)
     ):
         raise CredentialsException
@@ -105,5 +105,5 @@ async def destroy_token(token_payload: Annotated[TokenPayload, Depends(decode_ac
 
     :param token_payload: JWT access token payload
     """
-    ttl = token_payload.exp.replace(tzinfo=None) - get_datatime_now()
+    ttl = token_payload.exp.replace(tzinfo=None) - get_datetime_now()
     await redis_client.add_token_to_blacklist(token_payload.jti, ttl)

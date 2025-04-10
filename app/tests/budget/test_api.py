@@ -65,7 +65,7 @@ async def test_transactions(test_budget: Budget, test_category: Category) -> Non
 
 @pytest.fixture
 async def budget_user(client: AsyncClient) -> AsyncGenerator[UserFixture, None]:
-    user_fixture = UserFixture(email="test_budget@example.com", password="test12345", full_name="Budget User", id=2000)
+    user_fixture = UserFixture(email="test_budget@example.com", password="Test12345@", full_name="Budget User", id=2000)
     async with test_db() as session:
         created_user = await create_user(session, user_fixture)
     yield user_fixture
@@ -378,8 +378,7 @@ async def test_add_category_to_budget_name_with_spaces(
     )
     response_json = response.json()
     assert response.status_code == 422, response_json
-    assert "name" in response_json["detail"][0]["loc"], response_json
-    assert response_json["detail"][0]["msg"] == "Input should contain one word", response_json
+    assert response_json["detail"]["msg"] == "Input should contain one word", response_json
 
 
 @pytest.mark.filterwarnings("ignore:DELETE")
