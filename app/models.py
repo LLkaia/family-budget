@@ -4,7 +4,7 @@ from typing import Any
 from pydantic import EmailStr, field_validator
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel, UniqueConstraint, func
 
-from stocks.schemas import AccountTransactionType
+from stocks.schemas import AccountTransactionType, StockSymbolType
 from utils import get_datetime_now
 from validators import normalize_name
 
@@ -96,14 +96,15 @@ class StockPosition(SQLModel, table=True):  # type: ignore[call-arg]
     """Stock position database model."""
 
     id: int = Field(default=None, primary_key=True)
-    ticket_name: str = Field(max_length=10)
     count_active: int = Field(ge=0)
     datetime_opened: datetime = Field(description="When position was opened.")
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
     price_per_stock_in: float = Field(ge=0, description="Price per stock in.")
+    stock_symbol_id: int = Field(foreign_key="stocksymbol.id", ondelete="CASCADE")
 
     transactions: list["AccountTransaction"] = Relationship(back_populates="stock_position", cascade_delete=True)
     stock_account: StockAccount = Relationship(back_populates="stock_positions")
+    stock_symbol: "StockSymbol" = Relationship(back_populates="stock_positions")
 
 
 class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
@@ -116,13 +117,14 @@ class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
     transaction_type: AccountTransactionType
     paid_fee: float = Field(ge=0, default=0)
     taxes_to_pay: float = Field(ge=0, default=0)
-    ticket_name: str = Field(max_length=10, default=None)
     price_per_item: float = Field(ge=0)
     count_items: int = Field(ge=0)
     stock_position_id: int = Field(foreign_key="stockposition.id", default=None, ondelete="CASCADE")
+    stock_symbol_id: int = Field(foreign_key="stocksymbol.id", default=None, ondelete="CASCADE")
 
     stock_account: StockAccount = Relationship(back_populates="account_transactions")
     stock_position: StockPosition = Relationship(back_populates="transactions")
+    stock_symbol: "StockSymbol" = Relationship(back_populates="transactions")
 
 
 class StockSymbol(SQLModel, table=True):  # type: ignore[call-arg]
@@ -134,6 +136,10 @@ class StockSymbol(SQLModel, table=True):  # type: ignore[call-arg]
     exchange_code: str = Field(min_length=1, max_length=3, description="Stock exchange identifier.")
     currency: str = Field(min_length=3, max_length=3)
     description: str = Field(max_length=255)
+    symbol_type: StockSymbolType
+
+    transactions: list[AccountTransaction] = Relationship(back_populates="stock_symbol", cascade_delete=True)
+    stock_positions: list[StockPosition] = Relationship(back_populates="stock_symbol", cascade_delete=True)
 
     __table_args__ = (UniqueConstraint("symbol", "exchange_code", name="uq_symbol_exchange_code"),)
 

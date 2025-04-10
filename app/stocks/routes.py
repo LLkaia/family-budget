@@ -19,6 +19,7 @@ from stocks.schemas import (
     StockAccountCreate,
     StockPositionClose,
     StockPositionOpen,
+    StockPositionPublic,
     StockPositionWithCurrentPrice,
     StockSymbolList,
 )
@@ -82,13 +83,13 @@ async def get_stock_positions(
     get_current_price: Annotated[
         bool, Query(title="Request stock near real-time price", alias="get-current-price")
     ] = False,
-) -> list[StockPosition | StockPositionWithCurrentPrice]:
+) -> list[StockPositionPublic | StockPositionWithCurrentPrice]:
     """Get all stock positions for account."""
     return await get_active_stock_positions_per_account(session, account_id, user, get_current_price)
 
 
 @router.post("/account/{account_id}/stocks/close-positions")
-async def close_stock_positions_by_ticket_name(
+async def close_stock_positions_by_stock_symbol(
     user: Annotated[User, Depends(current_user)],
     session: Annotated[AsyncSession, Depends(get_db)],
     account_id: Annotated[int, Path(title="Stock Account ID")],
