@@ -1,3 +1,5 @@
+import hashlib
+import secrets
 from datetime import date, datetime
 from enum import Enum
 
@@ -43,6 +45,16 @@ def get_password_hash(password: str) -> str:
     :return: hashed password
     """
     return str(pwd_context.hash(password))
+
+
+def create_refresh_token() -> str:
+    """Generate refresh token."""
+    return secrets.token_urlsafe(64)
+
+
+def get_token_hash(token: str) -> str:
+    """Get token's hash."""
+    return hashlib.sha256(token.encode()).hexdigest()
 
 
 def get_datetime_now(timezone: str = "UTC") -> datetime:

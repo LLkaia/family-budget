@@ -74,4 +74,14 @@ class UserFixture(UserCreate):
         return {"Authorization": f"Bearer {self.token}"}
 
 
+class SessionPublic(SQLModel):
+    """Session public schema."""
+
+    id: int
+    user_agent: str
+    ip_address: str
+    created_at: datetime
+    is_active: bool
+
+
 PasswordStr = Annotated[str, AfterValidator(validate_password)]

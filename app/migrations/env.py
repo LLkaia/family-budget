@@ -14,6 +14,7 @@ from models import (
     Budget,
     Category,
     PredefinedCategory,
+    Session,
     StockAccount,
     StockPosition,
     StockSymbol,
