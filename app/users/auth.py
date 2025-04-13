@@ -3,7 +3,7 @@ from datetime import timedelta
 from typing import Annotated, cast
 
 import jwt
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Request, Response
 from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -12,10 +12,10 @@ from core.config import get_settings
 from core.database import get_db
 from core.redis import redis_client
 from exceptions import CredentialsException
-from models import User
-from users.crud import get_user_by_email
+from models import Session, User
+from users.crud import create_session, get_session_by_token_hash, get_user_by_email, revoke_session_by_token_hash
 from users.schemas import TokenPayload
-from utils import get_datetime_now, verify_password
+from utils import create_refresh_token, get_datetime_now, get_token_hash, verify_password
 
 
 app_config = get_settings()
@@ -47,6 +47,56 @@ def create_access_token(user: User) -> str:
     to_encode = {"exp": expire, "sub": user.email, "jti": str(uuid.uuid4())}
     encoded_jwt = jwt.encode(to_encode, app_config.secret_key, algorithm=app_config.algorithm)
     return cast(str, encoded_jwt)
+
+
+async def create_new_session_for_user(session: AsyncSession, user: User, request: Request, response: Response) -> None:
+    """Create new session for user.
+
+    :param session: DB session
+    :param user: User instance
+    :param request: Request instance
+    :param response: Response instance
+    """
+    refresh_token = create_refresh_token()
+    datetime_now = get_datetime_now()
+
+    await create_session(
+        session=session,
+        user_id=user.id,
+        user_agent=request.headers.get("user-agent", ""),
+        refresh_token_hash=get_token_hash(refresh_token),
+        ip_address=request.client.host,
+        created_at=datetime_now,
+        expires_at=datetime_now + timedelta(minutes=app_config.refresh_token_expire_minutes),
+    )
+
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=False,
+        samesite="strict",
+        max_age=app_config.refresh_token_expire_minutes * 60,
+        path="/account",
+    )
+
+
+async def verify_session(session: AsyncSession, request: Request) -> Session:
+    """Verify and retrieve user session."""
+    refresh_token = request.cookies.get("refresh_token")
+    if not refresh_token:
+        raise CredentialsException("Missing refresh token")
+    refresh_token_hash = get_token_hash(refresh_token)
+
+    user_session = await get_session_by_token_hash(session, refresh_token_hash)
+    if not user_session:
+        raise CredentialsException
+    if user_session.revoked:
+        raise CredentialsException
+    if user_session.expires_at < get_datetime_now():
+        raise CredentialsException("Refresh token expired")
+
+    return user_session
 
 
 def decode_access_token(token: Annotated[str, Depends(oauth2_scheme)]) -> TokenPayload:
@@ -100,10 +150,25 @@ def current_superuser(user: Annotated[User, Depends(current_user)]) -> User:
     return user
 
 
-async def destroy_token(token_payload: Annotated[TokenPayload, Depends(decode_access_token)]) -> None:
-    """Add token to blocklist by unic identifier.
+async def destroy_tokens(
+    request: Request,
+    response: Response,
+    token_payload: Annotated[TokenPayload, Depends(decode_access_token)],
+    session: Annotated[AsyncSession, Depends(get_db)],
+) -> None:
+    """Destroy access and refresh tokens.
 
+    :param request: Request instance
+    :param response: Response instance
     :param token_payload: JWT access token payload
+    :param session: DB session
     """
+    # remove session by refresh token from cookie
+    refresh_token = request.cookies.get("refresh_token")
+    if refresh_token:
+        await revoke_session_by_token_hash(session, get_token_hash(refresh_token))
+        response.delete_cookie("refresh_token", path="/")
+
+    # blacklist access token
     ttl = token_payload.exp.replace(tzinfo=None) - get_datetime_now()
     await redis_client.add_token_to_blacklist(token_payload.jti, ttl)

@@ -39,6 +39,7 @@ class User(SQLModel, table=True):  # type: ignore[call-arg]
 
     budgets: list[Budget] = Relationship(back_populates="users", link_model=UserBudgetLink)
     stock_accounts: list["StockAccount"] = Relationship(back_populates="owner", cascade_delete=True)
+    sessions: list["Session"] = Relationship(back_populates="user", cascade_delete=True)
 
 
 class Category(SQLModel, table=True):  # type: ignore[call-arg]
@@ -154,3 +155,18 @@ class AuditLog(SQLModel, table=True):  # type: ignore[call-arg]
     record_id: int | None = None
     old_data: dict[str, Any] | None = Field(sa_column=Column(JSON), default=None)
     new_data: dict[str, Any] | None = Field(sa_column=Column(JSON), default=None)
+
+
+class Session(SQLModel, table=True):  # type: ignore[call-arg]
+    """Session database model."""
+
+    id: int = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="user.id", ondelete="CASCADE")
+    refresh_token_hash: str = Field(min_length=64, max_length=64)
+    user_agent: str
+    ip_address: str
+    created_at: datetime
+    expires_at: datetime
+    revoked: bool = Field(default=False)
+
+    user: User = Relationship(back_populates="sessions")
