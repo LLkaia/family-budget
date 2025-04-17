@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 from functools import lru_cache
 
 import finnhub
@@ -8,6 +9,7 @@ from core.redis import RedisKeys, redis_client
 from models import StockSymbol
 from stocks.schemas import StockSymbolType
 from utils import get_datetime_now
+from validators import validate_cash
 
 
 @lru_cache
@@ -16,7 +18,7 @@ def get_finnhub_client() -> finnhub.Client:
     return finnhub.Client(api_key=get_settings().finnhub_api_key)
 
 
-async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_after: int = 3600) -> float:
+async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_after: int = 3600) -> Decimal:
     """Get latest stock price by ticket.
 
     Get stock price by <ticket> from cache if it is there and
@@ -30,27 +32,27 @@ async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_aft
     :param cache_ttl: TTL for row in redis (24 hours by default)
     :param update_after: number of seconds after which try to
         update cache (1 hour by default)
-    :return: stock price or None
+    :return: stock price
     """
     current_timestamp = int(get_datetime_now().timestamp())
 
     data_from_cache = await redis_client.read_row_from_cache(RedisKeys.stock_price.value, ticket)
-    price_from_cache = "0"
+    price_from_cache = 0
 
     # return cached price if cache created lt <update_after> seconds ago
     if data_from_cache:
         price_from_cache, timestamp = data_from_cache.split(";")
         if current_timestamp - int(timestamp) < update_after:
-            return float(price_from_cache)
+            return validate_cash(Decimal(price_from_cache))
 
     # try to get fresh data, otherwise return cached price or 0
     try:
         retrieved_data = get_finnhub_client().quote(ticket)
     except finnhub.FinnhubAPIException:  # 429 throttle error
-        return float(price_from_cache)
+        return validate_cash(Decimal(price_from_cache))
 
     # current price could be 0 if ticket name is incorrect, skip caching
-    current_price = retrieved_data["c"]
+    current_price = validate_cash(Decimal(retrieved_data["c"]))
     if current_price > 0:
         await redis_client.add_row_to_cache(
             redis_key=RedisKeys.stock_price.value,
@@ -59,7 +61,7 @@ async def get_latest_stock_price(ticket: str, cache_ttl: int = 86400, update_aft
             ttl=timedelta(seconds=cache_ttl),
         )
 
-    return float(current_price)
+    return validate_cash(Decimal(current_price))
 
 
 async def get_stock_symbols_data(

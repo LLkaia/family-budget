@@ -6,7 +6,7 @@ from sqlmodel import JSON, Column, Field, Relationship, SQLModel, UniqueConstrai
 
 from stocks.schemas import AccountTransactionType, StockSymbolType
 from utils import get_datetime_now
-from validators import normalize_name
+from validators import CurrencyValue, normalize_name
 
 
 class UserBudgetLink(SQLModel, table=True):  # type: ignore[call-arg]
@@ -21,7 +21,7 @@ class Budget(SQLModel, table=True):  # type: ignore[call-arg]
 
     id: int = Field(default=None, primary_key=True)
     name: str = Field(max_length=255)
-    balance: float = Field(ge=0)
+    balance: CurrencyValue = Field(ge=0, decimal_places=4)
 
     users: list["User"] = Relationship(back_populates="budgets", link_model=UserBudgetLink)
     categories: list["Category"] = Relationship(back_populates="budget", cascade_delete=True)
@@ -47,7 +47,7 @@ class Category(SQLModel, table=True):  # type: ignore[call-arg]
 
     id: int = Field(default=None, primary_key=True)
     name: str = Field(max_length=255)
-    category_restriction: float = Field(ge=0)
+    category_restriction: CurrencyValue = Field(ge=0, decimal_places=4)
     description: str | None = Field(max_length=255)
     is_income: bool
     budget_id: int = Field(foreign_key="budget.id", ondelete="CASCADE")
@@ -73,7 +73,7 @@ class Transaction(SQLModel, table=True):  # type: ignore[call-arg]
 
     id: int = Field(default=None, primary_key=True)
     date_performed: date = Field(description="When transaction was performed.")
-    amount: float = Field(gt=0)
+    amount: CurrencyValue = Field(gt=0, decimal_places=4)
     category_id: int = Field(foreign_key="category.id", ondelete="CASCADE")
     datetime_added: datetime = Field(default_factory=get_datetime_now, description="When transaction was added.")
 
@@ -84,7 +84,7 @@ class StockAccount(SQLModel, table=True):  # type: ignore[call-arg]
     """Stock account database model."""
 
     id: int = Field(default=None, primary_key=True)
-    balance: float = Field(ge=0)
+    balance: CurrencyValue = Field(ge=0, decimal_places=4)
     account_name: str = Field(max_length=255)
     owner_id: int = Field(foreign_key="user.id", ondelete="CASCADE")
 
@@ -100,7 +100,7 @@ class StockPosition(SQLModel, table=True):  # type: ignore[call-arg]
     count_active: int = Field(ge=0)
     datetime_opened: datetime = Field(description="When position was opened.")
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
-    price_per_stock_in: float = Field(ge=0, description="Price per stock in.")
+    price_per_stock_in: CurrencyValue = Field(ge=0, decimal_places=4, description="Price per stock in.")
     stock_symbol_id: int = Field(foreign_key="stocksymbol.id", ondelete="CASCADE")
 
     transactions: list["AccountTransaction"] = Relationship(back_populates="stock_position", cascade_delete=True)
@@ -114,11 +114,11 @@ class AccountTransaction(SQLModel, table=True):  # type: ignore[call-arg]
     id: int = Field(default=None, primary_key=True)
     datetime_performed: datetime = Field(description="When transaction was performed.")
     account_id: int = Field(foreign_key="stockaccount.id", ondelete="CASCADE")
-    total_amount: float = Field(gt=0)
+    total_amount: CurrencyValue = Field(gt=0, decimal_places=4)
     transaction_type: AccountTransactionType
-    paid_fee: float = Field(ge=0, default=0)
-    taxes_to_pay: float = Field(ge=0, default=0)
-    price_per_item: float = Field(ge=0)
+    paid_fee: CurrencyValue = Field(ge=0, decimal_places=4, default=0)
+    taxes_to_pay: CurrencyValue = Field(ge=0, decimal_places=4, default=0)
+    price_per_item: CurrencyValue = Field(ge=0, decimal_places=4)
     count_items: int = Field(ge=0)
     stock_position_id: int = Field(foreign_key="stockposition.id", default=None, ondelete="CASCADE")
     stock_symbol_id: int = Field(foreign_key="stocksymbol.id", default=None, ondelete="CASCADE")

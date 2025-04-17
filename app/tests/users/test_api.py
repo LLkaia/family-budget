@@ -67,7 +67,7 @@ async def test_login_incorrect_credentials(client: AsyncClient) -> None:
 
 
 async def test_token_valid(client: AsyncClient, test_user: UserFixture) -> None:
-    response = await client.post("/account/verify-token", headers=test_user.get_headers())
+    response = await client.post("/account/verify", headers=test_user.get_headers())
     response_json = response.json()
     assert response.status_code == 200, response_json
     assert response_json["message"] == "Token is valid.", response_json
@@ -75,7 +75,7 @@ async def test_token_valid(client: AsyncClient, test_user: UserFixture) -> None:
 
 async def test_token_invalid(client: AsyncClient) -> None:
     headers = {"Authorization": "Bearer dummy-token"}
-    response = await client.post("/account/verify-token", headers=headers)
+    response = await client.post("/account/verify", headers=headers)
     response_json = response.json()
     assert response.status_code == 401, response_json
     assert response_json["detail"] == "Not authenticated", response_json
@@ -109,5 +109,5 @@ async def test_logout(client: AsyncClient, test_user: UserFixture) -> None:
     response_json = response.json()
     assert response.status_code == 200, response_json
     assert response_json["message"] == "Successfully logged out.", response_json
-    response = await client.post("/account/verify-token", headers=test_user.get_headers())
+    response = await client.post("/account/verify", headers=test_user.get_headers())
     assert response.status_code == 401, response_json

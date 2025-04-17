@@ -1,6 +1,9 @@
 import re
+from decimal import ROUND_HALF_UP, Decimal
+from typing import Annotated
 
 from fastapi.exceptions import RequestValidationError
+from pydantic import AfterValidator
 
 
 def normalize_name(value: str) -> str:
@@ -28,3 +31,11 @@ def validate_password(raw_password: str) -> str:
             }
         )
     return raw_password
+
+
+def validate_cash(value: Decimal) -> Decimal:
+    """Adjust Decimal value to 4 places."""
+    return value.quantize(Decimal("0.0001"), rounding=ROUND_HALF_UP)
+
+
+CurrencyValue = Annotated[Decimal, AfterValidator(validate_cash)]
