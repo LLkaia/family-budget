@@ -3,6 +3,8 @@ from enum import Enum
 
 from sqlmodel import Field, SQLModel
 
+from validators import CurrencyValue
+
 
 class AccountTransactionType(str, Enum):
     """Account Transaction Types Enum."""
@@ -50,7 +52,7 @@ class StockSymbolType(str, Enum):
 class StockAccountCreate(SQLModel):
     """Stock Account Create schema."""
 
-    balance: float = Field(ge=0, description="Current account balance.")
+    balance: CurrencyValue = Field(ge=0, description="Current account balance.")
     account_name: str = Field(max_length=255, description="Account name.")
 
 
@@ -59,8 +61,8 @@ class StockPositionBase(SQLModel):
 
     stock_symbol_id: int
     count: int = Field(gt=0, description="Count of stocks.")
-    price_per_stock: float = Field(gt=0, description="Price per one stock.")
-    paid_fee: float = Field(ge=0, description="Paid fee per transaction.")
+    price_per_stock: CurrencyValue = Field(gt=0, description="Price per one stock.")
+    paid_fee: CurrencyValue = Field(ge=0, description="Paid fee per transaction.")
 
 
 class StockPositionOpen(StockPositionBase):
@@ -83,13 +85,13 @@ class StockPositionPublic(SQLModel):
     stock_symbol: "StockSymbolPublic"
     datetime_opened: datetime = Field(description="When position was opened.")
     count_active: int = Field(gt=0, description="Count of stocks active.")
-    price_per_stock_in: float = Field(gt=0, description="Price per stock in.")
+    price_per_stock_in: CurrencyValue = Field(gt=0, description="Price per stock in.")
 
 
 class StockPositionWithCurrentPrice(StockPositionPublic):
     """Stock Position With Current Price schema."""
 
-    current_price: float = Field(ge=0, description="Near real-time stock price.")
+    current_price: CurrencyValue = Field(ge=0, description="Near real-time stock price.")
 
 
 class AccountTransactionData(SQLModel):
@@ -97,12 +99,12 @@ class AccountTransactionData(SQLModel):
 
     datetime_performed: datetime
     account_id: int
-    total_amount: float = Field(gt=0)
+    total_amount: CurrencyValue = Field(gt=0)
     transaction_type: AccountTransactionType
-    price_per_item: float = Field(gt=0)
+    price_per_item: CurrencyValue = Field(gt=0)
     count_items: int = Field(ge=0)
-    paid_fee: float = Field(ge=0, default=0)
-    taxes_to_pay: float = Field(ge=0, default=0)
+    paid_fee: CurrencyValue = Field(ge=0, default=0)
+    taxes_to_pay: CurrencyValue = Field(ge=0, default=0)
     stock_symbol_id: int
     stock_position_id: int = Field(default=None)
 

@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 from typing import AsyncGenerator, cast
 
 import pytest
@@ -91,7 +92,7 @@ async def test_create_budget(client: AsyncClient, test_user: UserFixture) -> Non
     response_json = response.json()
     assert response.status_code == 201, response_json
     assert response_json["name"] == data["name"], response_json
-    assert response_json["balance"] == data["balance"], response_json
+    assert Decimal(response_json["balance"]) == data["balance"], response_json
 
 
 async def test_create_budget_neg_balance(client: AsyncClient, test_user: UserFixture) -> None:
@@ -130,7 +131,7 @@ async def test_get_budget(client: AsyncClient, test_user: UserFixture, test_budg
     assert response.status_code == 200, response_json
     assert response_json["id"] == test_budget.id, response_json
     assert response_json["name"] == test_budget.name, response_json
-    assert response_json["balance"] == test_budget.balance, response_json
+    assert Decimal(response_json["balance"]) == test_budget.balance, response_json
     assert response_json["users"][0]["email"] == test_user.email, response_json
 
 
@@ -177,7 +178,7 @@ async def test_modify_budget(client: AsyncClient, test_user: UserFixture, test_b
     assert response.status_code == 200, response_json
     assert response_json["id"] == test_budget.id, response_json
     assert response_json["name"] == update_data["name"], response_json
-    assert response_json["balance"] == update_data["balance"], response_json
+    assert Decimal(response_json["balance"]) == update_data["balance"], response_json
 
 
 async def test_modify_budget_balance(client: AsyncClient, test_user: UserFixture, test_budget: Budget) -> None:
@@ -187,7 +188,7 @@ async def test_modify_budget_balance(client: AsyncClient, test_user: UserFixture
     assert response.status_code == 200, response_json
     assert response_json["id"] == test_budget.id, response_json
     assert response_json["name"] == test_budget.name, response_json
-    assert response_json["balance"] == update_data["balance"], response_json
+    assert Decimal(response_json["balance"]) == update_data["balance"], response_json
 
 
 async def test_modify_budget_neg_balance(client: AsyncClient, test_user: UserFixture, test_budget: Budget) -> None:
@@ -314,7 +315,7 @@ async def test_add_category_to_budget_success(client: AsyncClient, test_user: Us
     response_json = response.json()
     assert response.status_code == 201, response_json
     assert response_json["name"] == str(test_category_data["name"]).capitalize(), response_json
-    assert response_json["category_restriction"] == test_category_data["category_restriction"], response_json
+    assert Decimal(response_json["category_restriction"]) == test_category_data["category_restriction"], response_json
     assert response_json["description"] == test_category_data["description"], response_json
     assert response_json["is_income"] == test_category_data["is_income"], response_json
     assert response_json["budget_id"] == test_budget.id, response_json
@@ -415,7 +416,7 @@ async def test_modify_category_success(client: AsyncClient, test_user: UserFixtu
     response_json = response.json()
     assert response.status_code == 200, response_json
     assert response_json["name"] == update_data["name"], response_json
-    assert response_json["category_restriction"] == update_data["category_restriction"], response_json
+    assert Decimal(response_json["category_restriction"]) == update_data["category_restriction"], response_json
     assert response_json["description"] == update_data["description"], response_json
     assert response_json["is_income"] == update_data["is_income"], response_json
 
@@ -474,7 +475,7 @@ async def test_perform_transaction_success(
     response_json = response.json()
     assert response.status_code == 200, response_json
     assert response_json["id"] == test_category.budget_id, response_json
-    assert response_json["balance"] == expected_balance, response_json
+    assert Decimal(response_json["balance"]) == expected_balance, response_json
 
 
 async def test_perform_transaction_negative_amount(
@@ -530,9 +531,8 @@ async def test_get_budget_categories_with_transactions_year(
     assert response.status_code == 200, response_json
     for category in response_json:
         assert "total_amount" in category, category
-        assert isinstance(category["total_amount"], (float, int)), category
         if category["name"] == "Food":
-            assert category["total_amount"] == 450, category
+            assert Decimal(category["total_amount"]) == 450, category
 
 
 async def test_get_budget_categories_with_transactions_month(
@@ -547,9 +547,8 @@ async def test_get_budget_categories_with_transactions_month(
     assert response.status_code == 200, response_json
     for category in response_json:
         assert "total_amount" in category, category
-        assert isinstance(category["total_amount"], (float, int)), category
         if category["name"] == "Food":
-            assert category["total_amount"] == 400, category
+            assert Decimal(category["total_amount"]) == 400, category
 
 
 async def test_get_budget_categories_with_transactions_day(
@@ -564,9 +563,8 @@ async def test_get_budget_categories_with_transactions_day(
     assert response.status_code == 200, response_json
     for category in response_json:
         assert "total_amount" in category, category
-        assert isinstance(category["total_amount"], (float, int)), category
         if category["name"] == "Food":
-            assert category["total_amount"] == 100, category
+            assert Decimal(category["total_amount"]) == 100, category
 
 
 async def test_get_budget_categories_income_only(
