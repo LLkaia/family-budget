@@ -36,7 +36,7 @@ async def test_get_price_from_fresh_api(mock_finnhub: MagicMock, mock_redis: Mag
     assert result == 150.75
     mock_finnhub.return_value.quote.assert_called_once_with("AAPL")
     mock_redis.add_row_to_cache.assert_called_once_with(
-        redis_key="stock_price", key="AAPL", value="150.75;1234567890", ttl=timedelta(seconds=86400)
+        redis_key="stock_price", key="AAPL", value="150.7500;1234567890", ttl=timedelta(seconds=86400)
     )
 
 
