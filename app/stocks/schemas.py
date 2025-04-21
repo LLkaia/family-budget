@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 
 from sqlmodel import Field, SQLModel
@@ -124,3 +124,16 @@ class StockSymbolList(SQLModel):
 
     data: list[StockSymbolPublic]
     count: int
+
+
+class StockSymbolWithDividendsHistory(StockSymbolPublic):
+    """Stock Symbol schema with dividends history."""
+
+    dividends_history: list["DividendPaymentInfo"] | None = Field(default=None)
+
+
+class DividendPaymentInfo(SQLModel):
+    """Dividends Payment Info Schema."""
+
+    amount: CurrencyValue = Field(gt=0)
+    payment_date: date
