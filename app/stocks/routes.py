@@ -13,6 +13,7 @@ from stocks.crud import (
     get_stock_symbols,
     open_stock_position_with_transaction,
     retrieve_stock_accounts_by_user,
+    retrieve_stock_symbol_by_id,
     update_stock_symbols,
 )
 from stocks.schemas import (
@@ -22,6 +23,7 @@ from stocks.schemas import (
     StockPositionPublic,
     StockPositionWithCurrentPrice,
     StockSymbolList,
+    StockSymbolWithDividendsHistory,
 )
 from users.auth import current_superuser, current_user
 from users.schemas import Message
@@ -116,5 +118,18 @@ async def update_stock_symbols_task(
 async def get_list_of_stock_symbols(
     session: Annotated[AsyncSession, Depends(get_db)], offset: int = 0, limit: int = 100
 ) -> StockSymbolList:
-    """Get list of existed users."""
+    """Get list of stock symbols."""
     return await get_stock_symbols(session, offset, limit)
+
+
+@router.get("/symbols/{symbol_id}", dependencies=[Depends(current_user)], response_model_exclude_none=True)
+async def get_stock_symbol(
+    session: Annotated[AsyncSession, Depends(get_db)],
+    symbol_id: Annotated[int, Path(title="Stock Symbol ID")],
+    get_div_history: Annotated[bool, Query(alias="div-history")] = False,
+) -> StockSymbolWithDividendsHistory:
+    """Get Stock Symbol by ID."""
+    stock_symbol = await retrieve_stock_symbol_by_id(session, symbol_id, get_div_history)
+    if stock_symbol is not None:
+        return stock_symbol
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stock Symbol not found.")

@@ -11,6 +11,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from core.database import PSQL_QUERY_ALLOWED_MAX_ARGS
 from exceptions import ParameterMissingException
 from models import AccountTransaction, StockAccount, StockPosition, StockSymbol, User
+from stocks.dividends import get_dividend_history_by_stock_symbol
 from stocks.finnhub import get_latest_stock_price, get_stock_symbols_data
 from stocks.schemas import (
     AccountTransactionData,
@@ -21,6 +22,7 @@ from stocks.schemas import (
     StockPositionPublic,
     StockPositionWithCurrentPrice,
     StockSymbolList,
+    StockSymbolWithDividendsHistory,
 )
 
 
@@ -195,3 +197,18 @@ async def get_stock_symbols(session: AsyncSession, offset: int = 0, limit: int =
     count = await session.exec(select(func.count()).select_from(StockSymbol))
     stock_symbols = await session.exec(select(StockSymbol).order_by(StockSymbol.symbol).offset(offset).limit(limit))
     return StockSymbolList(count=count.one(), data=stock_symbols.all())
+
+
+async def retrieve_stock_symbol_by_id(
+    session: AsyncSession, symbol_id: int, get_div_history: bool = False
+) -> StockSymbolWithDividendsHistory | None:
+    """Get Info by Stock Symbol ID."""
+    stock_symbol = await session.exec(select(StockSymbol).where(StockSymbol.id == symbol_id))
+    stock_symbol = stock_symbol.one_or_none()
+
+    if stock_symbol and get_div_history:
+        stock_symbol = StockSymbolWithDividendsHistory.model_validate(
+            stock_symbol, update={"dividends_history": await get_dividend_history_by_stock_symbol(stock_symbol.symbol)}
+        )
+
+    return cast(StockSymbolWithDividendsHistory | None, stock_symbol)
