@@ -171,9 +171,9 @@ async def get_categories_by_budget_and_user(
     :param user_id: User ID
     :param session: sql session
     :param is_income: whether categories are income
-        or outlay.
+    or outlay.
     :param get_transactions: whether to fetch amount
-        of transactions per category per period.
+    of transactions per category per period.
     :param period_from: period for amount aggregation
     :return: list of categories
     """

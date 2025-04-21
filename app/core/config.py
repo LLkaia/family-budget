@@ -6,6 +6,9 @@ from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+base_dir = os.path.dirname(__file__)
+
+
 class Settings(BaseSettings):
     """Contains settings for project.
 
@@ -30,7 +33,7 @@ class Settings(BaseSettings):
     :arg trusted_hosts: trusted hosts
     """
 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=os.path.join(base_dir, "..", ".env"))
 
     postgres_password: str
     postgres_user: str
