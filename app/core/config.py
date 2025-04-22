@@ -9,6 +9,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 base_dir = os.path.dirname(__file__)
 
 
+def get_path_to_env() -> str:
+    """Get path to env file."""
+    is_during_gh_actions = os.getenv("GITHUB_ACTIONS", "false")
+    print(is_during_gh_actions)
+    if is_during_gh_actions == "true":
+        return os.path.join(base_dir, "..", ".env.example")
+    return os.path.join(base_dir, "..", ".env")
+
+
 class Settings(BaseSettings):
     """Contains settings for project.
 
@@ -33,7 +42,7 @@ class Settings(BaseSettings):
     :arg trusted_hosts: trusted hosts
     """
 
-    model_config = SettingsConfigDict(env_file=os.path.join(base_dir, "..", ".env"))
+    model_config = SettingsConfigDict(env_file=get_path_to_env())
 
     postgres_password: str
     postgres_user: str
