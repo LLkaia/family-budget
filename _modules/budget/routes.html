@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>budget.routes &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Family Budget Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">budget.routes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for budget.routes</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.exc</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegrityError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel.ext.asyncio.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncSession</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">budget.crud</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">add_user_to_budget</span><span class="p">,</span>
+    <span class="n">create_budget_with_user</span><span class="p">,</span>
+    <span class="n">create_category_and_add_to_budget</span><span class="p">,</span>
+    <span class="n">create_predefined_category</span><span class="p">,</span>
+    <span class="n">get_budget_by_id_with_current_user</span><span class="p">,</span>
+    <span class="n">get_categories_by_budget_and_user</span><span class="p">,</span>
+    <span class="n">get_category_by_id_with_user</span><span class="p">,</span>
+    <span class="n">get_list_transactions</span><span class="p">,</span>
+    <span class="n">get_predefined_categories</span><span class="p">,</span>
+    <span class="n">get_transaction_by_id_with_user</span><span class="p">,</span>
+    <span class="n">perform_transaction_per_category</span><span class="p">,</span>
+    <span class="n">remove_budget</span><span class="p">,</span>
+    <span class="n">remove_category</span><span class="p">,</span>
+    <span class="n">remove_predefined_category</span><span class="p">,</span>
+    <span class="n">remove_transaction</span><span class="p">,</span>
+    <span class="n">remove_user_from_budget</span><span class="p">,</span>
+    <span class="n">retrieve_budgets_by_user</span><span class="p">,</span>
+    <span class="n">update_budget</span><span class="p">,</span>
+    <span class="n">update_category</span><span class="p">,</span>
+    <span class="n">update_transaction</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">budget.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BudgetCreate</span><span class="p">,</span>
+    <span class="n">BudgetDetails</span><span class="p">,</span>
+    <span class="n">BudgetUpdate</span><span class="p">,</span>
+    <span class="n">CategoryCreate</span><span class="p">,</span>
+    <span class="n">CategoryUpdate</span><span class="p">,</span>
+    <span class="n">CategoryWithAmount</span><span class="p">,</span>
+    <span class="n">PredefinedCategoryCreate</span><span class="p">,</span>
+    <span class="n">PredefinedCategoryList</span><span class="p">,</span>
+    <span class="n">TransactionCreate</span><span class="p">,</span>
+    <span class="n">TransactionList</span><span class="p">,</span>
+    <span class="n">TransactionUpdate</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_db</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ItemNotExistsException</span><span class="p">,</span> <span class="n">ParameterMissingException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Budget</span><span class="p">,</span> <span class="n">Category</span><span class="p">,</span> <span class="n">PredefinedCategory</span><span class="p">,</span> <span class="n">Transaction</span><span class="p">,</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_superuser</span><span class="p">,</span> <span class="n">current_user</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.crud</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_user_by_email</span><span class="p">,</span> <span class="n">get_user_by_id</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PeriodFrom</span>
+
+
+<span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="create_budget">
+<a class="viewcode-back" href="../../budget.html#budget.routes.create_budget">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_budget</span><span class="p">(</span>
+    <span class="n">budget</span><span class="p">:</span> <span class="n">BudgetCreate</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Budget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create new budget for current user.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">create_budget_with_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_my_budgets">
+<a class="viewcode-back" href="../../budget.html#budget.routes.get_my_budgets">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_my_budgets</span><span class="p">(</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span> <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Budget</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get current user budgets.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">retrieve_budgets_by_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_predefined_categories">
+<a class="viewcode-back" href="../../budget.html#budget.routes.create_predefined_categories">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/predefined-categories&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_superuser</span><span class="p">)])</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_predefined_categories</span><span class="p">(</span>
+    <span class="n">category</span><span class="p">:</span> <span class="n">PredefinedCategoryCreate</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PredefinedCategory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create new predefined category.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">create_predefined_category</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">category</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Category already exists.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="list_predefined_categories">
+<a class="viewcode-back" href="../../budget.html#budget.routes.list_predefined_categories">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/predefined-categories&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)])</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_predefined_categories</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PredefinedCategoryList</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve predefined category.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">get_predefined_categories</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_predefined_categories">
+<a class="viewcode-back" href="../../budget.html#budget.routes.delete_predefined_categories">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+    <span class="s2">&quot;/predefined-categories/</span><span class="si">{id_}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_superuser</span><span class="p">)],</span>
+<span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_predefined_categories</span><span class="p">(</span>
+    <span class="n">id_</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Predefined category ID&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create new predefined category.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">remove_predefined_category</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">id_</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ItemNotExistsException</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Category not found.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_budget">
+<a class="viewcode-back" href="../../budget.html#budget.routes.get_budget">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">BudgetDetails</span><span class="p">,</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_budget</span><span class="p">(</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Budget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get budget by id.&quot;&quot;&quot;</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_budget_by_id_with_current_user</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">detailed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">budget</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">budget</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Budget not found.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_budget">
+<a class="viewcode-back" href="../../budget.html#budget.routes.delete_budget">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_budget</span><span class="p">(</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete budget.&quot;&quot;&quot;</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_budget_by_id_with_current_user</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">budget</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Budget not found.&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">remove_budget</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="modify_budget">
+<a class="viewcode-back" href="../../budget.html#budget.routes.modify_budget">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">modify_budget</span><span class="p">(</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">new_data</span><span class="p">:</span> <span class="n">BudgetUpdate</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Budget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update budget with new data.&quot;&quot;&quot;</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_budget_by_id_with_current_user</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">budget</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">update_budget</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Budget not found.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_new_user_to_budget">
+<a class="viewcode-back" href="../../budget.html#budget.routes.add_new_user_to_budget">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">/users&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">BudgetDetails</span><span class="p">,</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_new_user_to_budget</span><span class="p">(</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">user_data</span><span class="p">:</span> <span class="n">UserBase</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Budget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add new user to budget.&quot;&quot;&quot;</span>
+    <span class="n">user_to_add</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_user_by_email</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user_data</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user_to_add</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;User not found.&quot;</span><span class="p">)</span>
+
+    <span class="n">budget</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_budget_by_id_with_current_user</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">detailed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">budget</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Budget not found.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user_to_add</span> <span class="ow">in</span> <span class="n">budget</span><span class="o">.</span><span class="n">users</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;User already exists.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="k">await</span> <span class="n">add_user_to_budget</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">user_to_add</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_user_from_budget">
+<a class="viewcode-back" href="../../budget.html#budget.routes.delete_user_from_budget">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">/users/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">BudgetDetails</span><span class="p">,</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_user_from_budget</span><span class="p">(</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;User id&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Budget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete user from budget.&quot;&quot;&quot;</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_budget_by_id_with_current_user</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">detailed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">budget</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Budget not found.&quot;</span><span class="p">)</span>
+
+    <span class="n">user_to_delete</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_user_by_id</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user_to_delete</span> <span class="ow">or</span> <span class="n">user_to_delete</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">budget</span><span class="o">.</span><span class="n">users</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;User not found.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="k">await</span> <span class="n">remove_user_from_budget</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">user_to_delete</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_new_category_to_budget">
+<a class="viewcode-back" href="../../budget.html#budget.routes.add_new_category_to_budget">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">/categories&quot;</span><span class="p">,</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_new_category_to_budget</span><span class="p">(</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">category</span><span class="p">:</span> <span class="n">CategoryCreate</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Category</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create category and add it to budget.&quot;&quot;&quot;</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_budget_by_id_with_current_user</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">detailed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">budget</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Budget not found.&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">create_category_and_add_to_budget</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">category</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Category already exists.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_budget_categories">
+<a class="viewcode-back" href="../../budget.html#budget.routes.get_budget_categories">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">/categories&quot;</span><span class="p">,</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_budget_categories</span><span class="p">(</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">income</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">transactions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">period</span><span class="p">:</span> <span class="n">PeriodFrom</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">CategoryWithAmount</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get list of categories from budget.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">get_categories_by_budget_and_user</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">income</span><span class="p">,</span> <span class="n">transactions</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ParameterMissingException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="delete_category">
+<a class="viewcode-back" href="../../budget.html#budget.routes.delete_category">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/categories/</span><span class="si">{category_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_category</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">category_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Category ID for specific budget&quot;</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete category from specific budget.&quot;&quot;&quot;</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_category_by_id_with_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">category_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">category</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Category not found.&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">remove_category</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">category</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="modify_category">
+<a class="viewcode-back" href="../../budget.html#budget.routes.modify_category">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/categories/</span><span class="si">{category_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">modify_category</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">category_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Category ID for specific budget&quot;</span><span class="p">)],</span>
+    <span class="n">category_data</span><span class="p">:</span> <span class="n">CategoryUpdate</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Category</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modify category with new data.&quot;&quot;&quot;</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_category_by_id_with_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">category_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">category</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Category not found.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">update_category</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">category_data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="perform_transaction">
+<a class="viewcode-back" href="../../budget.html#budget.routes.perform_transaction">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/categories/</span><span class="si">{category_id}</span><span class="s2">/transactions&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">perform_transaction</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">category_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Category ID for specific budget&quot;</span><span class="p">)],</span>
+    <span class="n">transaction_data</span><span class="p">:</span> <span class="n">TransactionCreate</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Budget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform transaction per budget per category.&quot;&quot;&quot;</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_category_by_id_with_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">category_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">category</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Category not found.&quot;</span><span class="p">)</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_budget_by_id_with_current_user</span><span class="p">(</span><span class="n">category</span><span class="o">.</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">budget</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Budget not found.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">budget</span><span class="o">.</span><span class="n">balance</span> <span class="o">&lt;</span> <span class="n">transaction_data</span><span class="o">.</span><span class="n">amount</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Not enough money.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">perform_transaction_per_category</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">transaction_data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_budget_transactions">
+<a class="viewcode-back" href="../../budget.html#budget.routes.get_budget_transactions">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{budget_id}</span><span class="s2">/transactions&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_budget_transactions</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">budget_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget id&quot;</span><span class="p">)],</span>
+    <span class="n">date_start</span><span class="p">:</span> <span class="n">date</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">date_end</span><span class="p">:</span> <span class="n">date</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">category_name_filter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransactionList</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get list of transactions for budget.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">get_list_transactions</span><span class="p">(</span>
+        <span class="n">session</span><span class="p">,</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">date_start</span><span class="p">,</span> <span class="n">date_end</span><span class="p">,</span> <span class="n">category_name_filter</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">limit</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_transaction">
+<a class="viewcode-back" href="../../budget.html#budget.routes.delete_transaction">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/transactions/</span><span class="si">{transaction_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_204_NO_CONTENT</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_transaction</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">transaction_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Transaction ID&quot;</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete transaction by ID.&quot;&quot;&quot;</span>
+    <span class="n">transaction</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_transaction_by_id_with_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">transaction_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">transaction</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Transaction not found.&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">remove_transaction</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">transaction</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="modify_transaction">
+<a class="viewcode-back" href="../../budget.html#budget.routes.modify_transaction">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/transactions/</span><span class="si">{transaction_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">modify_transaction</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">transaction_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Transaction ID&quot;</span><span class="p">)],</span>
+    <span class="n">transaction_data</span><span class="p">:</span> <span class="n">TransactionUpdate</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transaction</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update transaction by ID.&quot;&quot;&quot;</span>
+    <span class="n">transaction</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_transaction_by_id_with_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">transaction_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">transaction</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Transaction not found.&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">update_transaction</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">transaction</span><span class="p">,</span> <span class="n">transaction_data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

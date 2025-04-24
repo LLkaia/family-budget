@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>users.crud &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Family Budget Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">users.crud</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for users.crud</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">joinedload</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">and_</span><span class="p">,</span> <span class="n">case</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">update</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel.ext.asyncio.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncSession</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span><span class="p">,</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">SessionPublic</span><span class="p">,</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserList</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datetime_now</span><span class="p">,</span> <span class="n">get_password_hash</span>
+
+
+<div class="viewcode-block" id="get_user_by_email">
+<a class="viewcode-back" href="../../users.html#users.crud.get_user_by_email">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user_by_email</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve user by email.&quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">email</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="get_user_by_id">
+<a class="viewcode-back" href="../../users.html#users.crud.get_user_by_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_user_by_id</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve user by ID.&quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">id_</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="get_users">
+<a class="viewcode-back" href="../../users.html#users.crud.get_users">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserList</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve users.&quot;&quot;&quot;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">())</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">User</span><span class="p">))</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">UserList</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="o">.</span><span class="n">one</span><span class="p">(),</span> <span class="n">data</span><span class="o">=</span><span class="n">users</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="create_user">
+<a class="viewcode-back" href="../../users.html#users.crud.create_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user_data</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new user.&quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">user_data</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;hashed_password&quot;</span><span class="p">:</span> <span class="n">get_password_hash</span><span class="p">(</span><span class="n">user_data</span><span class="o">.</span><span class="n">password</span><span class="p">)})</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_user_super">
+<a class="viewcode-back" href="../../users.html#users.crud.set_user_super">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">set_user_super</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set user as superuser.&quot;&quot;&quot;</span>
+    <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">user</span></div>
+
+
+
+<div class="viewcode-block" id="remove_user">
+<a class="viewcode-back" href="../../users.html#users.crud.remove_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">remove_user</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove existed user.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_session">
+<a class="viewcode-back" href="../../users.html#users.crud.create_session">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_session</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">user_agent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">refresh_token_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ip_address</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+    <span class="n">expires_at</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new Session.</span>
+
+<span class="sd">    :param session: Session instance</span>
+<span class="sd">    :param user_id: User ID</span>
+<span class="sd">    :param user_agent: User-Agent</span>
+<span class="sd">    :param refresh_token_hash: refresh token hash</span>
+<span class="sd">    :param ip_address: session&#39;s IP address</span>
+<span class="sd">    :param created_at: date n time when session is created</span>
+<span class="sd">    :param expires_at: date n time when session will expire</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span>
+        <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+        <span class="n">refresh_token_hash</span><span class="o">=</span><span class="n">refresh_token_hash</span><span class="p">,</span>
+        <span class="n">user_agent</span><span class="o">=</span><span class="n">user_agent</span><span class="p">,</span>
+        <span class="n">ip_address</span><span class="o">=</span><span class="n">ip_address</span><span class="p">,</span>
+        <span class="n">created_at</span><span class="o">=</span><span class="n">created_at</span><span class="p">,</span>
+        <span class="n">expires_at</span><span class="o">=</span><span class="n">expires_at</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_session</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_session_by_token_hash">
+<a class="viewcode-back" href="../../users.html#users.crud.get_session_by_token_hash">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_session_by_token_hash</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">token_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Session</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get session by token&#39;s hash.&quot;&quot;&quot;</span>
+    <span class="n">user_session</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">Session</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Session</span><span class="o">.</span><span class="n">refresh_token_hash</span> <span class="o">==</span> <span class="n">token_hash</span><span class="p">)</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">joinedload</span><span class="p">(</span><span class="n">Session</span><span class="o">.</span><span class="n">user</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Session</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user_session</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="revoke_session_by_token_hash">
+<a class="viewcode-back" href="../../users.html#users.crud.revoke_session_by_token_hash">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">revoke_session_by_token_hash</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">token_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Revoke session by token&#39;s hash.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">update</span><span class="p">(</span><span class="n">Session</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Session</span><span class="o">.</span><span class="n">refresh_token_hash</span> <span class="o">==</span> <span class="n">token_hash</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">revoked</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="revoke_user_sessions">
+<a class="viewcode-back" href="../../users.html#users.crud.revoke_user_sessions">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">revoke_user_sessions</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">session_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Revoke User&#39;s sessions.&quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">update</span><span class="p">(</span><span class="n">Session</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Session</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">revoked</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">session_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Session</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">session_id</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_sessions_by_user_id">
+<a class="viewcode-back" href="../../users.html#users.crud.get_sessions_by_user_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_sessions_by_user_id</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_active</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SessionPublic</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get user&#39;s sessions by user ID.&quot;&quot;&quot;</span>
+    <span class="n">is_active_condition</span> <span class="o">=</span> <span class="n">and_</span><span class="p">(</span><span class="n">Session</span><span class="o">.</span><span class="n">revoked</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">Session</span><span class="o">.</span><span class="n">expires_at</span> <span class="o">&gt;</span> <span class="n">get_datetime_now</span><span class="p">())</span>  <span class="c1"># noqa: E712</span>
+    <span class="n">is_active_field</span> <span class="o">=</span> <span class="n">case</span><span class="p">((</span><span class="n">is_active_condition</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="n">else_</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;is_active&quot;</span><span class="p">)</span>
+
+    <span class="c1"># query sessions and create alias for active sessions</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">is_active_field</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Session</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">is_active_field</span><span class="o">.</span><span class="n">desc</span><span class="p">(),</span> <span class="n">Session</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>  <span class="c1"># type: ignore[attr-defined]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># retrieve only active sessions</span>
+    <span class="k">if</span> <span class="n">is_active</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">is_active_condition</span><span class="p">)</span>
+
+    <span class="n">user_sessions</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">SessionPublic</span><span class="p">(</span><span class="o">**</span><span class="n">user_session</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(),</span> <span class="n">is_active</span><span class="o">=</span><span class="n">is_active</span><span class="p">)</span> <span class="k">for</span> <span class="n">user_session</span><span class="p">,</span> <span class="n">is_active</span> <span class="ow">in</span> <span class="n">user_sessions</span>
+    <span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stocks.schemas &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Family Budget Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">stocks.schemas</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for stocks.schemas</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">SQLModel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">validators</span><span class="w"> </span><span class="kn">import</span> <span class="n">CurrencyValue</span>
+
+
+<div class="viewcode-block" id="AccountTransactionType">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.AccountTransactionType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AccountTransactionType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Account Transaction Types Enum.&quot;&quot;&quot;</span>
+
+    <span class="n">DIVIDENDS</span> <span class="o">=</span> <span class="s2">&quot;dividends&quot;</span>
+    <span class="n">DEPOSIT</span> <span class="o">=</span> <span class="s2">&quot;deposit&quot;</span>
+    <span class="n">WITHDRAWAL</span> <span class="o">=</span> <span class="s2">&quot;withdrawal&quot;</span>
+    <span class="n">STOCK_IN</span> <span class="o">=</span> <span class="s2">&quot;stock_in&quot;</span>
+    <span class="n">STOCK_OUT</span> <span class="o">=</span> <span class="s2">&quot;stock_out&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="StockSymbolType">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockSymbolType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockSymbolType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Symbol Types Enum.&quot;&quot;&quot;</span>
+
+    <span class="n">COMMON_STOCK</span> <span class="o">=</span> <span class="s2">&quot;Common Stock&quot;</span>
+    <span class="n">PREFERENCE</span> <span class="o">=</span> <span class="s2">&quot;Preference&quot;</span>
+    <span class="n">FOREIGN_SHARE</span> <span class="o">=</span> <span class="s2">&quot;Foreign Sh.&quot;</span>
+    <span class="n">SAVINGS_SHARE</span> <span class="o">=</span> <span class="s2">&quot;Savings Share&quot;</span>
+    <span class="n">SDR</span> <span class="o">=</span> <span class="s2">&quot;SDR&quot;</span>
+    <span class="n">ETP</span> <span class="o">=</span> <span class="s2">&quot;ETP&quot;</span>
+    <span class="n">PRIVATE</span> <span class="o">=</span> <span class="s2">&quot;PRIVATE&quot;</span>
+    <span class="n">PUBLIC</span> <span class="o">=</span> <span class="s2">&quot;PUBLIC&quot;</span>
+    <span class="n">NY_REG_SHRS</span> <span class="o">=</span> <span class="s2">&quot;NY Reg Shrs&quot;</span>
+    <span class="n">ADR</span> <span class="o">=</span> <span class="s2">&quot;ADR&quot;</span>
+    <span class="n">GDR</span> <span class="o">=</span> <span class="s2">&quot;GDR&quot;</span>
+    <span class="n">RECEIPT</span> <span class="o">=</span> <span class="s2">&quot;Receipt&quot;</span>
+    <span class="n">LTD_PART</span> <span class="o">=</span> <span class="s2">&quot;Ltd Part&quot;</span>
+    <span class="n">MISC</span> <span class="o">=</span> <span class="s2">&quot;Misc.&quot;</span>
+    <span class="n">OPEN_END_FUND</span> <span class="o">=</span> <span class="s2">&quot;Open-End Fund&quot;</span>
+    <span class="n">CLOSED_END_FUND</span> <span class="o">=</span> <span class="s2">&quot;Closed-End Fund&quot;</span>
+    <span class="n">UNIT</span> <span class="o">=</span> <span class="s2">&quot;Unit&quot;</span>
+    <span class="n">REIT</span> <span class="o">=</span> <span class="s2">&quot;REIT&quot;</span>
+    <span class="n">TRACKING_STOCK</span> <span class="o">=</span> <span class="s2">&quot;Tracking Stk&quot;</span>
+    <span class="n">DUTCH_CERT</span> <span class="o">=</span> <span class="s2">&quot;Dutch Cert&quot;</span>
+    <span class="n">ROYALTY_TRUST</span> <span class="o">=</span> <span class="s2">&quot;Royalty Trst&quot;</span>
+    <span class="n">MLP</span> <span class="o">=</span> <span class="s2">&quot;MLP&quot;</span>
+    <span class="n">STAPLED_SECURITY</span> <span class="o">=</span> <span class="s2">&quot;Stapled Security&quot;</span>
+    <span class="n">NVDR</span> <span class="o">=</span> <span class="s2">&quot;NVDR&quot;</span>
+    <span class="n">CDI</span> <span class="o">=</span> <span class="s2">&quot;CDI&quot;</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="s2">&quot;Right&quot;</span>
+    <span class="n">EQUITY_WRT</span> <span class="o">=</span> <span class="s2">&quot;Equity WRT&quot;</span>
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="StockAccountCreate">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockAccountCreate">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockAccountCreate</span><span class="p">(</span><span class="n">SQLModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Account Create schema.&quot;&quot;&quot;</span>
+
+    <span class="n">balance</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Current account balance.&quot;</span><span class="p">)</span>
+    <span class="n">account_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Account name.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="StockPositionBase">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockPositionBase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockPositionBase</span><span class="p">(</span><span class="n">SQLModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Position Base schema.&quot;&quot;&quot;</span>
+
+    <span class="n">stock_symbol_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Count of stocks.&quot;</span><span class="p">)</span>
+    <span class="n">price_per_stock</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Price per one stock.&quot;</span><span class="p">)</span>
+    <span class="n">paid_fee</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Paid fee per transaction.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="StockPositionOpen">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockPositionOpen">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockPositionOpen</span><span class="p">(</span><span class="n">StockPositionBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Position Open schema.&quot;&quot;&quot;</span>
+
+    <span class="n">datetime_opened</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;When position was opened. Format: &#39;YYYY-MM-DD HH:MM:SS&#39;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="StockPositionClose">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockPositionClose">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockPositionClose</span><span class="p">(</span><span class="n">StockPositionBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Position Close schema.&quot;&quot;&quot;</span>
+
+    <span class="n">datetime_closed</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;When position was closed. Format: &#39;YYYY-MM-DD HH:MM:SS&#39;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="StockPositionPublic">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockPositionPublic">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockPositionPublic</span><span class="p">(</span><span class="n">SQLModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Position Public schema.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">account_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">stock_symbol</span><span class="p">:</span> <span class="s2">&quot;StockSymbolPublic&quot;</span>
+    <span class="n">datetime_opened</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;When position was opened.&quot;</span><span class="p">)</span>
+    <span class="n">count_active</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Count of stocks active.&quot;</span><span class="p">)</span>
+    <span class="n">price_per_stock_in</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Price per stock in.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="StockPositionWithCurrentPrice">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockPositionWithCurrentPrice">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockPositionWithCurrentPrice</span><span class="p">(</span><span class="n">StockPositionPublic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Position With Current Price schema.&quot;&quot;&quot;</span>
+
+    <span class="n">current_price</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Near real-time stock price.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="AccountTransactionData">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.AccountTransactionData">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AccountTransactionData</span><span class="p">(</span><span class="n">SQLModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Account Transaction Data schema.&quot;&quot;&quot;</span>
+
+    <span class="n">datetime_performed</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">account_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">total_amount</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">transaction_type</span><span class="p">:</span> <span class="n">AccountTransactionType</span>
+    <span class="n">price_per_item</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">count_items</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">paid_fee</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">taxes_to_pay</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">stock_symbol_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">stock_position_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="StockSymbolPublic">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockSymbolPublic">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockSymbolPublic</span><span class="p">(</span><span class="n">SQLModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Symbols public schema.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">figi</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Global unique identifier.&quot;</span><span class="p">)</span>
+    <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">exchange_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Stock exchange identifier.&quot;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="StockSymbolList">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockSymbolList">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockSymbolList</span><span class="p">(</span><span class="n">SQLModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List Stock Symbol schema.&quot;&quot;&quot;</span>
+
+    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockSymbolPublic</span><span class="p">]</span>
+    <span class="n">count</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="StockSymbolWithDividendsHistory">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.StockSymbolWithDividendsHistory">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StockSymbolWithDividendsHistory</span><span class="p">(</span><span class="n">StockSymbolPublic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stock Symbol schema with dividends history.&quot;&quot;&quot;</span>
+
+    <span class="n">dividends_history</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;DividendPaymentInfo&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DividendPaymentInfo">
+<a class="viewcode-back" href="../../stocks.html#stocks.schemas.DividendPaymentInfo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DividendPaymentInfo</span><span class="p">(</span><span class="n">SQLModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dividends Payment Info Schema.&quot;&quot;&quot;</span>
+
+    <span class="n">amount</span><span class="p">:</span> <span class="n">CurrencyValue</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">gt</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">payment_date</span><span class="p">:</span> <span class="n">date</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

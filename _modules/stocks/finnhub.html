@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stocks.finnhub &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Family Budget Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">stocks.finnhub</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for stocks.finnhub</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">finnhub</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.redis</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedisKeys</span><span class="p">,</span> <span class="n">redis_client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">StockSymbol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stocks.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">StockSymbolType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datetime_now</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">validators</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_cash</span>
+
+
+<div class="viewcode-block" id="get_finnhub_client">
+<a class="viewcode-back" href="../../stocks.html#stocks.finnhub.get_finnhub_client">[docs]</a>
+<span class="nd">@lru_cache</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_finnhub_client</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">finnhub</span><span class="o">.</span><span class="n">Client</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a finnhub client.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">finnhub</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">get_settings</span><span class="p">()</span><span class="o">.</span><span class="n">finnhub_api_key</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_latest_stock_price">
+<a class="viewcode-back" href="../../stocks.html#stocks.finnhub.get_latest_stock_price">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_latest_stock_price</span><span class="p">(</span><span class="n">ticket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cache_ttl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">86400</span><span class="p">,</span> <span class="n">update_after</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decimal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get latest stock price by ticket.</span>
+
+<span class="sd">    Get stock price by &lt;ticket&gt; from cache if it is there and</span>
+<span class="sd">    &lt;update_after&gt; seconds not reached since last cache update,</span>
+<span class="sd">    otherwise try to update price data by calling finnhub API.</span>
+<span class="sd">    If data missed in cache, call finnhub API. Cache price data</span>
+<span class="sd">    after each successful API call with &lt;cache_ttl&gt; seconds TTL.</span>
+<span class="sd">    Return &lt;None&gt; if no info in cache and finnhub API is throttled.</span>
+
+<span class="sd">    :param ticket: Ticket name (e.g. AAPL)</span>
+<span class="sd">    :param cache_ttl: TTL for row in redis (24 hours by default)</span>
+<span class="sd">    :param update_after: number of seconds after which try to</span>
+<span class="sd">        update cache (1 hour by default)</span>
+<span class="sd">    :return: stock price</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current_timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">get_datetime_now</span><span class="p">()</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
+
+    <span class="n">data_from_cache</span> <span class="o">=</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">read_row_from_cache</span><span class="p">(</span><span class="n">RedisKeys</span><span class="o">.</span><span class="n">stock_price</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ticket</span><span class="p">)</span>
+    <span class="n">price_from_cache</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># return cached price if cache created lt &lt;update_after&gt; seconds ago</span>
+    <span class="k">if</span> <span class="n">data_from_cache</span><span class="p">:</span>
+        <span class="n">price_from_cache</span><span class="p">,</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="n">data_from_cache</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_timestamp</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">update_after</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">validate_cash</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="n">price_from_cache</span><span class="p">))</span>
+
+    <span class="c1"># try to get fresh data, otherwise return cached price or 0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">retrieved_data</span> <span class="o">=</span> <span class="n">get_finnhub_client</span><span class="p">()</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">ticket</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">finnhub</span><span class="o">.</span><span class="n">FinnhubAPIException</span><span class="p">:</span>  <span class="c1"># 429 throttle error</span>
+        <span class="k">return</span> <span class="n">validate_cash</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="n">price_from_cache</span><span class="p">))</span>
+
+    <span class="c1"># current price could be 0 if ticket name is incorrect, skip caching</span>
+    <span class="n">current_price</span> <span class="o">=</span> <span class="n">validate_cash</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="n">retrieved_data</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">current_price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">add_row_to_cache</span><span class="p">(</span>
+            <span class="n">redis_key</span><span class="o">=</span><span class="n">RedisKeys</span><span class="o">.</span><span class="n">stock_price</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="n">ticket</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_price</span><span class="si">}</span><span class="s2">;</span><span class="si">{</span><span class="n">current_timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">ttl</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">cache_ttl</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">validate_cash</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="n">current_price</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="get_stock_symbols_data">
+<a class="viewcode-back" href="../../stocks.html#stocks.finnhub.get_stock_symbols_data">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_stock_symbols_data</span><span class="p">(</span>
+    <span class="n">exchange_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;US&quot;</span><span class="p">,</span> <span class="n">type_of_symbols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockSymbolType</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get stock symbols per stock exchange.</span>
+
+<span class="sd">    :param exchange_code: exchange code of needed stock exchange.</span>
+<span class="sd">    :param type_of_symbols: type of symbols to return.</span>
+<span class="sd">    :return: list of dicts with stock symbols data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exchange_code</span> <span class="o">=</span> <span class="n">exchange_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">type_of_symbols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">type_of_symbols</span> <span class="o">=</span> <span class="p">[</span><span class="n">StockSymbolType</span><span class="o">.</span><span class="n">COMMON_STOCK</span><span class="p">,</span> <span class="n">StockSymbolType</span><span class="o">.</span><span class="n">ETP</span><span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">requested_data</span> <span class="o">=</span> <span class="n">get_finnhub_client</span><span class="p">()</span><span class="o">.</span><span class="n">stock_symbols</span><span class="p">(</span><span class="n">exchange_code</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">finnhub</span><span class="o">.</span><span class="n">FinnhubAPIException</span><span class="p">:</span>  <span class="c1"># 429 throttle error</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="c1"># take &#39;StockSymbol&#39; fields from items in &#39;requested_data&#39; and extend it with &#39;extra_data&#39;</span>
+    <span class="n">allowed_keys</span> <span class="o">=</span> <span class="n">StockSymbol</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">extra_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;exchange_code&quot;</span><span class="p">:</span> <span class="n">exchange_code</span><span class="p">}</span>
+
+    <span class="c1"># additionally, filter only needed types of symbols</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">{</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">allowed_keys</span><span class="p">},</span> <span class="o">**</span><span class="n">extra_data</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;symbol_type&quot;</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]}}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">requested_data</span>
+        <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">type_of_symbols</span>
+    <span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

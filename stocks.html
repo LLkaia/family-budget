@@ -1,0 +1,1077 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stocks package &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utils" href="utils.html" />
+    <link rel="prev" title="Budget package" href="budget.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Family Budget Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">Core package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">SQLModel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html">Users package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="budget.html">Budget package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Stocks package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-stocks.crud">stocks.crud module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stocks.dividends">stocks.dividends module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stocks.finnhub">stocks.finnhub module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stocks.routes">stocks.routes module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stocks.schemas">stocks.schemas module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validators.html">Validators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Family Budget Documentation</a></li>
+      <li class="breadcrumb-item active">Stocks package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/stocks.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="stocks-package">
+<h1>Stocks package<a class="headerlink" href="#stocks-package" title="Link to this heading"></a></h1>
+<section id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<section id="module-stocks.crud">
+<span id="stocks-crud-module"></span><h3>stocks.crud module<a class="headerlink" href="#module-stocks.crud" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.close_stock_positions_with_transactions">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">close_stock_positions_with_transactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock_account</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock_position_to_close</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#close_stock_positions_with_transactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.close_stock_positions_with_transactions" title="Link to this definition"></a></dt>
+<dd><p>Close stock positions with transactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.create_stock_account_with_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">create_stock_account_with_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock_account_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#create_stock_account_with_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.create_stock_account_with_user" title="Link to this definition"></a></dt>
+<dd><p>Create a new stock account with given user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.StockAccount" title="models.StockAccount"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockAccount</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.get_active_stock_positions_per_account">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">get_active_stock_positions_per_account</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_current_price</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#get_active_stock_positions_per_account"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.get_active_stock_positions_per_account" title="Link to this definition"></a></dt>
+<dd><p>Get active stock positions per account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="#stocks.schemas.StockPositionPublic" title="stocks.schemas.StockPositionPublic"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPositionPublic</span></code></a> | <a class="reference internal" href="#stocks.schemas.StockPositionWithCurrentPrice" title="stocks.schemas.StockPositionWithCurrentPrice"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPositionWithCurrentPrice</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.get_stock_account_with_user_by_account_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">get_stock_account_with_user_by_account_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_account_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#get_stock_account_with_user_by_account_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.get_stock_account_with_user_by_account_id" title="Link to this definition"></a></dt>
+<dd><p>Get Stock Account by ID for owner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.StockAccount" title="models.StockAccount"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockAccount</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.get_stock_symbols">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">get_stock_symbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#get_stock_symbols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.get_stock_symbols" title="Link to this definition"></a></dt>
+<dd><p>Retrieve stock symbols.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#stocks.schemas.StockSymbolList" title="stocks.schemas.StockSymbolList"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockSymbolList</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.open_stock_position_with_transaction">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">open_stock_position_with_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock_account</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock_position_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#open_stock_position_with_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.open_stock_position_with_transaction" title="Link to this definition"></a></dt>
+<dd><p>Open stock position with transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.StockPosition" title="models.StockPosition"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPosition</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.perform_account_transaction">
+<span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">perform_account_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#perform_account_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.perform_account_transaction" title="Link to this definition"></a></dt>
+<dd><p>Perform account transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.retrieve_stock_accounts_by_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">retrieve_stock_accounts_by_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#retrieve_stock_accounts_by_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.retrieve_stock_accounts_by_user" title="Link to this definition"></a></dt>
+<dd><p>Get stock accounts by user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="models.html#models.StockAccount" title="models.StockAccount"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockAccount</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.retrieve_stock_symbol_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">retrieve_stock_symbol_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_div_history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#retrieve_stock_symbol_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.retrieve_stock_symbol_by_id" title="Link to this definition"></a></dt>
+<dd><p>Get Info by Stock Symbol ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#stocks.schemas.StockSymbolWithDividendsHistory" title="stocks.schemas.StockSymbolWithDividendsHistory"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockSymbolWithDividendsHistory</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.crud.update_stock_symbols">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.crud.</span></span><span class="sig-name descname"><span class="pre">update_stock_symbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exchange_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'US'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/crud.html#update_stock_symbols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.crud.update_stock_symbols" title="Link to this definition"></a></dt>
+<dd><p>Update stock symbols table with fresh data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-stocks.dividends">
+<span id="stocks-dividends-module"></span><h3>stocks.dividends module<a class="headerlink" href="#module-stocks.dividends" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.dividends.get_dividend_history_by_stock_symbol">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.dividends.</span></span><span class="sig-name descname"><span class="pre">get_dividend_history_by_stock_symbol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_symbol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/dividends.html#get_dividend_history_by_stock_symbol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.dividends.get_dividend_history_by_stock_symbol" title="Link to this definition"></a></dt>
+<dd><p>Get dividend payment history by stock symbol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="#stocks.schemas.DividendPaymentInfo" title="stocks.schemas.DividendPaymentInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">DividendPaymentInfo</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-stocks.finnhub">
+<span id="stocks-finnhub-module"></span><h3>stocks.finnhub module<a class="headerlink" href="#module-stocks.finnhub" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.finnhub.get_finnhub_client">
+<span class="sig-prename descclassname"><span class="pre">stocks.finnhub.</span></span><span class="sig-name descname"><span class="pre">get_finnhub_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/finnhub.html#get_finnhub_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.finnhub.get_finnhub_client" title="Link to this definition"></a></dt>
+<dd><p>Get a finnhub client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Client</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.finnhub.get_latest_stock_price">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.finnhub.</span></span><span class="sig-name descname"><span class="pre">get_latest_stock_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_ttl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">86400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_after</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/finnhub.html#get_latest_stock_price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.finnhub.get_latest_stock_price" title="Link to this definition"></a></dt>
+<dd><p>Get latest stock price by ticket.</p>
+<p>Get stock price by &lt;ticket&gt; from cache if it is there and
+&lt;update_after&gt; seconds not reached since last cache update,
+otherwise try to update price data by calling finnhub API.
+If data missed in cache, call finnhub API. Cache price data
+after each successful API call with &lt;cache_ttl&gt; seconds TTL.
+Return &lt;None&gt; if no info in cache and finnhub API is throttled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticket</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Ticket name (e.g. AAPL)</p></li>
+<li><p><strong>cache_ttl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – TTL for row in redis (24 hours by default)</p></li>
+<li><p><strong>update_after</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – number of seconds after which try to
+update cache (1 hour by default)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>stock price</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.finnhub.get_stock_symbols_data">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.finnhub.</span></span><span class="sig-name descname"><span class="pre">get_stock_symbols_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exchange_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'US'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_of_symbols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/finnhub.html#get_stock_symbols_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.finnhub.get_stock_symbols_data" title="Link to this definition"></a></dt>
+<dd><p>Get stock symbols per stock exchange.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exchange_code</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – exchange code of needed stock exchange.</p></li>
+<li><p><strong>type_of_symbols</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="#stocks.schemas.StockSymbolType" title="stocks.schemas.StockSymbolType"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockSymbolType</span></code></a>] | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – type of symbols to return.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of dicts with stock symbols data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-stocks.routes">
+<span id="stocks-routes-module"></span><h3>stocks.routes module<a class="headerlink" href="#module-stocks.routes" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.close_stock_positions_by_stock_symbol">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">close_stock_positions_by_stock_symbol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock_position</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#close_stock_positions_by_stock_symbol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.close_stock_positions_by_stock_symbol" title="Link to this definition"></a></dt>
+<dd><p>Close stock positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="users.html#users.schemas.Message" title="users.schemas.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.create_stock_account">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">create_stock_account</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_account</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#create_stock_account"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.create_stock_account" title="Link to this definition"></a></dt>
+<dd><p>Create a stock account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.StockAccount" title="models.StockAccount"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockAccount</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.get_list_of_stock_symbols">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">get_list_of_stock_symbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#get_list_of_stock_symbols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.get_list_of_stock_symbols" title="Link to this definition"></a></dt>
+<dd><p>Get list of stock symbols.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#stocks.schemas.StockSymbolList" title="stocks.schemas.StockSymbolList"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockSymbolList</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.get_my_stock_accounts">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">get_my_stock_accounts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#get_my_stock_accounts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.get_my_stock_accounts" title="Link to this definition"></a></dt>
+<dd><p>Get all stock accounts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="models.html#models.StockAccount" title="models.StockAccount"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockAccount</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.get_stock_account">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">get_stock_account</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#get_stock_account"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.get_stock_account" title="Link to this definition"></a></dt>
+<dd><p>Get stock account by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.StockAccount" title="models.StockAccount"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockAccount</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.get_stock_positions">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">get_stock_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_current_price</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#get_stock_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.get_stock_positions" title="Link to this definition"></a></dt>
+<dd><p>Get all stock positions for account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="#stocks.schemas.StockPositionPublic" title="stocks.schemas.StockPositionPublic"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPositionPublic</span></code></a> | <a class="reference internal" href="#stocks.schemas.StockPositionWithCurrentPrice" title="stocks.schemas.StockPositionWithCurrentPrice"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPositionWithCurrentPrice</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.get_stock_symbol">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">get_stock_symbol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_div_history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#get_stock_symbol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.get_stock_symbol" title="Link to this definition"></a></dt>
+<dd><p>Get Stock Symbol by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#stocks.schemas.StockSymbolWithDividendsHistory" title="stocks.schemas.StockSymbolWithDividendsHistory"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockSymbolWithDividendsHistory</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.open_stock_position">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">open_stock_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">account_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stock_position</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#open_stock_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.open_stock_position" title="Link to this definition"></a></dt>
+<dd><p>Open stock position for account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.StockPosition" title="models.StockPosition"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPosition</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stocks.routes.update_stock_symbols_task">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.routes.</span></span><span class="sig-name descname"><span class="pre">update_stock_symbols_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exchange_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'US'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/routes.html#update_stock_symbols_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.routes.update_stock_symbols_task" title="Link to this definition"></a></dt>
+<dd><p>Update stock symbols in table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="users.html#users.schemas.Message" title="users.schemas.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-stocks.schemas">
+<span id="stocks-schemas-module"></span><h3>stocks.schemas module<a class="headerlink" href="#module-stocks.schemas" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">AccountTransactionData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#AccountTransactionData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.AccountTransactionData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Account Transaction Data schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.account_id">
+<span class="sig-name descname"><span class="pre">account_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.account_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.count_items">
+<span class="sig-name descname"><span class="pre">count_items</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.count_items" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.datetime_performed">
+<span class="sig-name descname"><span class="pre">datetime_performed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.datetime_performed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'account_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'count_items':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[Ge(ge=0)]),</span> <span class="pre">'datetime_performed':</span> <span class="pre">FieldInfo(annotation=datetime,</span> <span class="pre">required=True),</span> <span class="pre">'paid_fee':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=False,</span> <span class="pre">default=0,</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'price_per_item':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'stock_position_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=False,</span> <span class="pre">default=None),</span> <span class="pre">'stock_symbol_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'taxes_to_pay':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=False,</span> <span class="pre">default=0,</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'total_amount':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'transaction_type':</span> <span class="pre">FieldInfo(annotation=AccountTransactionType,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.paid_fee">
+<span class="sig-name descname"><span class="pre">paid_fee</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.paid_fee" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.price_per_item">
+<span class="sig-name descname"><span class="pre">price_per_item</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.price_per_item" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.stock_position_id">
+<span class="sig-name descname"><span class="pre">stock_position_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.stock_position_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.stock_symbol_id">
+<span class="sig-name descname"><span class="pre">stock_symbol_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.stock_symbol_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.taxes_to_pay">
+<span class="sig-name descname"><span class="pre">taxes_to_pay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.taxes_to_pay" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.total_amount">
+<span class="sig-name descname"><span class="pre">total_amount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.total_amount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionData.transaction_type">
+<span class="sig-name descname"><span class="pre">transaction_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#stocks.schemas.AccountTransactionType" title="stocks.schemas.AccountTransactionType"><code class="xref py py-class docutils literal notranslate"><span class="pre">AccountTransactionType</span></code></a></em><a class="headerlink" href="#stocks.schemas.AccountTransactionData.transaction_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionType">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">AccountTransactionType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#AccountTransactionType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.AccountTransactionType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Account Transaction Types Enum.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionType.DEPOSIT">
+<span class="sig-name descname"><span class="pre">DEPOSIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'deposit'</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionType.DEPOSIT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionType.DIVIDENDS">
+<span class="sig-name descname"><span class="pre">DIVIDENDS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dividends'</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionType.DIVIDENDS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionType.STOCK_IN">
+<span class="sig-name descname"><span class="pre">STOCK_IN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'stock_in'</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionType.STOCK_IN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionType.STOCK_OUT">
+<span class="sig-name descname"><span class="pre">STOCK_OUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'stock_out'</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionType.STOCK_OUT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.AccountTransactionType.WITHDRAWAL">
+<span class="sig-name descname"><span class="pre">WITHDRAWAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'withdrawal'</span></em><a class="headerlink" href="#stocks.schemas.AccountTransactionType.WITHDRAWAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.DividendPaymentInfo">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">DividendPaymentInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#DividendPaymentInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.DividendPaymentInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Dividends Payment Info Schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.DividendPaymentInfo.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.DividendPaymentInfo.amount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.DividendPaymentInfo.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.DividendPaymentInfo.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.DividendPaymentInfo.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.DividendPaymentInfo.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.DividendPaymentInfo.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'amount':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'payment_date':</span> <span class="pre">FieldInfo(annotation=date,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.DividendPaymentInfo.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.DividendPaymentInfo.payment_date">
+<span class="sig-name descname"><span class="pre">payment_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></em><a class="headerlink" href="#stocks.schemas.DividendPaymentInfo.payment_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockAccountCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockAccountCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockAccountCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockAccountCreate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Stock Account Create schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockAccountCreate.account_name">
+<span class="sig-name descname"><span class="pre">account_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#stocks.schemas.StockAccountCreate.account_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockAccountCreate.balance">
+<span class="sig-name descname"><span class="pre">balance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.StockAccountCreate.balance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockAccountCreate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockAccountCreate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockAccountCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockAccountCreate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockAccountCreate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'account_name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">description='Account</span> <span class="pre">name.',</span> <span class="pre">metadata=[MaxLen(max_length=255)]),</span> <span class="pre">'balance':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Current</span> <span class="pre">account</span> <span class="pre">balance.',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)])}</span></em><a class="headerlink" href="#stocks.schemas.StockAccountCreate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockPositionBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockPositionBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockPositionBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Stock Position Base schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase.count">
+<span class="sig-name descname"><span class="pre">count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionBase.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionBase.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionBase.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'count':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True,</span> <span class="pre">description='Count</span> <span class="pre">of</span> <span class="pre">stocks.',</span> <span class="pre">metadata=[Gt(gt=0)]),</span> <span class="pre">'paid_fee':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Paid</span> <span class="pre">fee</span> <span class="pre">per</span> <span class="pre">transaction.',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'price_per_stock':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Price</span> <span class="pre">per</span> <span class="pre">one</span> <span class="pre">stock.',</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'stock_symbol_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionBase.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase.paid_fee">
+<span class="sig-name descname"><span class="pre">paid_fee</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.StockPositionBase.paid_fee" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase.price_per_stock">
+<span class="sig-name descname"><span class="pre">price_per_stock</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.StockPositionBase.price_per_stock" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionBase.stock_symbol_id">
+<span class="sig-name descname"><span class="pre">stock_symbol_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionBase.stock_symbol_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionClose">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockPositionClose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockPositionClose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockPositionClose" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stocks.schemas.StockPositionBase" title="stocks.schemas.StockPositionBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPositionBase</span></code></a></p>
+<p>Stock Position Close schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionClose.datetime_closed">
+<span class="sig-name descname"><span class="pre">datetime_closed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionClose.datetime_closed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionClose.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionClose.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionClose.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionClose.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionClose.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'count':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True,</span> <span class="pre">description='Count</span> <span class="pre">of</span> <span class="pre">stocks.',</span> <span class="pre">metadata=[Gt(gt=0)]),</span> <span class="pre">'datetime_closed':</span> <span class="pre">FieldInfo(annotation=datetime,</span> <span class="pre">required=True,</span> <span class="pre">description=&quot;When</span> <span class="pre">position</span> <span class="pre">was</span> <span class="pre">closed.</span> <span class="pre">Format:</span> <span class="pre">'YYYY-MM-DD</span> <span class="pre">HH:MM:SS'&quot;),</span> <span class="pre">'paid_fee':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Paid</span> <span class="pre">fee</span> <span class="pre">per</span> <span class="pre">transaction.',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'price_per_stock':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Price</span> <span class="pre">per</span> <span class="pre">one</span> <span class="pre">stock.',</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'stock_symbol_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionClose.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionOpen">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockPositionOpen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockPositionOpen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockPositionOpen" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stocks.schemas.StockPositionBase" title="stocks.schemas.StockPositionBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPositionBase</span></code></a></p>
+<p>Stock Position Open schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionOpen.datetime_opened">
+<span class="sig-name descname"><span class="pre">datetime_opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionOpen.datetime_opened" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionOpen.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionOpen.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionOpen.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionOpen.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionOpen.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'count':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True,</span> <span class="pre">description='Count</span> <span class="pre">of</span> <span class="pre">stocks.',</span> <span class="pre">metadata=[Gt(gt=0)]),</span> <span class="pre">'datetime_opened':</span> <span class="pre">FieldInfo(annotation=datetime,</span> <span class="pre">required=True,</span> <span class="pre">description=&quot;When</span> <span class="pre">position</span> <span class="pre">was</span> <span class="pre">opened.</span> <span class="pre">Format:</span> <span class="pre">'YYYY-MM-DD</span> <span class="pre">HH:MM:SS'&quot;),</span> <span class="pre">'paid_fee':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Paid</span> <span class="pre">fee</span> <span class="pre">per</span> <span class="pre">transaction.',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'price_per_stock':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Price</span> <span class="pre">per</span> <span class="pre">one</span> <span class="pre">stock.',</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'stock_symbol_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionOpen.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockPositionPublic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockPositionPublic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockPositionPublic" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Stock Position Public schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.account_id">
+<span class="sig-name descname"><span class="pre">account_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.account_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.count_active">
+<span class="sig-name descname"><span class="pre">count_active</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.count_active" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.datetime_opened">
+<span class="sig-name descname"><span class="pre">datetime_opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.datetime_opened" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'account_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'count_active':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True,</span> <span class="pre">description='Count</span> <span class="pre">of</span> <span class="pre">stocks</span> <span class="pre">active.',</span> <span class="pre">metadata=[Gt(gt=0)]),</span> <span class="pre">'datetime_opened':</span> <span class="pre">FieldInfo(annotation=datetime,</span> <span class="pre">required=True,</span> <span class="pre">description='When</span> <span class="pre">position</span> <span class="pre">was</span> <span class="pre">opened.'),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'price_per_stock_in':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Price</span> <span class="pre">per</span> <span class="pre">stock</span> <span class="pre">in.',</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'stock_symbol':</span> <span class="pre">FieldInfo(annotation=StockSymbolPublic,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.price_per_stock_in">
+<span class="sig-name descname"><span class="pre">price_per_stock_in</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.price_per_stock_in" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionPublic.stock_symbol">
+<span class="sig-name descname"><span class="pre">stock_symbol</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">StockSymbolPublic</span></em><a class="headerlink" href="#stocks.schemas.StockPositionPublic.stock_symbol" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionWithCurrentPrice">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockPositionWithCurrentPrice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockPositionWithCurrentPrice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockPositionWithCurrentPrice" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stocks.schemas.StockPositionPublic" title="stocks.schemas.StockPositionPublic"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockPositionPublic</span></code></a></p>
+<p>Stock Position With Current Price schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionWithCurrentPrice.current_price">
+<span class="sig-name descname"><span class="pre">current_price</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.StockPositionWithCurrentPrice.current_price" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionWithCurrentPrice.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionWithCurrentPrice.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionWithCurrentPrice.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionWithCurrentPrice.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockPositionWithCurrentPrice.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'account_id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'count_active':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True,</span> <span class="pre">description='Count</span> <span class="pre">of</span> <span class="pre">stocks</span> <span class="pre">active.',</span> <span class="pre">metadata=[Gt(gt=0)]),</span> <span class="pre">'current_price':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Near</span> <span class="pre">real-time</span> <span class="pre">stock</span> <span class="pre">price.',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'datetime_opened':</span> <span class="pre">FieldInfo(annotation=datetime,</span> <span class="pre">required=True,</span> <span class="pre">description='When</span> <span class="pre">position</span> <span class="pre">was</span> <span class="pre">opened.'),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'price_per_stock_in':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">description='Price</span> <span class="pre">per</span> <span class="pre">stock</span> <span class="pre">in.',</span> <span class="pre">metadata=[Gt(gt=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'stock_symbol':</span> <span class="pre">FieldInfo(annotation=StockSymbolPublic,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.StockPositionWithCurrentPrice.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolList">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockSymbolList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockSymbolList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockSymbolList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>List Stock Symbol schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolList.count">
+<span class="sig-name descname"><span class="pre">count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.StockSymbolList.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolList.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="#stocks.schemas.StockSymbolPublic" title="stocks.schemas.StockSymbolPublic"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockSymbolPublic</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolList.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolList.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolList.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolList.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolList.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolList.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'count':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'data':</span> <span class="pre">FieldInfo(annotation=list[StockSymbolPublic],</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolList.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockSymbolPublic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockSymbolPublic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockSymbolPublic" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Stock Symbols public schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.exchange_code">
+<span class="sig-name descname"><span class="pre">exchange_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.exchange_code" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.figi">
+<span class="sig-name descname"><span class="pre">figi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.figi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[MaxLen(max_length=255)]),</span> <span class="pre">'exchange_code':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">description='Stock</span> <span class="pre">exchange</span> <span class="pre">identifier.',</span> <span class="pre">metadata=[MinLen(min_length=1),</span> <span class="pre">MaxLen(max_length=3)]),</span> <span class="pre">'figi':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">description='Global</span> <span class="pre">unique</span> <span class="pre">identifier.',</span> <span class="pre">metadata=[MinLen(min_length=12),</span> <span class="pre">MaxLen(max_length=12)]),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'symbol':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[MinLen(min_length=1),</span> <span class="pre">MaxLen(max_length=6)])}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolPublic.symbol">
+<span class="sig-name descname"><span class="pre">symbol</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#stocks.schemas.StockSymbolPublic.symbol" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockSymbolType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockSymbolType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockSymbolType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Stock Symbol Types Enum.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.ADR">
+<span class="sig-name descname"><span class="pre">ADR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ADR'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.ADR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.CDI">
+<span class="sig-name descname"><span class="pre">CDI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'CDI'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.CDI" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.CLOSED_END_FUND">
+<span class="sig-name descname"><span class="pre">CLOSED_END_FUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Closed-End</span> <span class="pre">Fund'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.CLOSED_END_FUND" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.COMMON_STOCK">
+<span class="sig-name descname"><span class="pre">COMMON_STOCK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Common</span> <span class="pre">Stock'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.COMMON_STOCK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.DUTCH_CERT">
+<span class="sig-name descname"><span class="pre">DUTCH_CERT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Dutch</span> <span class="pre">Cert'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.DUTCH_CERT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.EQUITY_WRT">
+<span class="sig-name descname"><span class="pre">EQUITY_WRT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Equity</span> <span class="pre">WRT'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.EQUITY_WRT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.ETP">
+<span class="sig-name descname"><span class="pre">ETP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ETP'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.ETP" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.FOREIGN_SHARE">
+<span class="sig-name descname"><span class="pre">FOREIGN_SHARE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Foreign</span> <span class="pre">Sh.'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.FOREIGN_SHARE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.GDR">
+<span class="sig-name descname"><span class="pre">GDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'GDR'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.GDR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.LTD_PART">
+<span class="sig-name descname"><span class="pre">LTD_PART</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Ltd</span> <span class="pre">Part'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.LTD_PART" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.MISC">
+<span class="sig-name descname"><span class="pre">MISC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Misc.'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.MISC" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.MLP">
+<span class="sig-name descname"><span class="pre">MLP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MLP'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.MLP" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.NVDR">
+<span class="sig-name descname"><span class="pre">NVDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'NVDR'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.NVDR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.NY_REG_SHRS">
+<span class="sig-name descname"><span class="pre">NY_REG_SHRS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'NY</span> <span class="pre">Reg</span> <span class="pre">Shrs'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.NY_REG_SHRS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.OPEN_END_FUND">
+<span class="sig-name descname"><span class="pre">OPEN_END_FUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Open-End</span> <span class="pre">Fund'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.OPEN_END_FUND" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.PREFERENCE">
+<span class="sig-name descname"><span class="pre">PREFERENCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Preference'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.PREFERENCE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.PRIVATE">
+<span class="sig-name descname"><span class="pre">PRIVATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PRIVATE'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.PRIVATE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.PUBLIC">
+<span class="sig-name descname"><span class="pre">PUBLIC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PUBLIC'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.PUBLIC" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.RECEIPT">
+<span class="sig-name descname"><span class="pre">RECEIPT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Receipt'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.RECEIPT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.REIT">
+<span class="sig-name descname"><span class="pre">REIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'REIT'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.REIT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.RIGHT">
+<span class="sig-name descname"><span class="pre">RIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Right'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.RIGHT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.ROYALTY_TRUST">
+<span class="sig-name descname"><span class="pre">ROYALTY_TRUST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Royalty</span> <span class="pre">Trst'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.ROYALTY_TRUST" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.SAVINGS_SHARE">
+<span class="sig-name descname"><span class="pre">SAVINGS_SHARE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Savings</span> <span class="pre">Share'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.SAVINGS_SHARE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.SDR">
+<span class="sig-name descname"><span class="pre">SDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'SDR'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.SDR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.STAPLED_SECURITY">
+<span class="sig-name descname"><span class="pre">STAPLED_SECURITY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Stapled</span> <span class="pre">Security'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.STAPLED_SECURITY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.TRACKING_STOCK">
+<span class="sig-name descname"><span class="pre">TRACKING_STOCK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Tracking</span> <span class="pre">Stk'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.TRACKING_STOCK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.UNIT">
+<span class="sig-name descname"><span class="pre">UNIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Unit'</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.UNIT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolType.UNKNOWN">
+<span class="sig-name descname"><span class="pre">UNKNOWN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolType.UNKNOWN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolWithDividendsHistory">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stocks.schemas.</span></span><span class="sig-name descname"><span class="pre">StockSymbolWithDividendsHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stocks/schemas.html#StockSymbolWithDividendsHistory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stocks.schemas.StockSymbolWithDividendsHistory" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#stocks.schemas.StockSymbolPublic" title="stocks.schemas.StockSymbolPublic"><code class="xref py py-class docutils literal notranslate"><span class="pre">StockSymbolPublic</span></code></a></p>
+<p>Stock Symbol schema with dividends history.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolWithDividendsHistory.dividends_history">
+<span class="sig-name descname"><span class="pre">dividends_history</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[DividendPaymentInfo]</span> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><a class="headerlink" href="#stocks.schemas.StockSymbolWithDividendsHistory.dividends_history" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolWithDividendsHistory.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolWithDividendsHistory.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolWithDividendsHistory.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolWithDividendsHistory.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stocks.schemas.StockSymbolWithDividendsHistory.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[MaxLen(max_length=255)]),</span> <span class="pre">'dividends_history':</span> <span class="pre">FieldInfo(annotation=Union[list[DividendPaymentInfo],</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None),</span> <span class="pre">'exchange_code':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">description='Stock</span> <span class="pre">exchange</span> <span class="pre">identifier.',</span> <span class="pre">metadata=[MinLen(min_length=1),</span> <span class="pre">MaxLen(max_length=3)]),</span> <span class="pre">'figi':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">description='Global</span> <span class="pre">unique</span> <span class="pre">identifier.',</span> <span class="pre">metadata=[MinLen(min_length=12),</span> <span class="pre">MaxLen(max_length=12)]),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'symbol':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[MinLen(min_length=1),</span> <span class="pre">MaxLen(max_length=6)])}</span></em><a class="headerlink" href="#stocks.schemas.StockSymbolWithDividendsHistory.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="budget.html" class="btn btn-neutral float-left" title="Budget package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

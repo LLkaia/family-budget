@@ -1,0 +1,1040 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Budget package &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Stocks package" href="stocks.html" />
+    <link rel="prev" title="Users package" href="users.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Family Budget Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">Core package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">SQLModel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html">Users package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Budget package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-budget.crud">budget.crud module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-budget.routes">budget.routes module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-budget.schemas">budget.schemas module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="stocks.html">Stocks package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validators.html">Validators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Family Budget Documentation</a></li>
+      <li class="breadcrumb-item active">Budget package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/budget.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="budget-package">
+<h1>Budget package<a class="headerlink" href="#budget-package" title="Link to this heading"></a></h1>
+<section id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<section id="module-budget.crud">
+<span id="budget-crud-module"></span><h3>budget.crud module<a class="headerlink" href="#module-budget.crud" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.add_user_to_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">add_user_to_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#add_user_to_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.add_user_to_budget" title="Link to this definition"></a></dt>
+<dd><p>Add user to existed budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.create_budget_with_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">create_budget_with_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#create_budget_with_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.create_budget_with_user" title="Link to this definition"></a></dt>
+<dd><p>Create a new Budget with User.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.create_category_and_add_to_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">create_category_and_add_to_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#create_category_and_add_to_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.create_category_and_add_to_budget" title="Link to this definition"></a></dt>
+<dd><p>Create a new category and add it to the budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Category" title="models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.create_predefined_category">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">create_predefined_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#create_predefined_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.create_predefined_category" title="Link to this definition"></a></dt>
+<dd><p>Create a new predefined category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.PredefinedCategory" title="models.PredefinedCategory"><code class="xref py py-class docutils literal notranslate"><span class="pre">PredefinedCategory</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.get_budget_by_id_with_current_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">get_budget_by_id_with_current_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detailed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#get_budget_by_id_with_current_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.get_budget_by_id_with_current_user" title="Link to this definition"></a></dt>
+<dd><p>Get Budget by ID for member.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.get_categories_by_budget_and_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">get_categories_by_budget_and_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_transactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_from</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#get_categories_by_budget_and_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.get_categories_by_budget_and_user" title="Link to this definition"></a></dt>
+<dd><p>Get categories for budget.</p>
+<p>Validate if user has access to budget, filter
+by type, and get amount of transactions per
+period per category.
+:type budget_id: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param budget_id: budget ID.
+:type user_id: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param user_id: User ID
+:type session: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncSession</span></code></span>
+:param session: sql session
+:type is_income: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param is_income: whether categories are income
+or outlay.
+:type get_transactions: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param get_transactions: whether to fetch amount
+of transactions per category per period.
+:type period_from: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="utils.html#utils.PeriodFrom" title="utils.PeriodFrom"><code class="xref py py-class docutils literal notranslate"><span class="pre">PeriodFrom</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param period_from: period for amount aggregation
+:rtype: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="#budget.schemas.CategoryWithAmount" title="budget.schemas.CategoryWithAmount"><code class="xref py py-class docutils literal notranslate"><span class="pre">CategoryWithAmount</span></code></a>]</span>
+:return: list of categories</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.get_category_by_id_with_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">get_category_by_id_with_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#get_category_by_id_with_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.get_category_by_id_with_user" title="Link to this definition"></a></dt>
+<dd><p>Get category from budget by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Category" title="models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.get_list_transactions">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">get_list_transactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_name_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#get_list_transactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.get_list_transactions" title="Link to this definition"></a></dt>
+<dd><p>Get transactions.</p>
+<p>Validate if user has access to transaction, filter
+by date and category name prefix if specified.
+:type budget_id: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param budget_id: budget ID.
+:type user_id: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param user_id: User ID
+:type session: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncSession</span></code></span>
+:param session: sql session
+:type date_start: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param date_start: start date to filter transactions.
+:type date_end: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param date_end: end date to filter transactions.
+:type category_name_filter: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param category_name_filter: name prefix of category.
+:type offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param offset: offset of pagination.
+:type limit: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param limit: limit of pagination.
+:rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#budget.schemas.TransactionList" title="budget.schemas.TransactionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransactionList</span></code></a></span>
+:return: list of transactions with total count.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.get_predefined_categories">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">get_predefined_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#get_predefined_categories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.get_predefined_categories" title="Link to this definition"></a></dt>
+<dd><p>Retrieve Predefined Categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#budget.schemas.PredefinedCategoryList" title="budget.schemas.PredefinedCategoryList"><code class="xref py py-class docutils literal notranslate"><span class="pre">PredefinedCategoryList</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.get_transaction_by_id_with_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">get_transaction_by_id_with_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#get_transaction_by_id_with_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.get_transaction_by_id_with_user" title="Link to this definition"></a></dt>
+<dd><p>Get transaction by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Transaction" title="models.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transaction</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.perform_transaction_per_category">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">perform_transaction_per_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#perform_transaction_per_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.perform_transaction_per_category" title="Link to this definition"></a></dt>
+<dd><p>Perform transaction per budget per category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.remove_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">remove_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#remove_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.remove_budget" title="Link to this definition"></a></dt>
+<dd><p>Remove existed budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.remove_category">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">remove_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#remove_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.remove_category" title="Link to this definition"></a></dt>
+<dd><p>Remove category from budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.remove_predefined_category">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">remove_predefined_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#remove_predefined_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.remove_predefined_category" title="Link to this definition"></a></dt>
+<dd><p>Remove Predefined Category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.remove_transaction">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">remove_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#remove_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.remove_transaction" title="Link to this definition"></a></dt>
+<dd><p>Remove Transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.remove_user_from_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">remove_user_from_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#remove_user_from_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.remove_user_from_budget" title="Link to this definition"></a></dt>
+<dd><p>Remove user from existed budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.retrieve_budgets_by_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">retrieve_budgets_by_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#retrieve_budgets_by_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.retrieve_budgets_by_user" title="Link to this definition"></a></dt>
+<dd><p>Retrieve Budgets with User.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.update_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">update_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#update_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.update_budget" title="Link to this definition"></a></dt>
+<dd><p>Update budget with new data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.update_category">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">update_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#update_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.update_category" title="Link to this definition"></a></dt>
+<dd><p>Update category with new data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Category" title="models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.crud.update_transaction">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.crud.</span></span><span class="sig-name descname"><span class="pre">update_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/crud.html#update_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.crud.update_transaction" title="Link to this definition"></a></dt>
+<dd><p>Update transaction with new data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Transaction" title="models.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transaction</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-budget.routes">
+<span id="budget-routes-module"></span><h3>budget.routes module<a class="headerlink" href="#module-budget.routes" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.add_new_category_to_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">add_new_category_to_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#add_new_category_to_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.add_new_category_to_budget" title="Link to this definition"></a></dt>
+<dd><p>Create category and add it to budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Category" title="models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.add_new_user_to_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">add_new_user_to_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#add_new_user_to_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.add_new_user_to_budget" title="Link to this definition"></a></dt>
+<dd><p>Add new user to budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.create_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">create_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#create_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.create_budget" title="Link to this definition"></a></dt>
+<dd><p>Create new budget for current user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.create_predefined_categories">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">create_predefined_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#create_predefined_categories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.create_predefined_categories" title="Link to this definition"></a></dt>
+<dd><p>Create new predefined category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.PredefinedCategory" title="models.PredefinedCategory"><code class="xref py py-class docutils literal notranslate"><span class="pre">PredefinedCategory</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.delete_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">delete_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#delete_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.delete_budget" title="Link to this definition"></a></dt>
+<dd><p>Delete budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.delete_category">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">delete_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#delete_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.delete_category" title="Link to this definition"></a></dt>
+<dd><p>Delete category from specific budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.delete_predefined_categories">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">delete_predefined_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#delete_predefined_categories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.delete_predefined_categories" title="Link to this definition"></a></dt>
+<dd><p>Create new predefined category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.delete_transaction">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">delete_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#delete_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.delete_transaction" title="Link to this definition"></a></dt>
+<dd><p>Delete transaction by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.delete_user_from_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">delete_user_from_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#delete_user_from_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.delete_user_from_budget" title="Link to this definition"></a></dt>
+<dd><p>Delete user from budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.get_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">get_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#get_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.get_budget" title="Link to this definition"></a></dt>
+<dd><p>Get budget by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.get_budget_categories">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">get_budget_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#get_budget_categories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.get_budget_categories" title="Link to this definition"></a></dt>
+<dd><p>Get list of categories from budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="#budget.schemas.CategoryWithAmount" title="budget.schemas.CategoryWithAmount"><code class="xref py py-class docutils literal notranslate"><span class="pre">CategoryWithAmount</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.get_budget_transactions">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">get_budget_transactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_name_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#get_budget_transactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.get_budget_transactions" title="Link to this definition"></a></dt>
+<dd><p>Get list of transactions for budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#budget.schemas.TransactionList" title="budget.schemas.TransactionList"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransactionList</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.get_my_budgets">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">get_my_budgets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#get_my_budgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.get_my_budgets" title="Link to this definition"></a></dt>
+<dd><p>Get current user budgets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.list_predefined_categories">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">list_predefined_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#list_predefined_categories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.list_predefined_categories" title="Link to this definition"></a></dt>
+<dd><p>Retrieve predefined category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#budget.schemas.PredefinedCategoryList" title="budget.schemas.PredefinedCategoryList"><code class="xref py py-class docutils literal notranslate"><span class="pre">PredefinedCategoryList</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.modify_budget">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">modify_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#modify_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.modify_budget" title="Link to this definition"></a></dt>
+<dd><p>Update budget with new data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.modify_category">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">modify_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#modify_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.modify_category" title="Link to this definition"></a></dt>
+<dd><p>Modify category with new data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Category" title="models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.modify_transaction">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">modify_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#modify_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.modify_transaction" title="Link to this definition"></a></dt>
+<dd><p>Update transaction by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Transaction" title="models.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transaction</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="budget.routes.perform_transaction">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.routes.</span></span><span class="sig-name descname"><span class="pre">perform_transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/routes.html#perform_transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.routes.perform_transaction" title="Link to this definition"></a></dt>
+<dd><p>Perform transaction per budget per category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="models.html#models.Budget" title="models.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-budget.schemas">
+<span id="budget-schemas-module"></span><h3>budget.schemas module<a class="headerlink" href="#module-budget.schemas" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.BudgetCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">BudgetCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#BudgetCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.BudgetCreate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Create Budget schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetCreate.balance">
+<span class="sig-name descname"><span class="pre">balance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#budget.schemas.BudgetCreate.balance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetCreate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.BudgetCreate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.BudgetCreate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetCreate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'balance':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">title='Current</span> <span class="pre">balance</span> <span class="pre">of</span> <span class="pre">budget',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">title='Name</span> <span class="pre">of</span> <span class="pre">budget',</span> <span class="pre">metadata=[MaxLen(max_length=255)])}</span></em><a class="headerlink" href="#budget.schemas.BudgetCreate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetCreate.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#budget.schemas.BudgetCreate.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.BudgetDetails">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">BudgetDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#BudgetDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.BudgetDetails" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#budget.schemas.BudgetPublic" title="budget.schemas.BudgetPublic"><code class="xref py py-class docutils literal notranslate"><span class="pre">BudgetPublic</span></code></a></p>
+<p>Detailed Budget schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetDetails.categories">
+<span class="sig-name descname"><span class="pre">categories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="models.html#models.Category" title="models.Category"><code class="xref py py-class docutils literal notranslate"><span class="pre">Category</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#budget.schemas.BudgetDetails.categories" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetDetails.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.BudgetDetails.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetDetails.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.BudgetDetails.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetDetails.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'balance':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">title='Current</span> <span class="pre">balance</span> <span class="pre">of</span> <span class="pre">budget',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'categories':</span> <span class="pre">FieldInfo(annotation=list[Category],</span> <span class="pre">required=False,</span> <span class="pre">default=[]),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">title='Name</span> <span class="pre">of</span> <span class="pre">budget',</span> <span class="pre">metadata=[MaxLen(max_length=255)]),</span> <span class="pre">'users':</span> <span class="pre">FieldInfo(annotation=list[UserPublic],</span> <span class="pre">required=False,</span> <span class="pre">default=[])}</span></em><a class="headerlink" href="#budget.schemas.BudgetDetails.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetDetails.users">
+<span class="sig-name descname"><span class="pre">users</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="users.html#users.schemas.UserPublic" title="users.schemas.UserPublic"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserPublic</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#budget.schemas.BudgetDetails.users" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.BudgetPublic">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">BudgetPublic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#BudgetPublic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.BudgetPublic" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#budget.schemas.BudgetCreate" title="budget.schemas.BudgetCreate"><code class="xref py py-class docutils literal notranslate"><span class="pre">BudgetCreate</span></code></a></p>
+<p>Public Budget schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetPublic.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#budget.schemas.BudgetPublic.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetPublic.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.BudgetPublic.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetPublic.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.BudgetPublic.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetPublic.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'balance':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">title='Current</span> <span class="pre">balance</span> <span class="pre">of</span> <span class="pre">budget',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">title='Name</span> <span class="pre">of</span> <span class="pre">budget',</span> <span class="pre">metadata=[MaxLen(max_length=255)])}</span></em><a class="headerlink" href="#budget.schemas.BudgetPublic.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.BudgetUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">BudgetUpdate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#BudgetUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.BudgetUpdate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Update Budget schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetUpdate.balance">
+<span class="sig-name descname"><span class="pre">balance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]]</span></em><a class="headerlink" href="#budget.schemas.BudgetUpdate.balance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetUpdate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.BudgetUpdate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.BudgetUpdate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetUpdate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'balance':</span> <span class="pre">FieldInfo(annotation=Union[Annotated[Decimal,</span> <span class="pre">AfterValidator],</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">title='Current</span> <span class="pre">balance</span> <span class="pre">of</span> <span class="pre">budget',</span> <span class="pre">metadata=[Ge(ge=0)]),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None)}</span></em><a class="headerlink" href="#budget.schemas.BudgetUpdate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.BudgetUpdate.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><a class="headerlink" href="#budget.schemas.BudgetUpdate.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">CategoryCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#CategoryCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.CategoryCreate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Category creation schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate.category_restriction">
+<span class="sig-name descname"><span class="pre">category_restriction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#budget.schemas.CategoryCreate.category_restriction" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><a class="headerlink" href="#budget.schemas.CategoryCreate.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate.is_income">
+<span class="sig-name descname"><span class="pre">is_income</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><a class="headerlink" href="#budget.schemas.CategoryCreate.is_income" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.CategoryCreate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.CategoryCreate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'category_restriction':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">title='Outlay</span> <span class="pre">restriction</span> <span class="pre">of</span> <span class="pre">category</span> <span class="pre">for</span> <span class="pre">budget',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'description':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">title='Description</span> <span class="pre">of</span> <span class="pre">category</span> <span class="pre">for</span> <span class="pre">budget',</span> <span class="pre">metadata=[MaxLen(max_length=255)]),</span> <span class="pre">'is_income':</span> <span class="pre">FieldInfo(annotation=bool,</span> <span class="pre">required=False,</span> <span class="pre">default=False,</span> <span class="pre">title='Whether</span> <span class="pre">this</span> <span class="pre">category</span> <span class="pre">is</span> <span class="pre">income</span> <span class="pre">or</span> <span class="pre">outlay'),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">title='Name</span> <span class="pre">of</span> <span class="pre">category',</span> <span class="pre">metadata=[MaxLen(max_length=255)])}</span></em><a class="headerlink" href="#budget.schemas.CategoryCreate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryCreate.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#budget.schemas.CategoryCreate.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">CategoryUpdate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#CategoryUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.CategoryUpdate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Update category schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate.category_restriction">
+<span class="sig-name descname"><span class="pre">category_restriction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]]</span></em><a class="headerlink" href="#budget.schemas.CategoryUpdate.category_restriction" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><a class="headerlink" href="#budget.schemas.CategoryUpdate.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate.is_income">
+<span class="sig-name descname"><span class="pre">is_income</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><a class="headerlink" href="#budget.schemas.CategoryUpdate.is_income" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.CategoryUpdate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.CategoryUpdate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'category_restriction':</span> <span class="pre">FieldInfo(annotation=Union[Annotated[Decimal,</span> <span class="pre">AfterValidator],</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">metadata=[Ge(ge=0)]),</span> <span class="pre">'description':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None),</span> <span class="pre">'is_income':</span> <span class="pre">FieldInfo(annotation=Union[bool,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None)}</span></em><a class="headerlink" href="#budget.schemas.CategoryUpdate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryUpdate.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><a class="headerlink" href="#budget.schemas.CategoryUpdate.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.CategoryWithAmount">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">CategoryWithAmount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#CategoryWithAmount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.CategoryWithAmount" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#budget.schemas.CategoryCreate" title="budget.schemas.CategoryCreate"><code class="xref py py-class docutils literal notranslate"><span class="pre">CategoryCreate</span></code></a></p>
+<p>Category with calculated transactions amount.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryWithAmount.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#budget.schemas.CategoryWithAmount.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryWithAmount.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.CategoryWithAmount.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryWithAmount.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.CategoryWithAmount.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryWithAmount.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'category_restriction':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">title='Outlay</span> <span class="pre">restriction</span> <span class="pre">of</span> <span class="pre">category</span> <span class="pre">for</span> <span class="pre">budget',</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'description':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">title='Description</span> <span class="pre">of</span> <span class="pre">category</span> <span class="pre">for</span> <span class="pre">budget',</span> <span class="pre">metadata=[MaxLen(max_length=255)]),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'is_income':</span> <span class="pre">FieldInfo(annotation=bool,</span> <span class="pre">required=False,</span> <span class="pre">default=False,</span> <span class="pre">title='Whether</span> <span class="pre">this</span> <span class="pre">category</span> <span class="pre">is</span> <span class="pre">income</span> <span class="pre">or</span> <span class="pre">outlay'),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">title='Name</span> <span class="pre">of</span> <span class="pre">category',</span> <span class="pre">metadata=[MaxLen(max_length=255)]),</span> <span class="pre">'total_amount':</span> <span class="pre">FieldInfo(annotation=Union[Annotated[Decimal,</span> <span class="pre">AfterValidator],</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">metadata=[Ge(ge=0)])}</span></em><a class="headerlink" href="#budget.schemas.CategoryWithAmount.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.CategoryWithAmount.total_amount">
+<span class="sig-name descname"><span class="pre">total_amount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]]</span></em><a class="headerlink" href="#budget.schemas.CategoryWithAmount.total_amount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">PredefinedCategoryCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#PredefinedCategoryCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.PredefinedCategoryCreate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Predefined category creation schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryCreate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryCreate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryCreate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryCreate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True,</span> <span class="pre">title='Name</span> <span class="pre">of</span> <span class="pre">category',</span> <span class="pre">metadata=[MaxLen(max_length=255)])}</span></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryCreate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryCreate.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryCreate.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryList">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">PredefinedCategoryList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#PredefinedCategoryList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.PredefinedCategoryList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>List Predefined Categories schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryList.count">
+<span class="sig-name descname"><span class="pre">count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryList.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryList.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="models.html#models.PredefinedCategory" title="models.PredefinedCategory"><code class="xref py py-class docutils literal notranslate"><span class="pre">PredefinedCategory</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryList.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryList.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryList.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryList.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryList.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.PredefinedCategoryList.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'count':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'data':</span> <span class="pre">FieldInfo(annotation=list[PredefinedCategory],</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#budget.schemas.PredefinedCategoryList.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.TransactionCreate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">TransactionCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#TransactionCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.TransactionCreate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Transaction input schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionCreate.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]</span></em><a class="headerlink" href="#budget.schemas.TransactionCreate.amount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionCreate.date_performed">
+<span class="sig-name descname"><span class="pre">date_performed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></em><a class="headerlink" href="#budget.schemas.TransactionCreate.date_performed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionCreate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.TransactionCreate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionCreate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.TransactionCreate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionCreate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'amount':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True,</span> <span class="pre">metadata=[Ge(ge=0),</span> <span class="pre">AfterValidator(func=&lt;function</span> <span class="pre">validate_cash&gt;)]),</span> <span class="pre">'date_performed':</span> <span class="pre">FieldInfo(annotation=date,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#budget.schemas.TransactionCreate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.TransactionList">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">TransactionList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#TransactionList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.TransactionList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>List Transactions schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionList.count">
+<span class="sig-name descname"><span class="pre">count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#budget.schemas.TransactionList.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionList.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">[</span><a class="reference internal" href="models.html#models.Transaction" title="models.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transaction</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#budget.schemas.TransactionList.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionList.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.TransactionList.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionList.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.TransactionList.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionList.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'count':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'data':</span> <span class="pre">FieldInfo(annotation=list[Transaction],</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#budget.schemas.TransactionList.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="budget.schemas.TransactionUpdate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">budget.schemas.</span></span><span class="sig-name descname"><span class="pre">TransactionUpdate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/budget/schemas.html#TransactionUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#budget.schemas.TransactionUpdate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLModel</span></code></p>
+<p>Transaction update schema.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionUpdate.amount">
+<span class="sig-name descname"><span class="pre">amount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code><span class="pre">]]</span></em><a class="headerlink" href="#budget.schemas.TransactionUpdate.amount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionUpdate.date_performed">
+<span class="sig-name descname"><span class="pre">date_performed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><a class="headerlink" href="#budget.schemas.TransactionUpdate.date_performed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionUpdate.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">ComputedFieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#budget.schemas.TransactionUpdate.model_computed_fields" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionUpdate.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True,</span> <span class="pre">'registry':</span> <span class="pre">PydanticUndefined}</span></em><a class="headerlink" href="#budget.schemas.TransactionUpdate.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="budget.schemas.TransactionUpdate.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[dict[str,</span> <span class="pre">FieldInfo]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'amount':</span> <span class="pre">FieldInfo(annotation=Union[Annotated[Decimal,</span> <span class="pre">AfterValidator],</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">metadata=[Ge(ge=0)]),</span> <span class="pre">'date_performed':</span> <span class="pre">FieldInfo(annotation=Union[date,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None)}</span></em><a class="headerlink" href="#budget.schemas.TransactionUpdate.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="users.html" class="btn btn-neutral float-left" title="Users package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="stocks.html" class="btn btn-neutral float-right" title="Stocks package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

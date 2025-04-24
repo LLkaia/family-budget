@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stocks.routes &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Family Budget Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">stocks.routes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for stocks.routes</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel.ext.asyncio.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncSession</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_db</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">StockAccount</span><span class="p">,</span> <span class="n">StockPosition</span><span class="p">,</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stocks.crud</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">close_stock_positions_with_transactions</span><span class="p">,</span>
+    <span class="n">create_stock_account_with_user</span><span class="p">,</span>
+    <span class="n">get_active_stock_positions_per_account</span><span class="p">,</span>
+    <span class="n">get_stock_account_with_user_by_account_id</span><span class="p">,</span>
+    <span class="n">get_stock_symbols</span><span class="p">,</span>
+    <span class="n">open_stock_position_with_transaction</span><span class="p">,</span>
+    <span class="n">retrieve_stock_accounts_by_user</span><span class="p">,</span>
+    <span class="n">retrieve_stock_symbol_by_id</span><span class="p">,</span>
+    <span class="n">update_stock_symbols</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stocks.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">StockAccountCreate</span><span class="p">,</span>
+    <span class="n">StockPositionClose</span><span class="p">,</span>
+    <span class="n">StockPositionOpen</span><span class="p">,</span>
+    <span class="n">StockPositionPublic</span><span class="p">,</span>
+    <span class="n">StockPositionWithCurrentPrice</span><span class="p">,</span>
+    <span class="n">StockSymbolList</span><span class="p">,</span>
+    <span class="n">StockSymbolWithDividendsHistory</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_superuser</span><span class="p">,</span> <span class="n">current_user</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span>
+
+
+<span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="create_stock_account">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.create_stock_account">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/account&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_stock_account</span><span class="p">(</span>
+    <span class="n">stock_account</span><span class="p">:</span> <span class="n">StockAccountCreate</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockAccount</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a stock account.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">create_stock_account_with_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">stock_account</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_my_stock_accounts">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.get_my_stock_accounts">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/account&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_my_stock_accounts</span><span class="p">(</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span> <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockAccount</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all stock accounts.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">retrieve_stock_accounts_by_user</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_stock_account">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.get_stock_account">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/account/</span><span class="si">{account_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_stock_account</span><span class="p">(</span>
+    <span class="n">account_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Stock Account ID&quot;</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockAccount</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get stock account by id.&quot;&quot;&quot;</span>
+    <span class="n">stock_account</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_stock_account_with_user_by_account_id</span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stock_account</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">stock_account</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Stock Account not found.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="open_stock_position">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.open_stock_position">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/account/</span><span class="si">{account_id}</span><span class="s2">/stocks&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_201_CREATED</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">open_stock_position</span><span class="p">(</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">account_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Stock Account ID&quot;</span><span class="p">)],</span>
+    <span class="n">stock_position</span><span class="p">:</span> <span class="n">StockPositionOpen</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockPosition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open stock position for account.&quot;&quot;&quot;</span>
+    <span class="n">stock_account</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_stock_account_with_user_by_account_id</span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stock_account</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">open_stock_position_with_transaction</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">stock_account</span><span class="p">,</span> <span class="n">stock_position</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Stock Account not found.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_stock_positions">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.get_stock_positions">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/account/</span><span class="si">{account_id}</span><span class="s2">/stocks&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_stock_positions</span><span class="p">(</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">account_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Stock Account ID&quot;</span><span class="p">)],</span>
+    <span class="n">get_current_price</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Request stock near real-time price&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;get-current-price&quot;</span><span class="p">)</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockPositionPublic</span> <span class="o">|</span> <span class="n">StockPositionWithCurrentPrice</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all stock positions for account.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">get_active_stock_positions_per_account</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">account_id</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">get_current_price</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="close_stock_positions_by_stock_symbol">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.close_stock_positions_by_stock_symbol">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/account/</span><span class="si">{account_id}</span><span class="s2">/stocks/close-positions&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_stock_positions_by_stock_symbol</span><span class="p">(</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">account_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Stock Account ID&quot;</span><span class="p">)],</span>
+    <span class="n">stock_position</span><span class="p">:</span> <span class="n">StockPositionClose</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Close stock positions.&quot;&quot;&quot;</span>
+    <span class="n">stock_account</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_stock_account_with_user_by_account_id</span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stock_account</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">close_stock_positions_with_transactions</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">stock_account</span><span class="p">,</span> <span class="n">stock_position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Message</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Stock positions successfully closed.&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Stock Account not found.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="update_stock_symbols_task">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.update_stock_symbols_task">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/symbols/update&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_superuser</span><span class="p">)])</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_stock_symbols_task</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span> <span class="n">exchange_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;US&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update stock symbols in table.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">update_stock_symbols</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">exchange_code</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Message</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Stock symbols are updated.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_list_of_stock_symbols">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.get_list_of_stock_symbols">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/symbols&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)])</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_list_of_stock_symbols</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockSymbolList</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get list of stock symbols.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">get_stock_symbols</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_stock_symbol">
+<a class="viewcode-back" href="../../stocks.html#stocks.routes.get_stock_symbol">[docs]</a>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/symbols/</span><span class="si">{symbol_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)],</span> <span class="n">response_model_exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_stock_symbol</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+    <span class="n">symbol_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Stock Symbol ID&quot;</span><span class="p">)],</span>
+    <span class="n">get_div_history</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;div-history&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockSymbolWithDividendsHistory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get Stock Symbol by ID.&quot;&quot;&quot;</span>
+    <span class="n">stock_symbol</span> <span class="o">=</span> <span class="k">await</span> <span class="n">retrieve_stock_symbol_by_id</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">symbol_id</span><span class="p">,</span> <span class="n">get_div_history</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stock_symbol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">stock_symbol</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Stock Symbol not found.&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

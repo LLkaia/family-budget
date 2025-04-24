@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>users.auth &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Family Budget Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">users.auth</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for users.auth</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jwt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.security</span><span class="w"> </span><span class="kn">import</span> <span class="n">OAuth2PasswordBearer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jwt</span><span class="w"> </span><span class="kn">import</span> <span class="n">InvalidTokenError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel.ext.asyncio.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncSession</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_db</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.redis</span><span class="w"> </span><span class="kn">import</span> <span class="n">redis_client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">CredentialsException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span><span class="p">,</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.crud</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_session</span><span class="p">,</span> <span class="n">get_session_by_token_hash</span><span class="p">,</span> <span class="n">get_user_by_email</span><span class="p">,</span> <span class="n">revoke_session_by_token_hash</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">users.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenPayload</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_refresh_token</span><span class="p">,</span> <span class="n">get_datetime_now</span><span class="p">,</span> <span class="n">get_token_hash</span><span class="p">,</span> <span class="n">verify_password</span>
+
+
+<span class="n">app_config</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+
+<span class="n">oauth2_scheme</span> <span class="o">=</span> <span class="n">OAuth2PasswordBearer</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">&quot;/account/login&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="authenticate_user">
+<a class="viewcode-back" href="../../users.html#users.auth.authenticate_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate_user</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Authenticate user by email and password.</span>
+
+<span class="sd">    :param session: DB session</span>
+<span class="sd">    :param email: email address to authenticate</span>
+<span class="sd">    :param password: password to authenticate</span>
+<span class="sd">    :return: User if exists and authenticated else None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_user_by_email</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">hashed_password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">user</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="create_access_token">
+<a class="viewcode-back" href="../../users.html#users.auth.create_access_token">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_access_token</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create access JWT token.</span>
+
+<span class="sd">    :param user: User instance</span>
+<span class="sd">    :return: access JWT token</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">expire</span> <span class="o">=</span> <span class="n">get_datetime_now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">app_config</span><span class="o">.</span><span class="n">access_token_expire_minutes</span><span class="p">)</span>
+    <span class="n">to_encode</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">expire</span><span class="p">,</span> <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span> <span class="s2">&quot;jti&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())}</span>
+    <span class="n">encoded_jwt</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">to_encode</span><span class="p">,</span> <span class="n">app_config</span><span class="o">.</span><span class="n">secret_key</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">app_config</span><span class="o">.</span><span class="n">algorithm</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">encoded_jwt</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_new_session_for_user">
+<a class="viewcode-back" href="../../users.html#users.auth.create_new_session_for_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_new_session_for_user</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create new session for user.</span>
+
+<span class="sd">    :param session: DB session</span>
+<span class="sd">    :param user: User instance</span>
+<span class="sd">    :param request: Request instance</span>
+<span class="sd">    :param response: Response instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">refresh_token</span> <span class="o">=</span> <span class="n">create_refresh_token</span><span class="p">()</span>
+    <span class="n">datetime_now</span> <span class="o">=</span> <span class="n">get_datetime_now</span><span class="p">()</span>
+
+    <span class="k">await</span> <span class="n">create_session</span><span class="p">(</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+        <span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">user_agent</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user-agent&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="n">refresh_token_hash</span><span class="o">=</span><span class="n">get_token_hash</span><span class="p">(</span><span class="n">refresh_token</span><span class="p">),</span>
+        <span class="n">ip_address</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+        <span class="n">created_at</span><span class="o">=</span><span class="n">datetime_now</span><span class="p">,</span>
+        <span class="n">expires_at</span><span class="o">=</span><span class="n">datetime_now</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">app_config</span><span class="o">.</span><span class="n">refresh_token_expire_minutes</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span>
+        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="n">refresh_token</span><span class="p">,</span>
+        <span class="n">httponly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">secure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">samesite</span><span class="o">=</span><span class="s2">&quot;strict&quot;</span><span class="p">,</span>
+        <span class="n">max_age</span><span class="o">=</span><span class="n">app_config</span><span class="o">.</span><span class="n">refresh_token_expire_minutes</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/account&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="verify_session">
+<a class="viewcode-back" href="../../users.html#users.auth.verify_session">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">verify_session</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Session</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify and retrieve user session.&quot;&quot;&quot;</span>
+    <span class="n">refresh_token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">refresh_token</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span><span class="p">(</span><span class="s2">&quot;Missing refresh token&quot;</span><span class="p">)</span>
+    <span class="n">refresh_token_hash</span> <span class="o">=</span> <span class="n">get_token_hash</span><span class="p">(</span><span class="n">refresh_token</span><span class="p">)</span>
+
+    <span class="n">user_session</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_session_by_token_hash</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">refresh_token_hash</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user_session</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span>
+    <span class="k">if</span> <span class="n">user_session</span><span class="o">.</span><span class="n">revoked</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span>
+    <span class="k">if</span> <span class="n">user_session</span><span class="o">.</span><span class="n">expires_at</span> <span class="o">&lt;</span> <span class="n">get_datetime_now</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span><span class="p">(</span><span class="s2">&quot;Refresh token expired&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">user_session</span></div>
+
+
+
+<div class="viewcode-block" id="decode_access_token">
+<a class="viewcode-back" href="../../users.html#users.auth.decode_access_token">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">decode_access_token</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">)])</span> <span class="o">-&gt;</span> <span class="n">TokenPayload</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode access token.</span>
+
+<span class="sd">    :param token: JWT access token</span>
+<span class="sd">    :return: decoded JWT access token payload</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">app_config</span><span class="o">.</span><span class="n">secret_key</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="n">app_config</span><span class="o">.</span><span class="n">algorithm</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">InvalidTokenError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span>
+    <span class="k">return</span> <span class="n">TokenPayload</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="current_user">
+<a class="viewcode-back" href="../../users.html#users.auth.current_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">current_user</span><span class="p">(</span>
+    <span class="n">token_payload</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">TokenPayload</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">decode_access_token</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that the token is valid for user.</span>
+
+<span class="sd">    :param token_payload: JWT access token payload</span>
+<span class="sd">    :param session: DB session</span>
+<span class="sd">    :return: User if token valid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">expires</span> <span class="o">=</span> <span class="n">token_payload</span><span class="o">.</span><span class="n">exp</span>
+    <span class="n">unic_id</span> <span class="o">=</span> <span class="n">token_payload</span><span class="o">.</span><span class="n">jti</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="n">expires</span>
+        <span class="ow">or</span> <span class="n">expires</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">get_datetime_now</span><span class="p">()</span>
+        <span class="ow">or</span> <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">is_token_blacklisted</span><span class="p">(</span><span class="n">unic_id</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">token_payload</span><span class="o">.</span><span class="n">sub</span>
+    <span class="k">if</span> <span class="n">email</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_user_by_email</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">CredentialsException</span>
+    <span class="k">return</span> <span class="n">user</span></div>
+
+
+
+<div class="viewcode-block" id="current_superuser">
+<a class="viewcode-back" href="../../users.html#users.auth.current_superuser">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">current_superuser</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">current_user</span><span class="p">)])</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify that verified user is superuser.</span>
+
+<span class="sd">    :param user: verified user</span>
+<span class="sd">    :return: user if superuser</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;The user doesn&#39;t have enough privileges&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">user</span></div>
+
+
+
+<div class="viewcode-block" id="destroy_tokens">
+<a class="viewcode-back" href="../../users.html#users.auth.destroy_tokens">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">destroy_tokens</span><span class="p">(</span>
+    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+    <span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">,</span>
+    <span class="n">token_payload</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">TokenPayload</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">decode_access_token</span><span class="p">)],</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">AsyncSession</span><span class="p">,</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Destroy access and refresh tokens.</span>
+
+<span class="sd">    :param request: Request instance</span>
+<span class="sd">    :param response: Response instance</span>
+<span class="sd">    :param token_payload: JWT access token payload</span>
+<span class="sd">    :param session: DB session</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># remove session by refresh token from cookie</span>
+    <span class="n">refresh_token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">refresh_token</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">revoke_session_by_token_hash</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">get_token_hash</span><span class="p">(</span><span class="n">refresh_token</span><span class="p">))</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">delete_cookie</span><span class="p">(</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+    <span class="c1"># blacklist access token</span>
+    <span class="n">ttl</span> <span class="o">=</span> <span class="n">token_payload</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-</span> <span class="n">get_datetime_now</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">redis_client</span><span class="o">.</span><span class="n">add_token_to_blacklist</span><span class="p">(</span><span class="n">token_payload</span><span class="o">.</span><span class="n">jti</span><span class="p">,</span> <span class="n">ttl</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

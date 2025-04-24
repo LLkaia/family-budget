@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Budget Documentation &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core package" href="core.html" />
+    <link rel="prev" title="Family budget" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Family Budget Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html">Core package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">SQLModel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html">Users package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="budget.html">Budget package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stocks.html">Stocks package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validators.html">Validators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Family Budget Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="family-budget-documentation">
+<h1>Family Budget Documentation<a class="headerlink" href="#family-budget-documentation" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#modules">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#module-core.config">core.config module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config.Settings"><code class="docutils literal notranslate"><span class="pre">Settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config.get_path_to_env"><code class="docutils literal notranslate"><span class="pre">get_path_to_env()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config.get_settings"><code class="docutils literal notranslate"><span class="pre">get_settings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#module-core.database">core.database module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.database.get_db"><code class="docutils literal notranslate"><span class="pre">get_db()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.database.init_db"><code class="docutils literal notranslate"><span class="pre">init_db()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.database.is_db_alive"><code class="docutils literal notranslate"><span class="pre">is_db_alive()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#module-core.redis">core.redis module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.redis.RedisClient"><code class="docutils literal notranslate"><span class="pre">RedisClient</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.redis.RedisKeys"><code class="docutils literal notranslate"><span class="pre">RedisKeys</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.redis.write_through_cache"><code class="docutils literal notranslate"><span class="pre">write_through_cache()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">SQLModel Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.AccountTransaction"><code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.account_id"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.account_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.count_items"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.count_items</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.datetime_performed"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.datetime_performed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.id"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.model_config"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.model_fields"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.paid_fee"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.paid_fee</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.price_per_item"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.price_per_item</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.stock_account"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.stock_account</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.stock_position"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.stock_position</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.stock_position_id"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.stock_position_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.stock_symbol"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.stock_symbol</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.stock_symbol_id"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.stock_symbol_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.taxes_to_pay"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.taxes_to_pay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.total_amount"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.total_amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AccountTransaction.transaction_type"><code class="docutils literal notranslate"><span class="pre">AccountTransaction.transaction_type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.AuditLog"><code class="docutils literal notranslate"><span class="pre">AuditLog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.changed_at"><code class="docutils literal notranslate"><span class="pre">AuditLog.changed_at</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.id"><code class="docutils literal notranslate"><span class="pre">AuditLog.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">AuditLog.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.model_config"><code class="docutils literal notranslate"><span class="pre">AuditLog.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.model_fields"><code class="docutils literal notranslate"><span class="pre">AuditLog.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.new_data"><code class="docutils literal notranslate"><span class="pre">AuditLog.new_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.old_data"><code class="docutils literal notranslate"><span class="pre">AuditLog.old_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.operation"><code class="docutils literal notranslate"><span class="pre">AuditLog.operation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.record_id"><code class="docutils literal notranslate"><span class="pre">AuditLog.record_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.AuditLog.table_name"><code class="docutils literal notranslate"><span class="pre">AuditLog.table_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.balance"><code class="docutils literal notranslate"><span class="pre">Budget.balance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.categories"><code class="docutils literal notranslate"><span class="pre">Budget.categories</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.id"><code class="docutils literal notranslate"><span class="pre">Budget.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">Budget.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.model_config"><code class="docutils literal notranslate"><span class="pre">Budget.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.model_fields"><code class="docutils literal notranslate"><span class="pre">Budget.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.name"><code class="docutils literal notranslate"><span class="pre">Budget.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Budget.users"><code class="docutils literal notranslate"><span class="pre">Budget.users</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.Category"><code class="docutils literal notranslate"><span class="pre">Category</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.budget"><code class="docutils literal notranslate"><span class="pre">Category.budget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.budget_id"><code class="docutils literal notranslate"><span class="pre">Category.budget_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.category_restriction"><code class="docutils literal notranslate"><span class="pre">Category.category_restriction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.description"><code class="docutils literal notranslate"><span class="pre">Category.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.id"><code class="docutils literal notranslate"><span class="pre">Category.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.is_income"><code class="docutils literal notranslate"><span class="pre">Category.is_income</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">Category.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.model_config"><code class="docutils literal notranslate"><span class="pre">Category.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.model_fields"><code class="docutils literal notranslate"><span class="pre">Category.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.name"><code class="docutils literal notranslate"><span class="pre">Category.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Category.transactions"><code class="docutils literal notranslate"><span class="pre">Category.transactions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.PredefinedCategory"><code class="docutils literal notranslate"><span class="pre">PredefinedCategory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.PredefinedCategory.id"><code class="docutils literal notranslate"><span class="pre">PredefinedCategory.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.PredefinedCategory.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">PredefinedCategory.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.PredefinedCategory.model_config"><code class="docutils literal notranslate"><span class="pre">PredefinedCategory.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.PredefinedCategory.model_fields"><code class="docutils literal notranslate"><span class="pre">PredefinedCategory.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.PredefinedCategory.name"><code class="docutils literal notranslate"><span class="pre">PredefinedCategory.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.created_at"><code class="docutils literal notranslate"><span class="pre">Session.created_at</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.expires_at"><code class="docutils literal notranslate"><span class="pre">Session.expires_at</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.id"><code class="docutils literal notranslate"><span class="pre">Session.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.ip_address"><code class="docutils literal notranslate"><span class="pre">Session.ip_address</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">Session.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.model_config"><code class="docutils literal notranslate"><span class="pre">Session.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.model_fields"><code class="docutils literal notranslate"><span class="pre">Session.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.refresh_token_hash"><code class="docutils literal notranslate"><span class="pre">Session.refresh_token_hash</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.revoked"><code class="docutils literal notranslate"><span class="pre">Session.revoked</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.user"><code class="docutils literal notranslate"><span class="pre">Session.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.user_agent"><code class="docutils literal notranslate"><span class="pre">Session.user_agent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Session.user_id"><code class="docutils literal notranslate"><span class="pre">Session.user_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.StockAccount"><code class="docutils literal notranslate"><span class="pre">StockAccount</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.account_name"><code class="docutils literal notranslate"><span class="pre">StockAccount.account_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.account_transactions"><code class="docutils literal notranslate"><span class="pre">StockAccount.account_transactions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.balance"><code class="docutils literal notranslate"><span class="pre">StockAccount.balance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.id"><code class="docutils literal notranslate"><span class="pre">StockAccount.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">StockAccount.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.model_config"><code class="docutils literal notranslate"><span class="pre">StockAccount.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.model_fields"><code class="docutils literal notranslate"><span class="pre">StockAccount.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.owner"><code class="docutils literal notranslate"><span class="pre">StockAccount.owner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.owner_id"><code class="docutils literal notranslate"><span class="pre">StockAccount.owner_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockAccount.stock_positions"><code class="docutils literal notranslate"><span class="pre">StockAccount.stock_positions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.StockPosition"><code class="docutils literal notranslate"><span class="pre">StockPosition</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.account_id"><code class="docutils literal notranslate"><span class="pre">StockPosition.account_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.count_active"><code class="docutils literal notranslate"><span class="pre">StockPosition.count_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.datetime_opened"><code class="docutils literal notranslate"><span class="pre">StockPosition.datetime_opened</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.id"><code class="docutils literal notranslate"><span class="pre">StockPosition.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">StockPosition.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.model_config"><code class="docutils literal notranslate"><span class="pre">StockPosition.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.model_fields"><code class="docutils literal notranslate"><span class="pre">StockPosition.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.price_per_stock_in"><code class="docutils literal notranslate"><span class="pre">StockPosition.price_per_stock_in</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.stock_account"><code class="docutils literal notranslate"><span class="pre">StockPosition.stock_account</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.stock_symbol"><code class="docutils literal notranslate"><span class="pre">StockPosition.stock_symbol</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.stock_symbol_id"><code class="docutils literal notranslate"><span class="pre">StockPosition.stock_symbol_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockPosition.transactions"><code class="docutils literal notranslate"><span class="pre">StockPosition.transactions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.StockSymbol"><code class="docutils literal notranslate"><span class="pre">StockSymbol</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.currency"><code class="docutils literal notranslate"><span class="pre">StockSymbol.currency</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.description"><code class="docutils literal notranslate"><span class="pre">StockSymbol.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.exchange_code"><code class="docutils literal notranslate"><span class="pre">StockSymbol.exchange_code</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.figi"><code class="docutils literal notranslate"><span class="pre">StockSymbol.figi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.id"><code class="docutils literal notranslate"><span class="pre">StockSymbol.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">StockSymbol.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.model_config"><code class="docutils literal notranslate"><span class="pre">StockSymbol.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.model_fields"><code class="docutils literal notranslate"><span class="pre">StockSymbol.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.stock_positions"><code class="docutils literal notranslate"><span class="pre">StockSymbol.stock_positions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.symbol"><code class="docutils literal notranslate"><span class="pre">StockSymbol.symbol</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.symbol_type"><code class="docutils literal notranslate"><span class="pre">StockSymbol.symbol_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.StockSymbol.transactions"><code class="docutils literal notranslate"><span class="pre">StockSymbol.transactions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.amount"><code class="docutils literal notranslate"><span class="pre">Transaction.amount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.category"><code class="docutils literal notranslate"><span class="pre">Transaction.category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.category_id"><code class="docutils literal notranslate"><span class="pre">Transaction.category_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.date_performed"><code class="docutils literal notranslate"><span class="pre">Transaction.date_performed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.datetime_added"><code class="docutils literal notranslate"><span class="pre">Transaction.datetime_added</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.id"><code class="docutils literal notranslate"><span class="pre">Transaction.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">Transaction.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.model_config"><code class="docutils literal notranslate"><span class="pre">Transaction.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.Transaction.model_fields"><code class="docutils literal notranslate"><span class="pre">Transaction.model_fields</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.budgets"><code class="docutils literal notranslate"><span class="pre">User.budgets</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.full_name"><code class="docutils literal notranslate"><span class="pre">User.full_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.hashed_password"><code class="docutils literal notranslate"><span class="pre">User.hashed_password</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.is_superuser"><code class="docutils literal notranslate"><span class="pre">User.is_superuser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">User.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.model_config"><code class="docutils literal notranslate"><span class="pre">User.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.model_fields"><code class="docutils literal notranslate"><span class="pre">User.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.sessions"><code class="docutils literal notranslate"><span class="pre">User.sessions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.stock_accounts"><code class="docutils literal notranslate"><span class="pre">User.stock_accounts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.User.telegram_id"><code class="docutils literal notranslate"><span class="pre">User.telegram_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#models.UserBudgetLink"><code class="docutils literal notranslate"><span class="pre">UserBudgetLink</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.UserBudgetLink.budget_id"><code class="docutils literal notranslate"><span class="pre">UserBudgetLink.budget_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.UserBudgetLink.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">UserBudgetLink.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.UserBudgetLink.model_config"><code class="docutils literal notranslate"><span class="pre">UserBudgetLink.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.UserBudgetLink.model_fields"><code class="docutils literal notranslate"><span class="pre">UserBudgetLink.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#models.UserBudgetLink.user_id"><code class="docutils literal notranslate"><span class="pre">UserBudgetLink.user_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Users package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#modules">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="users.html#module-users.auth">users.auth module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.authenticate_user"><code class="docutils literal notranslate"><span class="pre">authenticate_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.create_access_token"><code class="docutils literal notranslate"><span class="pre">create_access_token()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.create_new_session_for_user"><code class="docutils literal notranslate"><span class="pre">create_new_session_for_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.current_superuser"><code class="docutils literal notranslate"><span class="pre">current_superuser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.current_user"><code class="docutils literal notranslate"><span class="pre">current_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.decode_access_token"><code class="docutils literal notranslate"><span class="pre">decode_access_token()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.destroy_tokens"><code class="docutils literal notranslate"><span class="pre">destroy_tokens()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.auth.verify_session"><code class="docutils literal notranslate"><span class="pre">verify_session()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="users.html#module-users.crud">users.crud module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.create_session"><code class="docutils literal notranslate"><span class="pre">create_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.create_user"><code class="docutils literal notranslate"><span class="pre">create_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.get_session_by_token_hash"><code class="docutils literal notranslate"><span class="pre">get_session_by_token_hash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.get_sessions_by_user_id"><code class="docutils literal notranslate"><span class="pre">get_sessions_by_user_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.get_user_by_email"><code class="docutils literal notranslate"><span class="pre">get_user_by_email()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.get_user_by_id"><code class="docutils literal notranslate"><span class="pre">get_user_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.get_users"><code class="docutils literal notranslate"><span class="pre">get_users()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.remove_user"><code class="docutils literal notranslate"><span class="pre">remove_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.revoke_session_by_token_hash"><code class="docutils literal notranslate"><span class="pre">revoke_session_by_token_hash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.revoke_user_sessions"><code class="docutils literal notranslate"><span class="pre">revoke_user_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.crud.set_user_super"><code class="docutils literal notranslate"><span class="pre">set_user_super()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="users.html#module-users.routes">users.routes module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.destroy_user_sessions"><code class="docutils literal notranslate"><span class="pre">destroy_user_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.get_list_of_users"><code class="docutils literal notranslate"><span class="pre">get_list_of_users()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.get_me_detailed"><code class="docutils literal notranslate"><span class="pre">get_me_detailed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.get_user_sessions"><code class="docutils literal notranslate"><span class="pre">get_user_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.login_user"><code class="docutils literal notranslate"><span class="pre">login_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.logout_and_destroy_tokens"><code class="docutils literal notranslate"><span class="pre">logout_and_destroy_tokens()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.refresh_access_token"><code class="docutils literal notranslate"><span class="pre">refresh_access_token()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.register_new_user"><code class="docutils literal notranslate"><span class="pre">register_new_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.routes.verify_access_token"><code class="docutils literal notranslate"><span class="pre">verify_access_token()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="users.html#module-users.schemas">users.schemas module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.SessionPublic"><code class="docutils literal notranslate"><span class="pre">SessionPublic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.TokenPayload"><code class="docutils literal notranslate"><span class="pre">TokenPayload</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.UserBase"><code class="docutils literal notranslate"><span class="pre">UserBase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.UserCreate"><code class="docutils literal notranslate"><span class="pre">UserCreate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.UserDetails"><code class="docutils literal notranslate"><span class="pre">UserDetails</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.UserFixture"><code class="docutils literal notranslate"><span class="pre">UserFixture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.UserList"><code class="docutils literal notranslate"><span class="pre">UserList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="users.html#users.schemas.UserPublic"><code class="docutils literal notranslate"><span class="pre">UserPublic</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="budget.html">Budget package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="budget.html#modules">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="budget.html#module-budget.crud">budget.crud module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.add_user_to_budget"><code class="docutils literal notranslate"><span class="pre">add_user_to_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.create_budget_with_user"><code class="docutils literal notranslate"><span class="pre">create_budget_with_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.create_category_and_add_to_budget"><code class="docutils literal notranslate"><span class="pre">create_category_and_add_to_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.create_predefined_category"><code class="docutils literal notranslate"><span class="pre">create_predefined_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.get_budget_by_id_with_current_user"><code class="docutils literal notranslate"><span class="pre">get_budget_by_id_with_current_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.get_categories_by_budget_and_user"><code class="docutils literal notranslate"><span class="pre">get_categories_by_budget_and_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.get_category_by_id_with_user"><code class="docutils literal notranslate"><span class="pre">get_category_by_id_with_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.get_list_transactions"><code class="docutils literal notranslate"><span class="pre">get_list_transactions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.get_predefined_categories"><code class="docutils literal notranslate"><span class="pre">get_predefined_categories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.get_transaction_by_id_with_user"><code class="docutils literal notranslate"><span class="pre">get_transaction_by_id_with_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.perform_transaction_per_category"><code class="docutils literal notranslate"><span class="pre">perform_transaction_per_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.remove_budget"><code class="docutils literal notranslate"><span class="pre">remove_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.remove_category"><code class="docutils literal notranslate"><span class="pre">remove_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.remove_predefined_category"><code class="docutils literal notranslate"><span class="pre">remove_predefined_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.remove_transaction"><code class="docutils literal notranslate"><span class="pre">remove_transaction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.remove_user_from_budget"><code class="docutils literal notranslate"><span class="pre">remove_user_from_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.retrieve_budgets_by_user"><code class="docutils literal notranslate"><span class="pre">retrieve_budgets_by_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.update_budget"><code class="docutils literal notranslate"><span class="pre">update_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.update_category"><code class="docutils literal notranslate"><span class="pre">update_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.crud.update_transaction"><code class="docutils literal notranslate"><span class="pre">update_transaction()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="budget.html#module-budget.routes">budget.routes module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.add_new_category_to_budget"><code class="docutils literal notranslate"><span class="pre">add_new_category_to_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.add_new_user_to_budget"><code class="docutils literal notranslate"><span class="pre">add_new_user_to_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.create_budget"><code class="docutils literal notranslate"><span class="pre">create_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.create_predefined_categories"><code class="docutils literal notranslate"><span class="pre">create_predefined_categories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.delete_budget"><code class="docutils literal notranslate"><span class="pre">delete_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.delete_category"><code class="docutils literal notranslate"><span class="pre">delete_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.delete_predefined_categories"><code class="docutils literal notranslate"><span class="pre">delete_predefined_categories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.delete_transaction"><code class="docutils literal notranslate"><span class="pre">delete_transaction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.delete_user_from_budget"><code class="docutils literal notranslate"><span class="pre">delete_user_from_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.get_budget"><code class="docutils literal notranslate"><span class="pre">get_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.get_budget_categories"><code class="docutils literal notranslate"><span class="pre">get_budget_categories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.get_budget_transactions"><code class="docutils literal notranslate"><span class="pre">get_budget_transactions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.get_my_budgets"><code class="docutils literal notranslate"><span class="pre">get_my_budgets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.list_predefined_categories"><code class="docutils literal notranslate"><span class="pre">list_predefined_categories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.modify_budget"><code class="docutils literal notranslate"><span class="pre">modify_budget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.modify_category"><code class="docutils literal notranslate"><span class="pre">modify_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.modify_transaction"><code class="docutils literal notranslate"><span class="pre">modify_transaction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.routes.perform_transaction"><code class="docutils literal notranslate"><span class="pre">perform_transaction()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="budget.html#module-budget.schemas">budget.schemas module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.BudgetCreate"><code class="docutils literal notranslate"><span class="pre">BudgetCreate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.BudgetDetails"><code class="docutils literal notranslate"><span class="pre">BudgetDetails</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.BudgetPublic"><code class="docutils literal notranslate"><span class="pre">BudgetPublic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.BudgetUpdate"><code class="docutils literal notranslate"><span class="pre">BudgetUpdate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.CategoryCreate"><code class="docutils literal notranslate"><span class="pre">CategoryCreate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.CategoryUpdate"><code class="docutils literal notranslate"><span class="pre">CategoryUpdate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.CategoryWithAmount"><code class="docutils literal notranslate"><span class="pre">CategoryWithAmount</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.PredefinedCategoryCreate"><code class="docutils literal notranslate"><span class="pre">PredefinedCategoryCreate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.PredefinedCategoryList"><code class="docutils literal notranslate"><span class="pre">PredefinedCategoryList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.TransactionCreate"><code class="docutils literal notranslate"><span class="pre">TransactionCreate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.TransactionList"><code class="docutils literal notranslate"><span class="pre">TransactionList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="budget.html#budget.schemas.TransactionUpdate"><code class="docutils literal notranslate"><span class="pre">TransactionUpdate</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stocks.html">Stocks package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stocks.html#modules">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="stocks.html#module-stocks.crud">stocks.crud module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.close_stock_positions_with_transactions"><code class="docutils literal notranslate"><span class="pre">close_stock_positions_with_transactions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.create_stock_account_with_user"><code class="docutils literal notranslate"><span class="pre">create_stock_account_with_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.get_active_stock_positions_per_account"><code class="docutils literal notranslate"><span class="pre">get_active_stock_positions_per_account()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.get_stock_account_with_user_by_account_id"><code class="docutils literal notranslate"><span class="pre">get_stock_account_with_user_by_account_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.get_stock_symbols"><code class="docutils literal notranslate"><span class="pre">get_stock_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.open_stock_position_with_transaction"><code class="docutils literal notranslate"><span class="pre">open_stock_position_with_transaction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.perform_account_transaction"><code class="docutils literal notranslate"><span class="pre">perform_account_transaction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.retrieve_stock_accounts_by_user"><code class="docutils literal notranslate"><span class="pre">retrieve_stock_accounts_by_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.retrieve_stock_symbol_by_id"><code class="docutils literal notranslate"><span class="pre">retrieve_stock_symbol_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.crud.update_stock_symbols"><code class="docutils literal notranslate"><span class="pre">update_stock_symbols()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stocks.html#module-stocks.dividends">stocks.dividends module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.dividends.get_dividend_history_by_stock_symbol"><code class="docutils literal notranslate"><span class="pre">get_dividend_history_by_stock_symbol()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stocks.html#module-stocks.finnhub">stocks.finnhub module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.finnhub.get_finnhub_client"><code class="docutils literal notranslate"><span class="pre">get_finnhub_client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.finnhub.get_latest_stock_price"><code class="docutils literal notranslate"><span class="pre">get_latest_stock_price()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.finnhub.get_stock_symbols_data"><code class="docutils literal notranslate"><span class="pre">get_stock_symbols_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stocks.html#module-stocks.routes">stocks.routes module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.close_stock_positions_by_stock_symbol"><code class="docutils literal notranslate"><span class="pre">close_stock_positions_by_stock_symbol()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.create_stock_account"><code class="docutils literal notranslate"><span class="pre">create_stock_account()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.get_list_of_stock_symbols"><code class="docutils literal notranslate"><span class="pre">get_list_of_stock_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.get_my_stock_accounts"><code class="docutils literal notranslate"><span class="pre">get_my_stock_accounts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.get_stock_account"><code class="docutils literal notranslate"><span class="pre">get_stock_account()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.get_stock_positions"><code class="docutils literal notranslate"><span class="pre">get_stock_positions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.get_stock_symbol"><code class="docutils literal notranslate"><span class="pre">get_stock_symbol()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.open_stock_position"><code class="docutils literal notranslate"><span class="pre">open_stock_position()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.routes.update_stock_symbols_task"><code class="docutils literal notranslate"><span class="pre">update_stock_symbols_task()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="stocks.html#module-stocks.schemas">stocks.schemas module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.AccountTransactionData"><code class="docutils literal notranslate"><span class="pre">AccountTransactionData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.AccountTransactionType"><code class="docutils literal notranslate"><span class="pre">AccountTransactionType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.DividendPaymentInfo"><code class="docutils literal notranslate"><span class="pre">DividendPaymentInfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockAccountCreate"><code class="docutils literal notranslate"><span class="pre">StockAccountCreate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockPositionBase"><code class="docutils literal notranslate"><span class="pre">StockPositionBase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockPositionClose"><code class="docutils literal notranslate"><span class="pre">StockPositionClose</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockPositionOpen"><code class="docutils literal notranslate"><span class="pre">StockPositionOpen</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockPositionPublic"><code class="docutils literal notranslate"><span class="pre">StockPositionPublic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockPositionWithCurrentPrice"><code class="docutils literal notranslate"><span class="pre">StockPositionWithCurrentPrice</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockSymbolList"><code class="docutils literal notranslate"><span class="pre">StockSymbolList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockSymbolPublic"><code class="docutils literal notranslate"><span class="pre">StockSymbolPublic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockSymbolType"><code class="docutils literal notranslate"><span class="pre">StockSymbolType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="stocks.html#stocks.schemas.StockSymbolWithDividendsHistory"><code class="docutils literal notranslate"><span class="pre">StockSymbolWithDividendsHistory</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#utils.PeriodFrom"><code class="docutils literal notranslate"><span class="pre">PeriodFrom</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#utils.PeriodFrom.DAY"><code class="docutils literal notranslate"><span class="pre">PeriodFrom.DAY</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#utils.PeriodFrom.MONTH"><code class="docutils literal notranslate"><span class="pre">PeriodFrom.MONTH</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#utils.PeriodFrom.YEAR"><code class="docutils literal notranslate"><span class="pre">PeriodFrom.YEAR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#utils.PeriodFrom.get_date_start"><code class="docutils literal notranslate"><span class="pre">PeriodFrom.get_date_start()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#utils.create_refresh_token"><code class="docutils literal notranslate"><span class="pre">create_refresh_token()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#utils.get_datetime_now"><code class="docutils literal notranslate"><span class="pre">get_datetime_now()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#utils.get_password_hash"><code class="docutils literal notranslate"><span class="pre">get_password_hash()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#utils.get_token_hash"><code class="docutils literal notranslate"><span class="pre">get_token_hash()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#utils.verify_password"><code class="docutils literal notranslate"><span class="pre">verify_password()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="validators.html">Validators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="validators.html#validators.normalize_name"><code class="docutils literal notranslate"><span class="pre">normalize_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="validators.html#validators.validate_cash"><code class="docutils literal notranslate"><span class="pre">validate_cash()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="validators.html#validators.validate_password"><code class="docutils literal notranslate"><span class="pre">validate_password()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#exceptions.CredentialsException"><code class="docutils literal notranslate"><span class="pre">CredentialsException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#exceptions.ItemNotExistsException"><code class="docutils literal notranslate"><span class="pre">ItemNotExistsException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#exceptions.ParameterMissingException"><code class="docutils literal notranslate"><span class="pre">ParameterMissingException</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Family budget" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="core.html" class="btn btn-neutral float-right" title="Core package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stocks.crud &mdash; Family budget 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Family budget
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Family Budget Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Family budget</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">stocks.crud</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for stocks.crud</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">batched</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">func</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.dialects.postgresql</span><span class="w"> </span><span class="kn">import</span> <span class="n">insert</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">joinedload</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlmodel.ext.asyncio.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncSession</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSQL_QUERY_ALLOWED_MAX_ARGS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParameterMissingException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccountTransaction</span><span class="p">,</span> <span class="n">StockAccount</span><span class="p">,</span> <span class="n">StockPosition</span><span class="p">,</span> <span class="n">StockSymbol</span><span class="p">,</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stocks.dividends</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_dividend_history_by_stock_symbol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stocks.finnhub</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_latest_stock_price</span><span class="p">,</span> <span class="n">get_stock_symbols_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stocks.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AccountTransactionData</span><span class="p">,</span>
+    <span class="n">AccountTransactionType</span><span class="p">,</span>
+    <span class="n">StockAccountCreate</span><span class="p">,</span>
+    <span class="n">StockPositionClose</span><span class="p">,</span>
+    <span class="n">StockPositionOpen</span><span class="p">,</span>
+    <span class="n">StockPositionPublic</span><span class="p">,</span>
+    <span class="n">StockPositionWithCurrentPrice</span><span class="p">,</span>
+    <span class="n">StockSymbolList</span><span class="p">,</span>
+    <span class="n">StockSymbolWithDividendsHistory</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_stock_account_with_user">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.create_stock_account_with_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_stock_account_with_user</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">stock_account_data</span><span class="p">:</span> <span class="n">StockAccountCreate</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockAccount</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new stock account with given user.&quot;&quot;&quot;</span>
+    <span class="n">stock_account</span> <span class="o">=</span> <span class="n">StockAccount</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">stock_account_data</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;owner_id&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">stock_account</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">stock_account</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">StockAccount</span><span class="p">,</span> <span class="n">stock_account</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="retrieve_stock_accounts_by_user">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.retrieve_stock_accounts_by_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_stock_accounts_by_user</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockAccount</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get stock accounts by user.&quot;&quot;&quot;</span>
+    <span class="n">stocks_accounts</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">StockAccount</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockAccount</span><span class="o">.</span><span class="n">owner_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">stocks_accounts</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="get_stock_account_with_user_by_account_id">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.get_stock_account_with_user_by_account_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_stock_account_with_user_by_account_id</span><span class="p">(</span>
+    <span class="n">stock_account_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockAccount</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get Stock Account by ID for owner.&quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">StockAccount</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockAccount</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">stock_account_id</span><span class="p">,</span> <span class="n">StockAccount</span><span class="o">.</span><span class="n">owner_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">account</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">StockAccount</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">account</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="open_stock_position_with_transaction">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.open_stock_position_with_transaction">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">open_stock_position_with_transaction</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">stock_account</span><span class="p">:</span> <span class="n">StockAccount</span><span class="p">,</span> <span class="n">stock_position_data</span><span class="p">:</span> <span class="n">StockPositionOpen</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockPosition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open stock position with transaction.&quot;&quot;&quot;</span>
+    <span class="n">stock_position</span> <span class="o">=</span> <span class="n">StockPosition</span><span class="p">(</span>
+        <span class="n">stock_symbol_id</span><span class="o">=</span><span class="n">stock_position_data</span><span class="o">.</span><span class="n">stock_symbol_id</span><span class="p">,</span>
+        <span class="n">count_active</span><span class="o">=</span><span class="n">stock_position_data</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+        <span class="n">datetime_opened</span><span class="o">=</span><span class="n">stock_position_data</span><span class="o">.</span><span class="n">datetime_opened</span><span class="p">,</span>
+        <span class="n">price_per_stock_in</span><span class="o">=</span><span class="n">stock_position_data</span><span class="o">.</span><span class="n">price_per_stock</span><span class="p">,</span>
+        <span class="n">account_id</span><span class="o">=</span><span class="n">stock_account</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">stock_position</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">stock_position</span><span class="p">)</span>
+
+    <span class="n">transaction</span> <span class="o">=</span> <span class="n">AccountTransactionData</span><span class="p">(</span>
+        <span class="n">datetime_performed</span><span class="o">=</span><span class="n">stock_position</span><span class="o">.</span><span class="n">datetime_opened</span><span class="p">,</span>
+        <span class="n">account_id</span><span class="o">=</span><span class="n">stock_account</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">total_amount</span><span class="o">=</span><span class="n">stock_position</span><span class="o">.</span><span class="n">price_per_stock_in</span> <span class="o">*</span> <span class="n">stock_position</span><span class="o">.</span><span class="n">count_active</span><span class="p">,</span>
+        <span class="n">transaction_type</span><span class="o">=</span><span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">STOCK_IN</span><span class="p">,</span>
+        <span class="n">price_per_item</span><span class="o">=</span><span class="n">stock_position</span><span class="o">.</span><span class="n">price_per_stock_in</span><span class="p">,</span>
+        <span class="n">count_items</span><span class="o">=</span><span class="n">stock_position</span><span class="o">.</span><span class="n">count_active</span><span class="p">,</span>
+        <span class="n">paid_fee</span><span class="o">=</span><span class="n">stock_position_data</span><span class="o">.</span><span class="n">paid_fee</span><span class="p">,</span>
+        <span class="n">stock_symbol_id</span><span class="o">=</span><span class="n">stock_position</span><span class="o">.</span><span class="n">stock_symbol_id</span><span class="p">,</span>
+        <span class="n">stock_position_id</span><span class="o">=</span><span class="n">stock_position</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">perform_account_transaction</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">stock_account</span><span class="p">,</span> <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stock_position</span></div>
+
+
+
+<div class="viewcode-block" id="close_stock_positions_with_transactions">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.close_stock_positions_with_transactions">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_stock_positions_with_transactions</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">stock_account</span><span class="p">:</span> <span class="n">StockAccount</span><span class="p">,</span> <span class="n">stock_position_to_close</span><span class="p">:</span> <span class="n">StockPositionClose</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Close stock positions with transactions.&quot;&quot;&quot;</span>
+    <span class="n">stock_positions</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">StockPosition</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockPosition</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">stock_account</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockPosition</span><span class="o">.</span><span class="n">count_active</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockPosition</span><span class="o">.</span><span class="n">stock_symbol_id</span> <span class="o">==</span> <span class="n">stock_position_to_close</span><span class="o">.</span><span class="n">stock_symbol_id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">StockPosition</span><span class="o">.</span><span class="n">datetime_opened</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">total_count_to_subtract</span> <span class="o">=</span> <span class="n">stock_position_to_close</span><span class="o">.</span><span class="n">count</span>
+    <span class="k">for</span> <span class="n">stock_position</span> <span class="ow">in</span> <span class="n">stock_positions</span><span class="p">:</span>
+        <span class="n">subtracted_count</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_count_to_subtract</span><span class="p">,</span> <span class="n">stock_position</span><span class="o">.</span><span class="n">count_active</span><span class="p">)</span>
+        <span class="n">stock_position</span><span class="o">.</span><span class="n">count_active</span> <span class="o">-=</span> <span class="n">subtracted_count</span>
+        <span class="n">total_count_to_subtract</span> <span class="o">-=</span> <span class="n">subtracted_count</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">stock_position</span><span class="p">)</span>
+
+        <span class="n">transaction</span> <span class="o">=</span> <span class="n">AccountTransactionData</span><span class="p">(</span>
+            <span class="n">datetime_performed</span><span class="o">=</span><span class="n">stock_position_to_close</span><span class="o">.</span><span class="n">datetime_closed</span><span class="p">,</span>
+            <span class="n">account_id</span><span class="o">=</span><span class="n">stock_account</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">total_amount</span><span class="o">=</span><span class="n">stock_position_to_close</span><span class="o">.</span><span class="n">price_per_stock</span> <span class="o">*</span> <span class="n">subtracted_count</span><span class="p">,</span>
+            <span class="n">transaction_type</span><span class="o">=</span><span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">STOCK_OUT</span><span class="p">,</span>
+            <span class="n">price_per_item</span><span class="o">=</span><span class="n">stock_position_to_close</span><span class="o">.</span><span class="n">price_per_stock</span><span class="p">,</span>
+            <span class="n">count_items</span><span class="o">=</span><span class="n">subtracted_count</span><span class="p">,</span>
+            <span class="n">paid_fee</span><span class="o">=</span><span class="n">stock_position_to_close</span><span class="o">.</span><span class="n">paid_fee</span><span class="p">,</span>
+            <span class="n">stock_symbol_id</span><span class="o">=</span><span class="n">stock_position_to_close</span><span class="o">.</span><span class="n">stock_symbol_id</span><span class="p">,</span>
+            <span class="n">stock_position_id</span><span class="o">=</span><span class="n">stock_position</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">perform_account_transaction</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="n">stock_account</span><span class="p">,</span> <span class="n">transaction</span><span class="o">=</span><span class="n">transaction</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">total_count_to_subtract</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">total_count_to_subtract</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot close stock positions: too many stocks to close. Remaining: </span><span class="si">{</span><span class="n">total_count_to_subtract</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="perform_account_transaction">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.perform_account_transaction">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">perform_account_transaction</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">account</span><span class="p">:</span> <span class="n">StockAccount</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="n">AccountTransactionData</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform account transaction.&quot;&quot;&quot;</span>
+    <span class="k">match</span> <span class="n">transaction</span><span class="o">.</span><span class="n">transaction_type</span><span class="p">:</span>
+        <span class="k">case</span> <span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">STOCK_IN</span> <span class="o">|</span> <span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">WITHDRAWAL</span><span class="p">:</span>
+            <span class="n">account</span><span class="o">.</span><span class="n">balance</span> <span class="o">-=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">total_amount</span> <span class="o">+</span> <span class="n">transaction</span><span class="o">.</span><span class="n">paid_fee</span>
+        <span class="k">case</span> <span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">STOCK_OUT</span> <span class="o">|</span> <span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">DIVIDENDS</span> <span class="o">|</span> <span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">DEPOSIT</span><span class="p">:</span>
+            <span class="n">account</span><span class="o">.</span><span class="n">balance</span> <span class="o">+=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">total_amount</span> <span class="o">-</span> <span class="n">transaction</span><span class="o">.</span><span class="n">paid_fee</span>
+
+    <span class="k">if</span> <span class="n">transaction</span><span class="o">.</span><span class="n">transaction_type</span> <span class="ow">in</span> <span class="p">{</span><span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">STOCK_IN</span><span class="p">,</span> <span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">STOCK_OUT</span><span class="p">}:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">transaction</span><span class="o">.</span><span class="n">stock_position_id</span> <span class="ow">and</span> <span class="n">transaction</span><span class="o">.</span><span class="n">stock_symbol_id</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ParameterMissingException</span><span class="p">(</span><span class="s2">&quot;Missing stock position ID or stock symbol ID.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">transaction</span><span class="o">.</span><span class="n">transaction_type</span> <span class="o">==</span> <span class="n">AccountTransactionType</span><span class="o">.</span><span class="n">DIVIDENDS</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">transaction</span><span class="o">.</span><span class="n">stock_symbol_id</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ParameterMissingException</span><span class="p">(</span><span class="s2">&quot;Missing stock symbol ID.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">account</span><span class="o">.</span><span class="n">balance</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not enough money.&quot;</span><span class="p">)</span>
+
+    <span class="n">transaction</span> <span class="o">=</span> <span class="n">AccountTransaction</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add_all</span><span class="p">([</span><span class="n">transaction</span><span class="p">,</span> <span class="n">account</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="get_active_stock_positions_per_account">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.get_active_stock_positions_per_account">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_active_stock_positions_per_account</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">,</span> <span class="n">get_current_price</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">StockPositionPublic</span> <span class="o">|</span> <span class="n">StockPositionWithCurrentPrice</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get active stock positions per account.&quot;&quot;&quot;</span>
+    <span class="n">stock_positions</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">StockPosition</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">StockAccount</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockAccount</span><span class="o">.</span><span class="n">owner_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockPosition</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">account_id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockPosition</span><span class="o">.</span><span class="n">count_active</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">joinedload</span><span class="p">(</span><span class="n">StockPosition</span><span class="o">.</span><span class="n">stock_symbol</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">StockPositionWithCurrentPrice</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span>
+                <span class="n">stock_position</span><span class="p">,</span>
+                <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;current_price&quot;</span><span class="p">:</span> <span class="k">await</span> <span class="n">get_latest_stock_price</span><span class="p">(</span><span class="n">stock_position</span><span class="o">.</span><span class="n">stock_symbol</span><span class="o">.</span><span class="n">symbol</span><span class="p">)},</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">stock_position</span> <span class="ow">in</span> <span class="n">stock_positions</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">get_current_price</span>
+        <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">stock_positions</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="update_stock_symbols">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.update_stock_symbols">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_stock_symbols</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">exchange_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;US&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update stock symbols table with fresh data.&quot;&quot;&quot;</span>
+    <span class="n">stock_symbols_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_stock_symbols_data</span><span class="p">(</span><span class="n">exchange_code</span><span class="p">)</span>
+
+    <span class="c1"># allowed items depends on parameters of each item</span>
+    <span class="n">allowed_items_per_query</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">PSQL_QUERY_ALLOWED_MAX_ARGS</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">stock_symbols_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+
+    <span class="c1"># make generator which returns allowed amount of items per iteration</span>
+    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">batched</span><span class="p">(</span><span class="n">stock_symbols_data</span><span class="p">,</span> <span class="n">allowed_items_per_query</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">StockSymbol</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># if item with same figi exists -&gt; update symbol and description</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">on_conflict_do_update</span><span class="p">(</span>
+            <span class="n">constraint</span><span class="o">=</span><span class="s2">&quot;stocksymbol_figi_key&quot;</span><span class="p">,</span>
+            <span class="n">set_</span><span class="o">=</span><span class="p">{</span><span class="n">StockSymbol</span><span class="o">.</span><span class="n">symbol</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">excluded</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="n">StockSymbol</span><span class="o">.</span><span class="n">description</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">excluded</span><span class="o">.</span><span class="n">description</span><span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_stock_symbols">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.get_stock_symbols">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_stock_symbols</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockSymbolList</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve stock symbols.&quot;&quot;&quot;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">())</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">StockSymbol</span><span class="p">))</span>
+    <span class="n">stock_symbols</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">StockSymbol</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">StockSymbol</span><span class="o">.</span><span class="n">symbol</span><span class="p">)</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">StockSymbolList</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="o">.</span><span class="n">one</span><span class="p">(),</span> <span class="n">data</span><span class="o">=</span><span class="n">stock_symbols</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="retrieve_stock_symbol_by_id">
+<a class="viewcode-back" href="../../stocks.html#stocks.crud.retrieve_stock_symbol_by_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_stock_symbol_by_id</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span> <span class="n">symbol_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">get_div_history</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StockSymbolWithDividendsHistory</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get Info by Stock Symbol ID.&quot;&quot;&quot;</span>
+    <span class="n">stock_symbol</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">StockSymbol</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">StockSymbol</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">symbol_id</span><span class="p">))</span>
+    <span class="n">stock_symbol</span> <span class="o">=</span> <span class="n">stock_symbol</span><span class="o">.</span><span class="n">one_or_none</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">stock_symbol</span> <span class="ow">and</span> <span class="n">get_div_history</span><span class="p">:</span>
+        <span class="n">stock_symbol</span> <span class="o">=</span> <span class="n">StockSymbolWithDividendsHistory</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span>
+            <span class="n">stock_symbol</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dividends_history&quot;</span><span class="p">:</span> <span class="k">await</span> <span class="n">get_dividend_history_by_stock_symbol</span><span class="p">(</span><span class="n">stock_symbol</span><span class="o">.</span><span class="n">symbol</span><span class="p">)}</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">StockSymbolWithDividendsHistory</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stock_symbol</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Illia Kaialainien.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
