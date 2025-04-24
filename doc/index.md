@@ -35,4 +35,4 @@ docker compose up
 http://localhost:8000
 
 ## Database schema
-![schema.png](static/schema.png)
+![schema.png](https://github.com/LLkaia/family-budget/blob/gh-pages/_static/schema.png?raw=true)
