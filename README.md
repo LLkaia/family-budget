@@ -1,3 +1,3 @@
 # Family budget
 
-Follow for documentation:
+Follow for documentation: https://llkaia.github.io/family-budget/
