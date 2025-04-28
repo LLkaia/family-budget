@@ -5,6 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.database import get_db
 from models import StockAccount, StockPosition, User
+from ollama.ollama import get_stock_positions_summary
 from stocks.crud import (
     close_stock_positions_with_transactions,
     create_stock_account_with_user,
@@ -88,6 +89,19 @@ async def get_stock_positions(
 ) -> list[StockPositionPublic | StockPositionWithCurrentPrice]:
     """Get all stock positions for account."""
     return await get_active_stock_positions_per_account(session, account_id, user, get_current_price)
+
+
+@router.get("/account/{account_id}/stocks/report")
+async def get_stock_positions_report(
+    user: Annotated[User, Depends(current_user)],
+    session: Annotated[AsyncSession, Depends(get_db)],
+    account_id: Annotated[int, Path(title="Stock Account ID")],
+) -> Message:
+    """Get stock positions report for account."""
+    stock_positions = await get_active_stock_positions_per_account(session, account_id, user, False)
+    if not stock_positions:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stock Positions not found.")
+    return Message(message=await get_stock_positions_summary(stock_positions))
 
 
 @router.post("/account/{account_id}/stocks/close-positions")

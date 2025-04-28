@@ -4,7 +4,7 @@ from enum import Enum
 from functools import wraps
 from typing import Any, Awaitable, Callable, TypeVar
 
-import redis.asyncio as redis  # type: ignore[import-untyped]
+import redis.asyncio as redis
 from sqlmodel import SQLModel
 
 from core.config import get_settings

@@ -21,3 +21,14 @@ services:
     image: redis:alpine
     container_name: redis
     command: redis-server
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    restart: always
+    container_name: ollama
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  ollama:

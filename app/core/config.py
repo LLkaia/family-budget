@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     :arg db_conn_string: db connection string
     :arg test_db_conn_string: test db connection string
     :arg finnhub_api_key: api key for finnhub connection
+    :arg ollama_host: host for ollama connection
     :arg api_version_file_path: path to file with api version
     :arg api_version: api version
     :arg cors_allowed_origins: allowed CORS origins
@@ -62,6 +63,7 @@ class Settings(BaseSettings):
     api_version_file_path: str = "./.version"
 
     finnhub_api_key: str
+    ollama_host: str
 
     cors_allowed_origins: list[str] = ["*"]
     cors_allowed_methods: list[str] = ["*"]
